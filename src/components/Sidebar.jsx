@@ -11,6 +11,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 const Sidebar = () => {
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [activeLink, setActiveLink] = useState(null);
+    const [sidebarOpen , setSidebarOpen] = useState(false)
 
     const toggleAccordion = (accordionName) => {
         setActiveAccordion(activeAccordion === accordionName ? null : accordionName);
@@ -21,7 +22,10 @@ const Sidebar = () => {
     };
 
     return (
-        <div className=  {` bg-zinc-900 text-zinc-200 w-60 h-screen  p-4 sm:hidden`}>
+        // <div className=  {`bg-zinc-900 text-zinc-200 w-60 h-screen hidden p-4 lg:block`}>
+        <div className= {`absolute  text-zinc-200 left-0 top-0 z-9999 flex h-screen w-64 p-4 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+          }`}>
             <div className="flex items-center mb-8">
                 <img
                     src="https://openui.fly.dev/openui/24x24.svg?text=📊"
