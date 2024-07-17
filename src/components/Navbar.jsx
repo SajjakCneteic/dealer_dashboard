@@ -10,17 +10,18 @@ import { IoIosArrowDown } from "react-icons/io";
 
 const Navbar = () => {
   const [isDarkMode, setIsDarkMode] = useState(false)
-  const [sidebarOpen , setSidebarOpen] = useState(false)
+  const [sidebarOpen , setSidebarOpen] = useState(true)
   const toggleTheme= ()=>{
     setIsDarkMode(!isDarkMode)
   }
   return (
-    <div className="flex items-center justify-between p-4 bg-card text-card-foreground">
+    // <div className="flex items-center justify-between p-4 bg-card text-card-foreground">
+    <div className="sticky top-0 z-999 p-4 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none">
       {sidebarOpen && <div className="flex items-center space-x-4">
-        <button className="p-2">
+        <button className="p-2" onClick={()=>setSidebarOpen(!sidebarOpen)}>
           <GiHamburgerMenu className='text-3xl'/>
         </button>
-        <img aria-hidden="true" alt="logo" src="http://localhost:5173/src/images/user/user-01.png" />
+        {/* <img aria-hidden="true" alt="logo" src="" /> */}
       </div>}
       <div className="flex items-center space-x-4 flex-grow mx-4">
         <div className="relative flex items-center w-full">
