@@ -23,17 +23,19 @@ const Sidebar = () => {
     };
 
     return (
+
         // <div className=  {`bg-zinc-900 text-zinc-200 w-60 h-screen hidden p-4 lg:block`}>
         <div className= {`absolute  text-zinc-200 left-0 top-0 z-9999 flex h-screen w-64 p-4 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}>
+
             <div className="flex items-center mb-8">
                 <img
                     src="https://openui.fly.dev/openui/24x24.svg?text=📊"
                     alt="logo"
                     className="mr-2"
                 />
-                <span className="text-3xl font-semibold">TailAdmin</span>
+                <span className="text-3xl font-semibold">Universal </span>
             </div>
             <nav>
                 <div className="mb-4">
