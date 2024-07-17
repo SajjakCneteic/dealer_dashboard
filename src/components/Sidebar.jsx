@@ -12,6 +12,7 @@ const Sidebar = () => {
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [activeLink, setActiveLink] = useState(null);
 
+
     const toggleAccordion = (accordionName) => {
         setActiveAccordion(activeAccordion === accordionName ? null : accordionName);
     };
@@ -140,3 +141,4 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
+
