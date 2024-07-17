@@ -2,6 +2,10 @@ import React, { useState } from 'react';
 import 'tailwindcss/tailwind.css';
 import { FaSun, FaMoon } from 'react-icons/fa';
 import { GiHamburgerMenu } from "react-icons/gi";
+import { BsSearch } from "react-icons/bs";
+import { HiOutlineBellAlert } from "react-icons/hi2";
+import { TbMessageCircle2 } from "react-icons/tb";
+import { IoIosArrowDown } from "react-icons/io";
 
 
 const Navbar = () => {
@@ -16,12 +20,12 @@ const Navbar = () => {
         <button className="p-2">
           <GiHamburgerMenu className='text-3xl'/>
         </button>
-        <img aria-hidden="true" alt="logo" src="https://openui.fly.dev/openui/32x32.svg?text=📊" />
+        <img aria-hidden="true" alt="logo" src="http://localhost:5173/src/images/user/user-01.png" />
       </div>}
       <div className="flex items-center space-x-4 flex-grow mx-4">
         <div className="relative flex items-center w-full">
           <span className="absolute left-3 text-muted-foreground">
-            <img aria-hidden="true" alt="search-icon" src="https://openui.fly.dev/openui/24x24.svg?text=🔍" />
+           <BsSearch className='text-2xl'/>
           </span>
           <input
             type="text"
@@ -38,17 +42,21 @@ const Navbar = () => {
       {isDarkMode ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}
     </button>
         <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80">
-          <img aria-hidden="true" alt="notifications-icon" src="https://openui.fly.dev/openui/24x24.svg?text=🔔" />
+          <HiOutlineBellAlert className='text-2xl'/>
           <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-destructive"></span>
         </button>
         <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80">
-          <img aria-hidden="true" alt="messages-icon" src="https://openui.fly.dev/openui/24x24.svg?text=💬" />
+        <TbMessageCircle2 className='text-2xl'/>
           <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-destructive"></span>
         </button>
         <div className="flex items-center space-x-2">
+          <div className='flex'>
+            <span></span>
+            <span></span>
+          </div>
           <img aria-hidden="true" alt="user-avatar" src="https://placehold.co/32x32" className="rounded-full" />
           <button className="p-2">
-            <img aria-hidden="true" alt="dropdown-icon" src="https://openui.fly.dev/openui/24x24.svg?text=▾" />
+            <IoIosArrowDown className='text-2xl'/>
           </button>
         </div>
       </div>

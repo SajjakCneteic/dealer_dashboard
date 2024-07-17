@@ -21,7 +21,7 @@ const Sidebar = () => {
     };
 
     return (
-        <div className="bg-zinc-900 text-zinc-200 w-64 h-screen p-4">
+        <div className=  {` bg-zinc-900 text-zinc-200 w-60 h-screen  p-4 sm:hidden`}>
             <div className="flex items-center mb-8">
                 <img
                     src="https://openui.fly.dev/openui/24x24.svg?text=📊"
