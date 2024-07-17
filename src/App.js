@@ -10,9 +10,9 @@ function App() {
   return (
     <>
 
-    <div>
+    {/* <div>
      <MainPage/>
-    </div>
+    </div> */}
 
     <AllRoutes/>
 
