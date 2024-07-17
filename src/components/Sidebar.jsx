@@ -22,14 +22,14 @@ const Sidebar = () => {
     };
 
     return (
-        <div className=  {` bg-zinc-900 text-zinc-200 w-60 h-screen  p-4 sm:hidden`}>
+        <div className=  {` bg-zinc-900 text-zinc-200  h-screen  p-4 hidden md:block`}>
             <div className="flex items-center mb-8">
                 <img
                     src="https://openui.fly.dev/openui/24x24.svg?text=📊"
                     alt="logo"
                     className="mr-2"
                 />
-                <span className="text-3xl font-semibold">TailAdmin</span>
+                <span className="text-3xl font-semibold">Universal </span>
             </div>
             <nav>
                 <div className="mb-4">
