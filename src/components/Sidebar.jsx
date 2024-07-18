@@ -7,11 +7,12 @@ import { GrStatusInfo } from "react-icons/gr";
 import { TbLineScan } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
+import { RxCross2 } from "react-icons/rx";
 
-const Sidebar = () => {
+const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [activeLink, setActiveLink] = useState(null);
-    const [sidebarOpen , setSidebarOpen] = useState(true)
+    // const [sidebarOpen , setSidebarOpen] = useState(true)
 
 
     const toggleAccordion = (accordionName) => {
@@ -25,10 +26,11 @@ const Sidebar = () => {
     return (
 
         // <div className=  {`bg-zinc-900 text-zinc-200 w-60 h-screen hidden p-4 lg:block`}>
-        <div className= {`absolute hidden lg:block dark:bg-gray-900 text-zinc-200 left-0 top-0  flex h-screen w-64 p-4 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
-            sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-          }`}>
-
+        <div  style={{zIndex:100}}
+        className={`absolute left-0 text-zinc-200 p-4 top-0 z-9999 flex h-screen w-72.5 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+          sidebarOpen ? 'translate-x-0' : '-translate-x-full'
+        }`}>
+            {sidebarOpen&&<div onClick={()=>setSidebarOpen(!sidebarOpen)}><RxCross2 className='text-3xl text-zinc-200'/></div>}
             <div className="flex items-center mb-8">
                 <img
                     src="https://openui.fly.dev/openui/24x24.svg?text=📊"
@@ -147,4 +149,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-

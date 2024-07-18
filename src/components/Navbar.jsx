@@ -8,9 +8,9 @@ import { TbMessageCircle2 } from "react-icons/tb";
 import { IoIosArrowDown } from "react-icons/io";
 
 
-const Navbar = () => {
+const Navbar = ({sidebarOpen,setSidebarOpen}) => {
   const [isDarkMode, setIsDarkMode] = useState(false)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  // const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isUserDropdownOpen, setUserDropdownOpen] = useState(false)
   useEffect(() => {
     if (isDarkMode) {
