@@ -25,7 +25,7 @@ const toggleTheme = () => {
 };
   return (
     // <div className="flex items-center justify-between p-4 bg-card text-card-foreground">
-    <div className="sticky dark:bg-gray-800 dark:text-gray-400 top-0 z-999 p-4 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none justify-between">
+    <div style={{zIndex:100}} className="sticky dark:bg-gray-800 dark:text-gray-400 top-0 z-999 p-4 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none justify-between">
       <div className="flex lg:hidden items-center space-x-4">
         <button className="p-2" onClick={() => setSidebarOpen(!sidebarOpen)}>
           <GiHamburgerMenu className='text-3xl' />

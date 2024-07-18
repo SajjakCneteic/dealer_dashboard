@@ -37,7 +37,7 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
                     alt="logo"
                     className="mr-2"
                 />
-                <span className="text-3xl font-semibold">Universal </span>
+                <span className="text-3xl font-semibold">Dealer Dashboard </span>
             </div>
             <nav>
                 <div className="mb-4">
@@ -78,7 +78,7 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
                                     Pending Orders
                                 </Link>
                                 <Link 
-                                    to="/orders-completed"
+                                    to="/orders/completed"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'completed-orders' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                                     onClick={() => handleLinkClick('completed-orders')}
                                 >
@@ -95,7 +95,7 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
                         >
                             <div className="flex items-center">
                                 <GrStatusInfo className='text-xl' />
-                                <span className="ml-3 text-l">Vendor Info</span>
+                                <span className="ml-3 text-l">Dealer Info</span>
                             </div>
                             <div>{activeAccordion === 'vendorInfo' ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
                         </Link>
@@ -108,13 +108,7 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
                                 >
                                     Profile
                                 </Link>
-                                <Link 
-                                    to="/settings"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'vendor-settings' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
-                                    onClick={() => handleLinkClick('vendor-settings')}
-                                >
-                                    Settings
-                                </Link>
+                               
                             </div>
                         )}
                     </div>
