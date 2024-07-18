@@ -7,6 +7,14 @@ import Navbar from '../components/Navbar'
 import Sidebar from '../components/Sidebar'
 import OrderList from '../pages/OrderList'
 import DefaultLayout from '../pages/DefaultLayout'
+import AllOrderList from '../pages/AllOrderList'
+import PendingOrderList from '../pages/PendingOrderList'
+import CompleteOrderList from '../pages/CompleteOrderList'
+import Profile from '../pages/Profile'
+import Settings from '../pages/Settings'
+import ProductList from '../pages/ProductList'
+import Scan_order from '../pages/Scan_order'
+
 
 const AllRoutes = () => {
   return (
@@ -15,9 +23,11 @@ const AllRoutes = () => {
       <Routes>
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
+
         <Route path='/' element={<Dashboard/>} />
       </Routes>
         </DefaultLayout>
+      
     </>
   )
 }
