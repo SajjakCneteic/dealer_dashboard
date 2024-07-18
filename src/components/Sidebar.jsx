@@ -11,7 +11,7 @@ import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 const Sidebar = () => {
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [activeLink, setActiveLink] = useState(null);
-    const [sidebarOpen , setSidebarOpen] = useState(false)
+    const [sidebarOpen , setSidebarOpen] = useState(true)
 
 
     const toggleAccordion = (accordionName) => {
@@ -24,7 +24,7 @@ const Sidebar = () => {
 
     return (
         // <div className=  {`bg-zinc-900 text-zinc-200 w-60 h-screen hidden p-4 lg:block`}>
-        <div className= {`absolute  text-zinc-200 left-0 top-0 z-9999 flex h-screen w-64 p-4 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
+        <div className= {`absolute hidden lg:block dark:bg-gray-900 text-zinc-200 left-0 top-0  flex h-screen w-64 p-4 flex-col overflow-y-hidden bg-black duration-300 ease-linear dark:bg-boxdark lg:static lg:translate-x-0 ${
             sidebarOpen ? 'translate-x-0' : '-translate-x-full'
           }`}>
             <div className="flex items-center mb-8">
@@ -60,7 +60,7 @@ const Sidebar = () => {
                         {activeAccordion === 'orders' && (
                             <div className="ml-10">
                                 <Link 
-                                    to="/orders/all"
+                                    to="/all-orders"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'all-orders' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                                     onClick={() => handleLinkClick('all-orders')}
                                 >
@@ -74,7 +74,7 @@ const Sidebar = () => {
                                     Pending Orders
                                 </Link>
                                 <Link 
-                                    to="/orders/completed"
+                                    to="/orders-completed"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'completed-orders' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                                     onClick={() => handleLinkClick('completed-orders')}
                                 >
@@ -85,7 +85,7 @@ const Sidebar = () => {
                     </div>
                     <div>
                         <Link
-                            to="#"
+                            // to="#"
                             className={`flex justify-between items-center mb-4 text-l p-2 rounded-lg cursor-pointer ${activeAccordion === 'vendorInfo' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                             onClick={() => toggleAccordion('vendorInfo')}
                         >
@@ -98,14 +98,14 @@ const Sidebar = () => {
                         {activeAccordion === 'vendorInfo' && (
                             <div className="ml-10">
                                 <Link 
-                                    to="/vendor/profile"
+                                    to="/vendor-profile"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'vendor-profile' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                                     onClick={() => handleLinkClick('vendor-profile')}
                                 >
                                     Profile
                                 </Link>
                                 <Link 
-                                    to="/vendor/settings"
+                                    to="/vendor-settings"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'vendor-settings' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                                     onClick={() => handleLinkClick('vendor-settings')}
                                 >
@@ -115,7 +115,7 @@ const Sidebar = () => {
                         )}
                     </div>
                     <Link 
-                        to="/products"
+                        // to="/products"
                         className={`flex items-center mb-4 text-l p-2 rounded-lg ${activeLink === 'products' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                         onClick={() => handleLinkClick('products')}
                     >
@@ -123,7 +123,7 @@ const Sidebar = () => {
                         <span className="ml-3 text-l">Products</span>
                     </Link>
                     <Link 
-                        to="/scan-order"
+                        // to="/scan-order"
                         className={`flex items-center mb-4 text-l p-2 rounded-lg ${activeLink === 'scan-order' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                         onClick={() => handleLinkClick('scan-order')}
                     >
@@ -131,7 +131,7 @@ const Sidebar = () => {
                         <span className="ml-3 text-l">Scan Order</span>
                     </Link>
                     <Link 
-                        to="/logout"
+                      
                         className={`flex items-center mb-4 text-l p-2 rounded-lg ${activeLink === 'logout' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                         onClick={() => handleLinkClick('logout')}
                     >
