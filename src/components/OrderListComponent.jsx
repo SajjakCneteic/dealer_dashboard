@@ -1,10 +1,22 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const OrderList = ({customerOrders}) => {
     return (
         <div className="max-w-full p-4 bg-card rounded-lg shadow-lg">
+            <div className="flex justify-between">
+
+            <div>
+
             <h2 className="text-2xl font-bold text-card-foreground">Order List</h2>
             <p className="text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies lectus sem.</p>
+            </div>
+            <div>
+                <Link to="/all-orders">
+                <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700">View More</button>
+                </Link>
+            </div>
+            </div>
             <div className="overflow-x-auto">
                 <table className="min-w-full mt-6 bg-card border-border rounded-lg">
                     <thead>
@@ -21,7 +33,7 @@ const OrderList = ({customerOrders}) => {
                         {/* Customer Orders */}
                         {/* Map each row as a separate component */}
                         {customerOrders.map((order)=>{
-                            return <CustomerOrderRow key={order} {...order}/>
+                            return <CustomerOrderRow key={order.id} {...order}/>
                         })}
                     </tbody>
                 </table>
@@ -60,7 +72,7 @@ const CustomerOrderRow = ({ customerName, customerEmail, productName, productDet
 
 const OrderListComponent = () => {
     const customerOrders = [
-        {
+        { id:1,
             customerName: 'Musharof Chowdhury',
             customerEmail: 'musharof@gmail.com',
             productName: 'Apple Macbook Pro M1',
@@ -70,7 +82,7 @@ const OrderListComponent = () => {
             status: 'Pending',
             confirmationEnabled: true
         },
-        {
+        {   id:2,
             customerName: 'Shafiq Hammad',
             customerEmail: 'shafiq@gmail.com',
             productName: 'iPhone 13 Pro Max',
@@ -80,7 +92,7 @@ const OrderListComponent = () => {
             status: 'Pending',
             confirmationEnabled: true
         },
-        {
+        {    id:3,
             customerName: 'Naimur Rahman',
             customerEmail: 'naim@gmail.com',
             productName: 'Apple watch series 7',
@@ -90,7 +102,7 @@ const OrderListComponent = () => {
             status: 'Cancelled',
             confirmationEnabled: false
         },
-        {
+        {    id:4,
             customerName: 'Jhon Smith',
             customerEmail: 'smith@gmail.com',
             productName: 'Apple Macbook air M1',

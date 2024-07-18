@@ -100,14 +100,14 @@ const Sidebar = () => {
                         {activeAccordion === 'vendorInfo' && (
                             <div className="ml-10">
                                 <Link 
-                                    to="/vendor-profile"
+                                    to="/profile"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'vendor-profile' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                                     onClick={() => handleLinkClick('vendor-profile')}
                                 >
                                     Profile
                                 </Link>
                                 <Link 
-                                    to="/vendor-settings"
+                                    to="/settings"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'vendor-settings' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                                     onClick={() => handleLinkClick('vendor-settings')}
                                 >
@@ -117,7 +117,7 @@ const Sidebar = () => {
                         )}
                     </div>
                     <Link 
-                        // to="/products"
+                        to="/products"
                         className={`flex items-center mb-4 text-l p-2 rounded-lg ${activeLink === 'products' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                         onClick={() => handleLinkClick('products')}
                     >
@@ -125,7 +125,7 @@ const Sidebar = () => {
                         <span className="ml-3 text-l">Products</span>
                     </Link>
                     <Link 
-                        // to="/scan-order"
+                        to="/scan-order"
                         className={`flex items-center mb-4 text-l p-2 rounded-lg ${activeLink === 'scan-order' ? 'bg-zinc-700' : 'hover:bg-zinc-800'}`}
                         onClick={() => handleLinkClick('scan-order')}
                     >
