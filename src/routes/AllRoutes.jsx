@@ -3,16 +3,13 @@ import { Route, Routes } from 'react-router-dom'
 import LogIn from '../pages/Login'
 import SignUp from '../pages/Signup'
 import Dashboard from '../pages/Dashboard'
-import Navbar from '../components/Navbar'
-import Sidebar from '../components/Sidebar'
-import OrderList from '../pages/OrderList'
+
 import DefaultLayout from '../pages/DefaultLayout'
+import ProductList from '../pages/ProductList'
 import AllOrderList from '../pages/AllOrderList'
 import PendingOrderList from '../pages/PendingOrderList'
 import CompleteOrderList from '../pages/CompleteOrderList'
 import Profile from '../pages/Profile'
-import Settings from '../pages/Settings'
-import ProductList from '../pages/ProductList'
 import Scan_order from '../pages/Scan_order'
 
 
@@ -23,8 +20,14 @@ const AllRoutes = () => {
       <Routes>
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
-
         <Route path='/' element={<Dashboard/>} />
+        <Route path='/dashboard' element={<Dashboard/>} />
+        <Route path='/all-orders' element={<AllOrderList/>} />
+        <Route path='/orders/pending' element={<PendingOrderList/>} />
+        <Route path='/orders/completed' element={<CompleteOrderList/>} />
+        <Route path='/profile' element={<Profile/>} />
+        <Route path='/scan-order' element={<Scan_order/>} />
+        <Route path='/products' element={<ProductList/>} />
       </Routes>
         </DefaultLayout>
       
