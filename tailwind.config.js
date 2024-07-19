@@ -4,7 +4,15 @@ module.exports = {
   ],
   darkMode:'class',
   theme: {
-    extend: {},
+    extend: {
+      colors: {
+        customBlue: '#24303F',
+        btnBlue: '#3056D3',
+        secondry: '#F6FAFF',
+        secondryDark:'#1A222C',
+        textColor:'#AEB7C0'
+      },
+    },
   },
   plugins: [],
 }
