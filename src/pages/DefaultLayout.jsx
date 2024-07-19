@@ -1,36 +1,49 @@
-import React, { useState } from 'react'
-import Sidebar from '../components/Sidebar'
-import Navbar from '../components/Navbar'
+import React, { useState, useEffect } from 'react';
+import Sidebar from '../components/Sidebar';
+import Navbar from '../components/Navbar';
+import Loader from '../components/Loader';
+import { useLocation, useParams } from 'react-router-dom';
 
-const DefaultLayout = ({children}) => {
+const DefaultLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [loading, setLoading] = useState(true);
+const Location=useLocation();
+  useEffect(() => {
+    setLoading(true);
+    const timer = setTimeout(() => {
+      setLoading(false);
+    }, 500);
+
+    return () => clearTimeout(timer);
+  }, [Location.pathname]);
+
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
-      {/* <!-- ===== Page Wrapper Start ===== --> */}
+      {/* ===== Page Wrapper Start ===== */}
       <div className="flex h-screen overflow-hidden">
-        {/* <!-- ===== Sidebar Start ===== --> */}
+        {/* ===== Sidebar Start ===== */}
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-        {/* <!-- ===== Sidebar End ===== --> */}
+        {/* ===== Sidebar End ===== */}
 
-        {/* <!-- ===== Content Area Start ===== --> */}
+        {/* ===== Content Area Start ===== */}
         <div className="relative flex flex-1 flex-col overflow-y-auto overflow-x-hidden">
-          {/* <!-- ===== Header Start ===== --> */}
+          {/* ===== Header Start ===== */}
           <Navbar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
-          {/* <!-- ===== Header End ===== --> */}
+          {/* ===== Header End ===== */}
 
-          {/* <!-- ===== Main Content Start ===== --> */}
+          {/* ===== Main Content Start ===== */}
           <main>
-            <div className="mx-auto dark:bg-secondryDark bg-secondry  dark:text-white max-w-screen-2xl p-4 md:p-6 2xl:p-10">
-              {children}
+            <div className="mx-auto animate-fadeIn dark:bg-secondryDark bg-secondry dark:text-white max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+              {loading ? <Loader /> : children}
             </div>
           </main>
-          {/* <!-- ===== Main Content End ===== --> */}
+          {/* ===== Main Content End ===== */}
         </div>
-        {/* <!-- ===== Content Area End ===== --> */}
+        {/* ===== Content Area End ===== */}
       </div>
-      {/* <!-- ===== Page Wrapper End ===== --> */}
+      {/* ===== Page Wrapper End ===== */}
     </div>
-  )
-}
+  );
+};
 
-export default DefaultLayout
+export default DefaultLayout;
