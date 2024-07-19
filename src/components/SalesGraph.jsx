@@ -2,14 +2,14 @@ import React, { useState } from 'react';
 import ReactApexChart from 'react-apexcharts';
 
 const options = {
-  colors: ['#088F80', '#00ff0f'],
+  colors: ['#13C296', '#3056D3'],
   chart: {
     fontFamily: 'Satoshi, sans-serif',
     type: 'bar',
     height: 335,
     stacked: true,
     toolbar: {
-      show: false,
+      show: true,
     },
     zoom: {
       enabled: false,
@@ -31,7 +31,7 @@ const options = {
   plotOptions: {
     bar: {
       horizontal: false,
-      borderRadius: 0,
+      borderRadius: 10,
       columnWidth: '25%',
       borderRadiusApplication: 'end',
       borderRadiusWhenStacked: 'last',
@@ -42,13 +42,29 @@ const options = {
   },
   xaxis: {
     categories: ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+    labels: {
+      style: {
+        colors: "darkgray"
+      }
+    }
   },
+  yaxis: {
+    labels: {
+      style: {
+        colors: "darkgray"
+      }
+    }
+  },
+ 
   legend: {
     position: 'top',
     horizontalAlign: 'left',
     fontFamily: 'Satoshi',
     fontWeight: 500,
     fontSize: '14px',
+    labels: {
+      colors: 'darkgray', // Set legend labels to dark gray
+    },
     markers: {
       radius: 99,
     },
@@ -78,7 +94,7 @@ const SalesGraph = () => {
     <div className=" w-full bg-card p-4 rounded-lg shadow-md flex-1">
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-card-foreground">Sales Graph</h2>
-        <select className="bg-secondary text-secondary-foreground p-2 rounded-lg">
+        <select className="border-1 text-black p-2 rounded-lg">
           {salesGraphSelectOptions.map((option, index) => (
             <option key={index}>{option}</option>
           ))}
