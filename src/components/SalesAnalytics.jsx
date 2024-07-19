@@ -10,9 +10,21 @@ const salesAnalyticsOptions = {
       enabled: false
     }
   },
-  colors: ['#088F8F', '#00ff00'],
+  colors: ['#13C296', '#3056D3'],
   xaxis: {
-    categories: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug']
+    categories: ['Sep', 'Oct', 'Nov', 'Dec', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+    labels: {
+      style: {
+        colors: "darkgray"
+      }
+    }
+  },
+  yaxis: {
+    labels: {
+      style: {
+        colors: "darkgray"
+      }
+    }
   },
   stroke: {
     curve: 'smooth'
@@ -32,11 +44,11 @@ const salesAnalyticsOptions = {
 const salesAnalyticsSeries = [
   {
     name: 'Product One',
-    data: [20, 30, 40, 35, 50, 55, 60, 70, 80, 60, 70, 90]
+    data: [20, 90, 40, 35, 50, 55, 60, 70, 80, 60, 70, 90]
   },
   {
     name: 'Product Two',
-    data: [25, 35, 45, 40, 55, 60, 65, 75, 85, 65, 75, 95]
+    data: [25, 45, 45, 40, 55, 60, 65, 75, 15, 65, 75, 95]
   }
 ];
 
@@ -47,7 +59,7 @@ const SalesAnalytics = () => {
     <div className="w-full  bg-card p-4 rounded-lg shadow-md flex-1">
       <div className="w-full flex justify-between items-center mb-4">
         <h2 className="text-xl font-bold text-card-foreground">Sales Analytics</h2>
-        <select className="bg-secondary text-secondary-foreground p-2 rounded-lg">
+        <select className="border-1 text-black p-2 rounded-lg">
           {salesAnalyticsSelectOptions.map((option, index) => (
             <option key={index}>{option}</option>
           ))}
