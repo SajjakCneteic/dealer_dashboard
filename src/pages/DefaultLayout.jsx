@@ -20,7 +20,7 @@ const DefaultLayout = ({children}) => {
 
           {/* <!-- ===== Main Content Start ===== --> */}
           <main>
-            <div className="mx-auto max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <div className="mx-auto dark:bg-secondryDark bg-secondry  dark:text-white max-w-screen-2xl p-4 md:p-6 2xl:p-10">
               {children}
             </div>
           </main>

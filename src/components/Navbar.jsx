@@ -25,7 +25,7 @@ const toggleTheme = () => {
 };
   return (
     // <div className="flex items-center justify-between p-4 bg-card text-card-foreground">
-    <div style={{zIndex:100}} className="sticky dark:bg-gray-800 dark:text-gray-400 top-0 z-999 p-4 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none justify-between">
+    <div style={{zIndex:100}} className="sticky dark:bg-customBlue shadow-xl dark:text-gray-400 top-0 z-999 p-6 flex w-full bg-white drop-shadow-1 dark:bg-boxdark dark:drop-shadow-none justify-between">
       <div className="flex lg:hidden items-center space-x-4">
         <button className="p-2" onClick={() => setSidebarOpen(!sidebarOpen)}>
           <GiHamburgerMenu className='text-3xl' />
@@ -44,18 +44,18 @@ const toggleTheme = () => {
           />
         </div>
       </div>
-      <div className="flex items-center space-x-4">
+      <div className="flex items-center space-x-4 ">
         <button
-          className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80"
+          className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:text-btnBlue"
           onClick={toggleTheme}
         >
           {isDarkMode ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}
         </button>
-        <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80">
+        <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:text-btnBlue">
           <HiOutlineBellAlert className='text-2xl' />
           <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-destructive"></span>
         </button>
-        <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:bg-secondary/80">
+        <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:text-btnBlue">
           <TbMessageCircle2 className='text-2xl' />
           <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-destructive"></span>
         </button>
@@ -64,16 +64,16 @@ const toggleTheme = () => {
             <span></span>
             <span></span>
           </div>
-          <img aria-hidden="true" alt="user-avatar" src="https://placehold.co/32x32" className="rounded-full" />
-          <button className="p-2" onClick={()=>setUserDropdownOpen((pre)=>!pre)}>
+          <img aria-hidden="true" alt="user-avatar" src="https://placehold.co/40x40" className="rounded-full" />
+          <button className="p-2 hover:text-btnBlue" onClick={()=>setUserDropdownOpen((pre)=>!pre)}>
             <IoIosArrowDown className='text-2xl' />
           </button>
-          {isUserDropdownOpen&&<div className="absolute right-5 top-14 mt-4 flex w-64 flex-col rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">My Profile</div>
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">My Contacts</div>
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Account Settings</div>
+          {isUserDropdownOpen&&<div className="absolute right-5 top-14 mt-4 flex w-64 flex-col rounded-sm shadow:xl bg-white shadow-default dark:bg-secondryDark  ">
+            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">My Profile</div>
+            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">My Contacts</div>
+            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">Account Settings</div>
             <hr className="border-t border-stroke dark:border-strokedark" />
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:bg-gray-700 cursor-pointer">Logout</div>
+            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">Logout</div>
           </div>
 }
         </div>

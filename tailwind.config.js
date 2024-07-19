@@ -5,6 +5,15 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
+
+    extend: {
+      colors: {
+        customBlue: '#24303F',
+        btnBlue: '#3056D3',
+        secondry: '#F6FAFF',
+        secondryDark:'#1A222C',
+        textColor:'#AEB7C0'
+
     fontFamily: {
       satoshi: ['Satoshi', 'sans-serif'],
     },
@@ -247,6 +256,7 @@ module.exports = {
         'spin-1.5': 'spin 1.5s linear infinite',
         'spin-2': 'spin 2s linear infinite',
         'spin-3': 'spin 3s linear infinite',
+
       },
     },
   },
