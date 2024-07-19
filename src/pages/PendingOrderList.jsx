@@ -50,7 +50,7 @@ const PendingOrderList = () => {
     ];
 
     return (
-        <OrderList customerOrders={customerOrders}/>
+        <OrderList Heading={"Pending Order List"} show={false} customerOrders={customerOrders}/>
           
     );
 };

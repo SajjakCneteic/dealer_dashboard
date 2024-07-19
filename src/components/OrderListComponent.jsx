@@ -50,7 +50,7 @@ const OrderListComponent = () => {
     ];
 
     return (
-        <OrderList customerOrders={customerOrders}/>
+        <OrderList Heading={"All Order List"} show="true" customerOrders={customerOrders}/>
           
     );
 };
