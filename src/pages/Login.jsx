@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import LogoDark from '../images/logo/logo-dark.svg';
 import Logo from '../images/logo/logo.svg';
 import img from "../images/mob.svg";
@@ -10,6 +10,8 @@ const LogIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const navigate=useNavigate();
+
   const validateForm = () => {
     let errors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -37,6 +39,8 @@ const LogIn = () => {
     if (validateForm()) {
       console.log('Email:', email);
       console.log('Password:', password);
+      localStorage.setItem("auth",true);
+      navigate("/")
       // Here you can add your logic to submit the form data to an API or perform other actions
     }
   };
@@ -44,12 +48,13 @@ const LogIn = () => {
   return (
     <>
 
-      <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+      <div className="rounded-sm pb-6 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex justify-center items-center">
           <div className="hidden w-full md:block ">
-            <div className="py-12 px-26 text-center">
-              <div className="my-4 inline-block" >
-                <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-2xl">Dealer Dashboard</h2>
+            <div className=" px-26 text-center">
+              <div className=" inline-block" >
+              <h2 className=" text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
+              Dealer Dashboard</h2>
                 
               </div>
 
@@ -67,7 +72,7 @@ const LogIn = () => {
           </div>
 
           <div className="w-full border-stroke p-10 dark:border-strokedark  xl:border-l-2">
-            <div className="w-full p-4 sm:p-12.5 xl:p-17.5">
+            <div className="w-full px-4 sm:px-12.5 xl:px-17.5">
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Sign In To Universal Commerce
               </h2>

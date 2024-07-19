@@ -2,12 +2,18 @@ import React, { useState, useEffect } from 'react';
 import Sidebar from '../components/Sidebar';
 import Navbar from '../components/Navbar';
 import Loader from '../components/Loader';
-import { useLocation, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 
 const DefaultLayout = ({ children }) => {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [loading, setLoading] = useState(true);
-const Location=useLocation();
+  const [isAuth,setIsAuth]=useState(localStorage.getItem("auth"));
+  const naviagate=useNavigate();
+  const Location=useLocation();
+
+  useEffect(()=>{
+    setIsAuth(localStorage.getItem("auth"));
+  },[Location.pathname]);
   useEffect(() => {
     setLoading(true);
     const timer = setTimeout(() => {
@@ -16,7 +22,9 @@ const Location=useLocation();
 
     return () => clearTimeout(timer);
   }, [Location.pathname]);
-
+if(!isAuth){
+  naviagate("/login")
+}
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
       {/* ===== Page Wrapper Start ===== */}
