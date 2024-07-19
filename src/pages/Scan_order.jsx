@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import QrScanner from 'react-qr-scanner';
 
@@ -65,6 +66,7 @@ const ScanOrder = () => {
       )}
 
      
+
     </div>
   );
 };

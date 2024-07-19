@@ -14,12 +14,15 @@ import Scan_order from '../pages/Scan_order'
 
 
 const AllRoutes = () => {
+  const isLoggedIn = true
   return (
-    <>
-        <DefaultLayout>
-      <Routes>
+    <>{!isLoggedIn&&<Routes>
+        <Route path="/" element={<LogIn />} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
+        </Routes>}
+       {isLoggedIn&& <DefaultLayout>
+      <Routes>
         <Route path='/' element={<Dashboard/>} />
         <Route path='/dashboard' element={<Dashboard/>} />
         <Route path='/all-orders' element={<AllOrderList/>} />
@@ -29,7 +32,7 @@ const AllRoutes = () => {
         <Route path='/scan-order' element={<Scan_order/>} />
         <Route path='/products' element={<ProductList/>} />
       </Routes>
-        </DefaultLayout>
+        </DefaultLayout>}
       
     </>
   )
