@@ -46,16 +46,16 @@ const toggleTheme = () => {
       </div>
       <div className="flex items-center space-x-4 ">
         <button
-          className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:text-btnBlue"
+          className="relative p-2 rounded-full text-secondary-foreground hover:text-btnBlue"
           onClick={toggleTheme}
         >
           {isDarkMode ? <FaSun aria-hidden="true" /> : <FaMoon aria-hidden="true" />}
         </button>
-        <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:text-btnBlue">
+        <button className="relative p-2 rounded-full  text-secondary-foreground hover:text-btnBlue">
           <HiOutlineBellAlert className='text-2xl' />
           <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-destructive"></span>
         </button>
-        <button className="relative p-2 rounded-full bg-secondary text-secondary-foreground hover:text-btnBlue">
+        <button className="relative p-2 rounded-full text-secondary-foreground hover:text-btnBlue">
           <TbMessageCircle2 className='text-2xl' />
           <span className="absolute top-0 right-0 block h-2 w-2 rounded-full bg-destructive"></span>
         </button>

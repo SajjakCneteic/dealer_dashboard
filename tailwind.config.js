@@ -5,26 +5,13 @@ module.exports = {
   content: ['./index.html', './src/**/*.{js,ts,jsx,tsx}'],
   darkMode: 'class',
   theme: {
-
     extend: {
       colors: {
         customBlue: '#24303F',
         btnBlue: '#3056D3',
         secondry: '#F6FAFF',
-        secondryDark:'#1A222C',
-        textColor:'#AEB7C0'
-
-    fontFamily: {
-      satoshi: ['Satoshi', 'sans-serif'],
-    },
-    screens: {
-      '2xsm': '375px',
-      xsm: '425px',
-      '3xl': '2000px',
-      ...defaultTheme.screens,
-    },
-    extend: {
-      colors: {
+        secondryDark: '#1A222C',
+        textColor: '#AEB7C0',
         current: 'currentColor',
         transparent: 'transparent',
         white: '#FFFFFF',
@@ -60,6 +47,15 @@ module.exports = {
         success: '#219653',
         danger: '#D34053',
         warning: '#FFA70B',
+      },
+      fontFamily: {
+        satoshi: ['Satoshi', 'sans-serif'],
+      },
+      screens: {
+        '2xsm': '375px',
+        xsm: '425px',
+        '3xl': '2000px',
+        ...defaultTheme.screens,
       },
       fontSize: {
         'title-xxl': ['44px', '55px'],
@@ -256,7 +252,6 @@ module.exports = {
         'spin-1.5': 'spin 1.5s linear infinite',
         'spin-2': 'spin 2s linear infinite',
         'spin-3': 'spin 3s linear infinite',
-
       },
     },
   },

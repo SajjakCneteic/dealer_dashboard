@@ -43,7 +43,7 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
                 <div className="mb-4">
                     <Link 
                         to="/dashboard"
-                        className={`flex items-center text-xl mb-4  p-2 rounded-lg ${activeLink === 'dashboard' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'dashboard' ? 'text-white' : 'hover:text-white'}`}
+                        className={`flex items-center text-xl mb-4  p-2 rounded-lg ${activeLink === 'dashboard' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'dashboard' ? 'text-white' : 'hover:text-white'} `}
                         onClick={() => handleLinkClick('dashboard')}
                     >
                         <LuLayoutDashboard className='' />
