@@ -50,7 +50,7 @@ const CompleteOrderList = () => {
     ];
 
     return (
-        <OrderList customerOrders={customerOrders}/>
+        <OrderList Heading={"Completed Order List"} show={false} customerOrders={customerOrders}/>
           
     );
 };
