@@ -97,7 +97,7 @@ const Dashboard = () => {
         <div className="w-full">
         <DashboardCharts/>
         </div>
-        <div className="w-full">
+        <div className="w-full bg-white dark:bg-customBlue">
 
        < OrderListComponent/>
         </div>

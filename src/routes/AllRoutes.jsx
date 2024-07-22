@@ -11,6 +11,7 @@ import PendingOrderList from '../pages/PendingOrderList'
 import CompleteOrderList from '../pages/CompleteOrderList'
 import Profile from '../pages/Profile'
 import Scan_order from '../pages/Scan_order'
+import ProductDetails from '../pages/ProductDetails'
 
 
 const AllRoutes = () => {
@@ -31,6 +32,7 @@ const AllRoutes = () => {
         <Route path='/profile' element={<Profile/>} />
         <Route path='/scan-order' element={<Scan_order/>} />
         <Route path='/products' element={<ProductList/>} />
+        <Route path='/product/:id' element={<ProductDetails/>} />
       </Routes>
         </DefaultLayout>}
       
