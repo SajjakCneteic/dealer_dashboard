@@ -11,7 +11,11 @@ import PendingOrderList from '../pages/PendingOrderList'
 import CompleteOrderList from '../pages/CompleteOrderList'
 import Profile from '../pages/Profile'
 import Scan_order from '../pages/Scan_order'
+
+import ProductDetails from '../pages/ProductDetails'
+
 import PageNotFound from '../pages/PageNotFound'
+
 
 
 const AllRoutes = () => {
@@ -36,9 +40,16 @@ const AllRoutes = () => {
         <Route path='/' element={<Dashboard/>} />
         <Route path='/dashboard' element={<Dashboard/>} />
         <Route path='/all-orders' element={<AllOrderList/>} />
+
+        <Route path='/orders/pending' element={<PendingOrderList/>} />
+        <Route path='/orders/completed' element={<CompleteOrderList/>} />
+        <Route path='/profile' element={<Profile/>} />
+        <Route path='/scan-order' element={<Scan_order/>} />
+        <Route path='/products' element={<ProductList/>} />
+        <Route path='/product/:id' element={<ProductDetails/>} />
+
        
         <Route path="*" element={<PageNotFound />} />
-
       </Routes>
         </DefaultLayout>} */}
       

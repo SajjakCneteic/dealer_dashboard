@@ -64,7 +64,7 @@ const toggleTheme = () => {
             <span></span>
             <span></span>
           </div>
-          <img aria-hidden="true" alt="user-avatar" src="https://placehold.co/40x40" className="rounded-full" />
+          <img aria-hidden="true" alt="user-avatar" width={'40px'}  src="http://localhost:3000/static/media/user-06.d0e2a1a0035fe055bde7.png" className="rounded-full" />
           <button className="p-2 hover:text-btnBlue" onClick={()=>setUserDropdownOpen((pre)=>!pre)}>
             <IoIosArrowDown className='text-2xl' />
           </button>

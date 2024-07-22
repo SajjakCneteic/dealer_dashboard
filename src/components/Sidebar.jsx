@@ -56,7 +56,7 @@ const handleLogout =()=>{
                     <div>
                         <Link
                             to="#"
-                            className={`flex justify-between items-center mb-4 text-xl p-2 rounded-lg cursor-pointer ${activeLink === '#' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '#' ? 'text-white' : 'hover:text-white'}`}
+                            className={`flex justify-between items-center mb-4 text-xl p-2 rounded-lg cursor-pointer ${activeLink === 'orders' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'orders' ? 'text-white' : 'hover:text-white'}`}
                             onClick={() => toggleAccordion('orders')}
                         >
                             <div className="flex items-center">
@@ -76,14 +76,14 @@ const handleLogout =()=>{
                                 </Link>
                                 <Link 
                                     to="/orders/pending"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'orders/pending' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'order/pending' ? 'text-white' : 'hover:text-white'}`}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'pending-orders' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'pending-orders' ? 'text-white' : 'hover:text-white'}`}
                                     onClick={() => handleLinkClick('pending-orders')}
                                 >
                                     Pending Orders
                                 </Link>
                                 <Link 
                                     to="/orders/completed"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'orders/completed' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'orders/completed' ? 'text-white' : 'hover:text-white'}`}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'completed-orders' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'completed-orders' ? 'text-white' : 'hover:text-white'}`}
                                     onClick={() => handleLinkClick('completed-orders')}
                                 >
                                     Completed Orders
@@ -107,7 +107,7 @@ const handleLogout =()=>{
                             <div className="ml-10 text-l">
                                 <Link 
                                     to="/profile"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'profile' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'profile' ? 'text-white' : 'hover:text-white'}`}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'vendor-profile' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'vendor-profile' ? 'text-white' : 'hover:text-white'}`}
                                     onClick={() => handleLinkClick('vendor-profile')}
                                 >
                                     Profile
