@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import { FaBorderStyle } from "react-icons/fa";
@@ -12,9 +12,13 @@ import { RxCross2 } from "react-icons/rx";
 const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [activeLink, setActiveLink] = useState(null);
+    const navigate=useNavigate();
     // const [sidebarOpen , setSidebarOpen] = useState(true)
 
-
+const handleLogout =()=>{
+    localStorage.setItem("auth",false);
+    navigate("/login")
+}
     const toggleAccordion = (accordionName) => {
         setActiveAccordion(activeAccordion === accordionName ? null : accordionName);
     };
@@ -128,14 +132,13 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
                         <TbLineScan className='text-xl' />
                         <span className="ml-3 text-l">Scan Order</span>
                     </Link>
-                    <Link 
-                      
-                        className={`flex items-center mb-4 text-xl p-2 rounded-lg ${activeLink === 'logout' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'logout' ? 'text-white' : 'hover:text-white'}`}
-                        onClick={() => handleLinkClick('logout')}
+                    <div
+                        className={`flex items-center cursor-pointer mb-4 text-xl p-2 rounded-lg ${activeLink === 'logout' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'logout' ? 'text-white' : 'hover:text-white'}`}
+                        onClick={() => handleLogout()}
                     >
                         <MdLogout className='text-xl' />
                         <span className="ml-3 text-l">Logout</span>
-                    </Link>
+                    </div>
                 </div>
             </nav>
         </div>
