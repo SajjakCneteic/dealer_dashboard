@@ -24,6 +24,7 @@ const AllRoutes = () => {
   return (
     <><Routes>
         <Route path="/" element={<DefaultLayout><Dashboard/></DefaultLayout>} />
+        <Route path="/dashboard" element={<DefaultLayout><Dashboard/></DefaultLayout>} />
         <Route path="/login" element={<LogIn />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path='/all-orders' element={<DefaultLayout><AllOrderList/></DefaultLayout>} />
@@ -32,9 +33,10 @@ const AllRoutes = () => {
         <Route path='/profile' element={<DefaultLayout><Profile/></DefaultLayout>} />
         <Route path='/scan-order' element={<DefaultLayout><Scan_order/></DefaultLayout>} />
         <Route path='/products' element={<DefaultLayout><ProductList/></DefaultLayout>} />
+        <Route path='/product/:id' element={<DefaultLayout><ProductDetails/></DefaultLayout>} />
         <Route path="*" element={<PageNotFound />} />
 
-        </Routes>}
+        </Routes>
        {/* {isAuth&& <DefaultLayout>
       <Routes>
         <Route path='/' element={<Dashboard/>} />
