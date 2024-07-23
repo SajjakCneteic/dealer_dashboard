@@ -6,6 +6,9 @@ module.exports = {
   darkMode: 'class',
   theme: {
     extend: {
+      gridTemplateColumns: {
+        '100': '70fr 30fr', 
+      },
       colors: {
         customBlue: '#24303F',
         btnBlue: '#3056D3',
