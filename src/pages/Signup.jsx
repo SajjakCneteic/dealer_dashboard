@@ -62,7 +62,7 @@ const SignUp= () => {
             <div className=" px-26 text-center">
               <div className=" inline-block" >
               <h2 className=" text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-              Dealer Dashboard</h2>
+              Dealer Panel</h2>
                 
               </div>
 
@@ -83,7 +83,7 @@ const SignUp= () => {
             <div className="w-full px-4 sm:px-12.5 xl:px-17.5">
               {/* <span className="mb-2 block font-medium">Start for free</span> */}
               <h2 className="mb-4 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign Up to Universal Commers
+                Sign Up 
               </h2>
 
               <form onSubmit={handleSubmit}>
@@ -170,8 +170,9 @@ const SignUp= () => {
                   <div className="relative">
                   <input
                       type="password"
-                      placeholder="Enter your password"
+                      placeholder="6+ Characters, 1 Capital letter"
                       value={password}
+                      
                       onChange={(e) => setPassword(e.target.value)}
                       className={`w-full rounded-lg border ${errors.password ? 'border-red-500' : 'border-stroke'} bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
                     />
