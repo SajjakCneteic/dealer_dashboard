@@ -41,7 +41,7 @@ const handleLogout =()=>{
                     alt="logo"
                     className="mr-2"
                 />
-                <span className="text-3xl font-semibold"> Dashboard </span>
+                <span className="text-3xl font-semibold"> Dealer Panel </span>
             </div>
             <nav className='mt-5 TEXT-xl'>
                 <div className="mb-4">
