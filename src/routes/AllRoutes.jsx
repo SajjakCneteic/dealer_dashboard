@@ -15,6 +15,7 @@ import Scan_order from '../pages/Scan_order'
 import ProductDetails from '../pages/ProductDetails'
 
 import PageNotFound from '../pages/PageNotFound'
+import CreateProduct from '../pages/CreateProduct'
 
 
 
@@ -34,6 +35,7 @@ const AllRoutes = () => {
         <Route path='/scan-order' element={<DefaultLayout><Scan_order/></DefaultLayout>} />
         <Route path='/products' element={<DefaultLayout><ProductList/></DefaultLayout>} />
         <Route path='/product/:id' element={<DefaultLayout><ProductDetails/></DefaultLayout>} />
+        <Route path='/products/create' element={<DefaultLayout><CreateProduct/></DefaultLayout>} />
         <Route path="*" element={<PageNotFound />} />
 
         </Routes>

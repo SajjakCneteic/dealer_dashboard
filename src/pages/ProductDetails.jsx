@@ -1,9 +1,16 @@
-import { FaRegEdit } from 'react-icons/fa';
+import { FaArrowLeft, FaRegEdit } from 'react-icons/fa';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuView } from 'react-icons/lu';
+import { Link } from 'react-router-dom';
 
 const ProductDetails = ({ product }) => {
   return (
+    <>
+    <div className='mb-3 '>
+      <Link to='/products' className='text-xl inline-flex items-center bg-white p-2 pl-5 pr-5 rounded-full shadow-md hover:text-btnBlue transition duration-200'>
+        <FaArrowLeft className='mr-2' /> Products
+      </Link>
+    </div>
     <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-customBlue rounded-lg shadow-lg mt-10">
       <div className="flex flex-col lg:flex-row">
         <img 
@@ -49,6 +56,7 @@ const ProductDetails = ({ product }) => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 
