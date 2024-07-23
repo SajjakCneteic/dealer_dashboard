@@ -1,61 +1,223 @@
+import React, { useEffect, useRef } from 'react';
 import { FaArrowLeft, FaRegEdit } from 'react-icons/fa';
 import { AiOutlineDelete } from 'react-icons/ai';
 import { LuView } from 'react-icons/lu';
 import { Link } from 'react-router-dom';
+import { GrImage } from "react-icons/gr";
+import { MdArrowForwardIos } from 'react-icons/md';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css'; // import styles
 
 const ProductDetails = ({ product }) => {
+
+
   return (
     <>
-    <div className='mb-3 '>
-      <Link to='/products' className='text-xl inline-flex items-center bg-white p-2 pl-5 pr-5 rounded-full shadow-md hover:text-btnBlue transition duration-200'>
-        <FaArrowLeft className='mr-2' /> Products
-      </Link>
-    </div>
-    <div className="max-w-4xl mx-auto p-6 bg-white dark:bg-customBlue rounded-lg shadow-lg mt-10">
-      <div className="flex flex-col lg:flex-row">
-        <img 
-          src={'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'} 
-        //   alt={product.name} 
-          className="w-full lg:w-1/2 h-auto object-cover rounded-md shadow-lg"
-        />
-        <div className="lg:ml-6 mt-6 lg:mt-0 flex flex-col justify-between">
-          <div>
-            <h1 className="text-3xl font-semibold text-zinc-900 dark:text-zinc-100">Name</h1>
-            <p className="mt-2 text-lg text-zinc-700 dark:text-zinc-300">Category</p>
-            <p className="mt-4 text-xl text-zinc-700 dark:text-zinc-300">Price</p>
+      <div className='mb-6'>
+        <span className='text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md'>
+          <Link to='/dashboard' className='items-center inline-flex hover:text-btnBlue transition duration-200'>
+            Dashboard<MdArrowForwardIos className='ml-2 mr-2' />
+          </Link>
+          <Link to='/products' className='items-center inline-flex hover:text-btnBlue transition duration-200'>
+            Products<MdArrowForwardIos className='ml-2 mr-2' />
+          </Link>
+          <Link className='items-center pointer-events-none inline-flex hover:text-btnBlue transition duration-200'>
+            Product Details
+          </Link>
+        </span>
+      </div>
+      <div className="overflow-x-auto  bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
+        <div className='flex justify-end mb-3'>
+          <Link to='/products/create' className='bg-btnBlue  flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5'>
+            Delete
+          </Link>
+          <Link to='/products/create' className='bg-blue-300  flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2'>
+            Update
+          </Link>
+        </div>
+
+        <div className="grid grid-cols-1 md:grid-cols-100 gap-5">
+          <div className="col-span-70">
+            {/* Left side start  */}
+            <div className="flex justify-between gap-5">
+              <div className="w-full mb-5">
+                <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
+                  Product name
+                </label>
+                <input
+                  type="text"
+                  id="productName"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                  placeholder="Enter product name"
+                />
+              </div>
+              <div className="w-full">
+                <label htmlFor="slug" className="block text-sm font-medium text-gray-700">
+                  Slug
+                </label>
+                <input
+                  type="text"
+                  id="slug"
+                  className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                  placeholder="Enter slug"
+                />
+              </div>
+
+            </div>
+            <div className="w-full rounded-lg">
+              <label htmlFor="description" className="block text-sm font-medium text-gray-700">
+                Description
+              </label>
+              <ReactQuill
+                // ref={quillRef}
+                theme="snow"
+                modules={{
+                  toolbar: [
+                    [{ header: [1, 2, false] }],
+                    ['bold', 'italic', 'underline'],
+                    ['image', 'code-block'],
+                    ['insert',]
+                  ],
+                }}
+                placeholder="Compose an epic..."
+              />
+            </div>
+
+            <div className="p-4 border mt-5 rounded-lg dark:bg-customBlue bg-white shadow-md max-w-4xl mx-auto">
+              <h2 className="text-xl font-semibold mb-4">Assets</h2>
+              <div className="flex items-center">
+                <div className="flex-shrink-0 w-1/3 h-48 border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
+                  <div className="text-center p-8">
+                    <GrImage size={'100%'} />
+                    <p className="text-gray-500 mt-2">No featured asset</p>
+                  </div>
+                </div>
+                <button className="ml-4  dark:bg-btnBlue px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                  <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add asset
+                </button>
+              </div>
+            </div>
+            <div className="p-4 mt-5 border rounded-lg bg-white dark:bg-customBlue shadow-md max-w-4xl mx-auto">
+              <h2 className="text-xl font-semibold mb-4">Product variants</h2>
+              <div className="space-y-4">
+                {/* Option and Option values */}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  <div>
+                    <label htmlFor="option" className="block text-sm font-medium text-gray-700">Option</label>
+                    <input
+                      type="text"
+                      id="option"
+                      placeholder="e.g. Size"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div className="relative">
+                    <label htmlFor="option-values" className="block text-sm font-medium text-gray-700">Option values</label>
+                    <input
+                      type="text"
+                      id="option-values"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                    <button className="absolute top-8 right-2 text-gray-500 hover:text-gray-700">
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Add option button */}
+                <button className="mt-2 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 flex items-center">
+                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                  </svg>
+                  Add option
+                </button>
+
+                {/* Add stock to location */}
+                <div>
+                  <label htmlFor="stock-location" className="block text-sm font-medium text-gray-700">Add stock to location</label>
+                  <select
+                    id="stock-location"
+                    className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                  >
+                    <option>Default Stock Location</option>
+                  </select>
+                </div>
+
+                {/* SKU, Price, and Stock */}
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+                  <div>
+                    <label htmlFor="sku" className="block text-sm font-medium text-gray-700">SKU</label>
+                    <input
+                      type="text"
+                      id="sku"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                  <div>
+                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
+                    <div className="relative mt-1 rounded-md shadow-sm">
+                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                        <span className="text-gray-500 sm:text-sm">US$</span>
+                      </div>
+                      <input
+                        type="text"
+                        id="price"
+                        className="block w-full pl-10 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-indigo-500 py-2 px-3"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
+                    <input
+                      type="text"
+                      id="stock"
+                      className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+            {/* Left side end  */}
           </div>
-          <div className="mt-6">
-            <h2 className="text-2xl font-semibold text-zinc-900 dark:text-zinc-100">Description</h2>
-            <p className="mt-2 text-zinc-700 dark:text-zinc-300">
-              Description
-            </p>
+          {/* Right side start */}
+          <div className="col-span-30"><div className="mt-4  items-center">
+            <div className=" bg-slate-200 p-3 mb-4 rounded-lg dark:bg-slate-700">
+              <label htmlFor="visibility" className="block text-sm font-medium text-gray-700">
+                Visibility
+              </label>
+              <div className="flex items-center mt-1">
+                <input
+                  type="checkbox"
+                  id="visibility"
+                  className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                  defaultChecked
+                />
+                <span className="ml-2 text-sm text-gray-700">Enabled</span>
+              </div>
+            </div>
+            <div className=' bg-slate-200 p-3 rounded-lg dark:bg-slate-700'>
+              <label htmlFor="facets" className="block text-sm font-medium text-gray-700">
+                Facets
+              </label>
+              <button
+                type="button"
+                className="mt-1 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:bg-black bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+              >
+                + Add facets
+              </button>
+            </div>
           </div>
-          <div className="flex mt-6 space-x-4">
-            <button
-              className="flex items-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 focus:outline-none transition-colors duration-200"
-              title="Edit"
-            >
-              <FaRegEdit size={20} />
-              <span className="ml-2">Edit</span>
-            </button>
-            <button
-              className="flex items-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 focus:outline-none transition-colors duration-200"
-              title="Delete"
-            >
-              <AiOutlineDelete size={20} />
-              <span className="ml-2">Delete</span>
-            </button>
-            <button
-              className="flex items-center text-zinc-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 focus:outline-none transition-colors duration-200"
-              title="View"
-            >
-              <LuView size={20} />
-              <span className="ml-2">View</span>
-            </button>
+            {/* Right side end */}
           </div>
         </div>
+
       </div>
-    </div>
+
     </>
   );
 };

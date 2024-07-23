@@ -23,11 +23,11 @@ const CreateProduct = () => {
 
   return (
     <>
-    <div className='mb-3 '>
-      <span  className='text-xl inline-flex items-center bg-white p-2 pl-5 pr-5 rounded-full shadow-md '>
-       <Link className='items-center inline-flex hover:text-btnBlue transition duration-200'>Dashboard<MdArrowForwardIos className='ml-2' /></Link>  
-       <Link className='items-center inline-flex hover:text-btnBlue transition duration-200'> Products<MdArrowForwardIos className='ml-2' /></Link>  
-       <Link className='items-center inline-flex hover:text-btnBlue transition duration-200'> New Product</Link>  
+    <div className='mb-6 '>
+      <span  className='text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md '>
+       <Link to='/dashboard' className='items-center inline-flex hover:text-btnBlue transition duration-200'>Dashboard<MdArrowForwardIos className='ml-2 mr-2' /></Link>  
+       <Link to='/products' className='items-center inline-flex hover:text-btnBlue transition duration-200'> Products<MdArrowForwardIos className='ml-2 mr-2' /></Link>  
+       <Link className='items-center pointer-events-none inline-flex hover:text-btnBlue transition duration-200'> New Product</Link>  
       </span>
     </div>
     <div className='max-w-3xl mx-auto p-6 bg-white dark:bg-customBlue dark:text-white rounded-lg shadow-lg'>
