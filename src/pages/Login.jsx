@@ -24,11 +24,12 @@ const LogIn = () => {
   
     if (!password.trim()) {
       errors.password = 'Password is required';
-    } else if (password.length < 6) {
-      errors.password = 'Password must be at least 6 characters long';
-    } else if (!/[A-Z]/.test(password)) {
-      errors.password = 'Password must contain at least one capital letter';
     }
+    //  else if (password.length < 6) {
+    //   errors.password = 'Password must be at least 6 characters long';
+    // } else if (!/[A-Z]/.test(password)) {
+    //   errors.password = 'Password must contain at least one capital letter';
+    // }
   
     setErrors(errors);
     return Object.keys(errors).length === 0;
@@ -53,8 +54,8 @@ const LogIn = () => {
           <div className="hidden w-full md:block ">
             <div className=" px-26 text-center">
               <div className=" inline-block" >
-              <h2 className=" text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-              Dealer Dashboard</h2>
+              <h2 className="mt-12 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
+              Dealer Panel</h2>
                 
               </div>
 
@@ -63,7 +64,7 @@ const LogIn = () => {
                 suspendisse.
               </p> */}
 
-              <span className="mt-15 inline-block">
+              <span className="mt-10 inline-block">
               <img src={img} alt="mobile" loading="lazy" />
 
                
@@ -72,9 +73,9 @@ const LogIn = () => {
           </div>
 
           <div className="w-full border-stroke p-10 dark:border-strokedark  xl:border-l-2">
-            <div className="w-full px-4 sm:px-12.5 xl:px-17.5">
+            <div className="w-full my-[20px] px-4 sm:px-12.5 xl:px-17.5">
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
-                Sign In To Universal Commerce
+                Sign In 
               </h2>
 
               <form onSubmit={handleSubmit}>
@@ -85,7 +86,7 @@ const LogIn = () => {
                   <div className="relative">
                   <input
         type="email"
-        placeholder="Enter your email"
+        placeholder="Enter Your Email"
         value={email}
         onChange={(e) => setEmail(e.target.value)}
         className={`w-full rounded-lg border ${errors.email ? 'border-red-500' : 'border-stroke'} bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
@@ -119,7 +120,7 @@ const LogIn = () => {
                   <div className="relative">
                   <input
         type="password"
-        placeholder="6+ Characters, 1 Capital letter"
+        placeholder="Enter Your Password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
         className={`w-full rounded-lg border ${errors.password ? 'border-red-500' : 'border-stroke'} bg-transparent py-4 pl-6 pr-10 text-black outline-none focus:border-primary focus-visible:shadow-none dark:border-form-strokedark dark:bg-form-input dark:text-white dark:focus:border-primary`}
