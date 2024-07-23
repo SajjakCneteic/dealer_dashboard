@@ -1,14 +1,19 @@
 import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const CustomerOrderRow = ({ customerName, customerEmail, productName, productDetails, orderNumber, orderDate, status  }) => {
     const [confirmationEnabled,setconfirmationEnabled]=useState(false);
+    const Navigate = useNavigate();
     useEffect(()=>{
 if(status=="Pending"){
     setconfirmationEnabled(true)
 }
     },[])
+    const handleClick = ()=>{
+        Navigate(`/order/${orderNumber}`)
+    }
     return (
-        <tr>
+        <tr onClick={handleClick}>
             <td className=" pl-2 pr-4 py-4 whitespace-nowrap">
                 <div className="text-card-foreground font-semibold">{customerName}</div>
                 <div className="text-muted-foreground">{customerEmail}</div>
@@ -17,7 +22,7 @@ if(status=="Pending"){
                 <div className="text-card-foreground">{productName}</div>
                 {productDetails && <div className="text-muted-foreground">{productDetails}</div>}
             </td>
-            <td className="pr-4 py-4 whitespace-nowrap text-card-foreground">{orderNumber}</td>
+            <td className="pr-4 py-4 whitespace-nowrap text-card-foreground">#{orderNumber}</td>
             <td className="pr-4 py-4  whitespace-nowrap text-card-foreground">{orderDate}</td>
             <td className="pr-2 py-4 whitespace-nowrap">
                 <span className={`py-1 px-2 inline-flex text-xs  leading-5 font-semibold rounded-full ${status === 'Pending' ? 'bg-orange-100 text-orange-500' : status === 'Cancelled' ? 'bg-red-100 text-red-500' : 'bg-green-100 text-green-500'}`}>
