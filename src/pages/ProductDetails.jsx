@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { MdArrowForwardIos } from 'react-icons/md';
 import ReactQuill from 'react-quill';
@@ -6,8 +6,16 @@ import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
 
 
+const product1 = {
+  id: 1,
+  productName: "Comfy Padded Chair",
+  slug: "comfy-padded-chair",
+  description: "You sit comfortably thanks to the shaped back. The chair frame is made of solid wood, which is a durable natural material."
+}
+
 const CreateProduct = ({ product }) => {
-  const isDisabled = true;
+  const [isDisabled, setIsDisabled] = useState(false)
+  
   return (
     <>
       <div className="mb-6">
@@ -28,7 +36,12 @@ const CreateProduct = ({ product }) => {
           <button className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
             Delete
           </button>
-          <button disabled={isDisabled} className="bg-blue-300 flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2">
+          <button
+            disabled={isDisabled}
+            className={` flex items-center ${isDisabled ? 'bg-btnBlue' : 'bg-blue-300'} 
+         
+            rounded-lg text-white pl-3 pr-3 pt-2 pb-2`}
+          >
             Update
           </button>
         </div>
@@ -43,7 +56,9 @@ const CreateProduct = ({ product }) => {
                   <input
                     type="text"
                     id="productName"
-                    className="mt-1 block w-full dark:bg-customBlue border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                    value={product1.productName}
+                    onChange={()=>setIsDisabled(true)}
+                    className="mt-1 block w-full text-slate-900 text-lg dark:bg-customBlue border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter product name"
                   />
                 </div>
@@ -54,12 +69,13 @@ const CreateProduct = ({ product }) => {
                   <input
                     type="text"
                     id="slug"
-                    className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                    value={product1.slug}
+                    className="mt-1 block w-full border text-slate-900 text-lg dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter slug"
                   />
                 </div>
               </div>
-              <div className="w-full rounded-lg">
+              <div className="w-full mb-12 rounded-lg">
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                   Description
                 </label>
@@ -74,7 +90,10 @@ const CreateProduct = ({ product }) => {
                       ['insert',]
                     ],
                   }}
+                  style={{ height: '100px' }}
                   placeholder="Compose an epic..."
+
+                  value={product1.description}
                 />
               </div>
             </div>
@@ -87,12 +106,21 @@ const CreateProduct = ({ product }) => {
                     <p className="text-gray-500 mt-2">No featured asset</p>
                   </div>
                 </div>
-                <button className="ml-4 dark:bg-btnBlue mt-35 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300">
+                {/* <button className="ml-4 dark:bg-btnBlue mt-35 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300">
                   <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                   Add asset
-                </button>
+                </button> */}
+                <div className="ml-4 mt-35">
+                  <label className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer dark:bg-btnBlue">
+                    <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add asset
+                    <input type="file" className="hidden" />
+                  </label>
+                </div>
               </div>
             </div>
             <div className="p-4 mt-5 border rounded-lg bg-white dark:bg-slate-700 shadow-md max-w-4xl mx-auto">
@@ -115,11 +143,7 @@ const CreateProduct = ({ product }) => {
                       id="option-values"
                       className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
                     />
-                    {/* <button className="absolute top-8 right-2 text-gray-500 hover:text-gray-700">
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                        <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.707a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 10-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clipRule="evenodd" />
-                      </svg>
-                    </button> */}
+
                   </div>
                 </div>
                 <button className="mt-2 px-4 py-2 border dark:bg-btnBlue border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 flex items-center">
@@ -173,7 +197,7 @@ const CreateProduct = ({ product }) => {
           </div>
           <div className="col-span-30">
             <div className="items-center">
-              <div className="border p-3 mb-4 rounded-lg dark:bg-slate-700">
+              {/* <div className="border p-3 mb-4 rounded-lg dark:bg-slate-700">
                 <label htmlFor="visibility" className="block text-sm font-medium text-gray-700">
                   Visibility
                 </label>
@@ -197,6 +221,17 @@ const CreateProduct = ({ product }) => {
                 >
                   + Add facets
                 </button>
+              </div> */}
+              <div className="border  p-3 rounded-lg dark:bg-slate-700">
+                <div className="flex  text-sm font-medium">
+                  <p className='text-gray-700'>ID: <span className='text-black-2'>50</span></p>
+                </div>
+                <div className="flex mt-1 text-sm font-medium">
+                  <p className='text-gray-700'>Created at: <span className='text-black-2'>22/07/24, 2:46 pm</span></p>
+                </div>
+                <div className="flex mt-1 text-sm font-medium">
+                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>22/07/24, 2:46 pm</span></p>
+                </div>
               </div>
             </div>
           </div>
