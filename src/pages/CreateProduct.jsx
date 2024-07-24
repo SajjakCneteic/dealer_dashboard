@@ -28,10 +28,10 @@ const CreateProduct = ({ product }) => {
             Create
           </button>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-100 gap-5">
+        <div className="grid grid-cols-1  md:grid-cols-100 gap-5">
           <div className="col-span-70">
-            <div className="rounded-lg border p-5 dark:bg-slate-700">
-              <div className="flex justify-between gap-5">
+            <div className="rounded-lg  border p-5 dark:bg-slate-700">
+              <div className="flex  justify-between gap-5">
                 <div className="w-full mb-5">
                   <label htmlFor="productName" className="block text-sm font-medium text-gray-700">
                     Product name
@@ -55,7 +55,7 @@ const CreateProduct = ({ product }) => {
                   />
                 </div>
               </div>
-              <div className="w-full rounded-lg">
+              <div className="w-full mb-12 rounded-lg">
                 <label htmlFor="description" className="block text-sm font-medium text-gray-700">
                   Description
                 </label>
@@ -70,6 +70,7 @@ const CreateProduct = ({ product }) => {
                       ['insert',]
                     ],
                   }}
+                  style={{height:'100px'}}
                   placeholder="Compose an epic..."
                 />
               </div>
