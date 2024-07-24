@@ -6,9 +6,12 @@ import { BsSearch } from "react-icons/bs";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { TbMessageCircle2 } from "react-icons/tb";
 import { IoIosArrowDown } from "react-icons/io";
+import userFour from '../images/user/user-04.png'
+import { Link, useNavigate } from 'react-router-dom';
 
 
 const Navbar = ({sidebarOpen,setSidebarOpen}) => {
+  const Navigate = useNavigate()
   const [isDarkMode, setIsDarkMode] = useState(false)
   // const [sidebarOpen, setSidebarOpen] = useState(true)
   const [isUserDropdownOpen, setUserDropdownOpen] = useState(false)
@@ -19,6 +22,11 @@ const Navbar = ({sidebarOpen,setSidebarOpen}) => {
       document.documentElement.classList.remove('dark');
     }
   }, [isDarkMode]);
+
+  const handleLogout =()=>{
+    localStorage.setItem("auth",false);
+    Navigate("/login")
+}
 
 const toggleTheme = () => {
     setIsDarkMode(!isDarkMode);
@@ -64,16 +72,16 @@ const toggleTheme = () => {
             <span></span>
             <span></span>
           </div>
-          <img aria-hidden="true" alt="user-avatar" width={'40px'}  src="http://localhost:3000/static/media/user-06.d0e2a1a0035fe055bde7.png" className="rounded-full" />
+          <img aria-hidden="true" alt="user-avatar" width={'40px'}  src={userFour} className="rounded-full" />
           <button className="p-2 hover:text-btnBlue" onClick={()=>setUserDropdownOpen((pre)=>!pre)}>
             <IoIosArrowDown className='text-2xl' />
           </button>
           {isUserDropdownOpen&&<div className="absolute right-5 top-14 mt-4 flex w-64 flex-col rounded-sm shadow:xl bg-white shadow-default dark:bg-secondryDark  ">
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">My Profile</div>
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">My Contacts</div>
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">Account Settings</div>
+            <Link to='/profile' className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">My Profile</Link>
+            <Link className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">My Contacts</Link>
+            <Link className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">Account Settings</Link>
             <hr className="border-t border-stroke dark:border-strokedark" />
-            <div className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">Logout</div>
+            <div onClick={handleLogout} className="px-4 py-2 hover:bg-gray-100 dark:hover:text-btnBlue hover:text-btnBlue cursor-pointer">Logout</div>
           </div>
 }
         </div>
