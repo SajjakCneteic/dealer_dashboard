@@ -41,7 +41,7 @@ if(!isAuth){
 
           {/* ===== Main Content Start ===== */}
           <main>
-            <div className="mx-auto animate-fadeIn dark:bg-secondryDark bg-secondry dark:text-white max-w-screen-2xl p-4 md:p-6 2xl:p-10">
+            <div className="mx-auto animate-fadeIn dark:bg-boxdark-2  dark:text-bodydark max-w-screen-2xl p-4 md:p-6 2xl:p-10">
               {loading ? <Loader /> : children}
             </div>
           </main>
