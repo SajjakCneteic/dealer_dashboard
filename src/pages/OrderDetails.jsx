@@ -110,7 +110,9 @@ const [status,setStatus]=useState(orderData.state)
             <hr />
             <div className="flex items-center justify-between mt-2 ">
               
-                <select className="w-full px-2 py-2 mr-1  font-semibold text-yellow-700 border bg-yellow-200 rounded" name="status" id="status" value={status} onChange={(e)=>setStatus(e.target.value)}>
+                <select className={`w-full px-2 py-2 mr-1  font-semibold  border
+                  ${status=="Ready To PickUp"?"text-orange-700 bg-orange-200":status=="Shipped"?"text-green-700 bg-green-200":"text-yellow-700 bg-yellow-200"}
+                   rounded`} name="status" id="status" value={status} onChange={(e)=>setStatus(e.target.value)}>
                   <option value="Payment settled">Payment Settled</option>
                   <option value="Ready To PickUp">Ready To PickUp</option>
                   <option value="Shipped">Shipped</option>

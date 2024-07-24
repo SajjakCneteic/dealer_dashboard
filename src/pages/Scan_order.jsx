@@ -51,6 +51,11 @@ const ScanOrder = () => {
         >
           {isCameraOpen ? 'Disable Camera' : 'Enable Camera'}
         </button>
+        <button
+          className="w-full mt-4 bg-btnBlue hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Upload From Device
+        </button>
       </div>
       {scanResult && (
         <div className="mt-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded-lg shadow-lg">

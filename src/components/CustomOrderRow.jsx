@@ -31,9 +31,9 @@ if(status=="Pending"){
                 </span>
             </td>
             <td className=" py-4 whitespace-nowrap">
-                <button disabled={!confirmationEnabled} className={`px-4 py-2 bg-transparent border-primary ${confirmationEnabled ? 'border border-blue-500 hover:bg-blue-500 border-1 hover:text-white hover:text-primary-foreground' : 'cursor-not-allowed opacity-0.5'} rounded-lg`}>
+             {confirmationEnabled?<button disabled={!confirmationEnabled} className={`px-4 py-2 bg-transparent border-primary ${confirmationEnabled ? 'border border-blue-500 hover:bg-blue-500 border-1 hover:text-white hover:text-primary-foreground' : 'cursor-not-allowed opacity-0.5'} rounded-lg`}>
                     Confirm Order
-                </button>
+                </button>:" "}
             </td>
         </tr>
     );

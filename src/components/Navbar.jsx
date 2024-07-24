@@ -6,7 +6,7 @@ import { BsSearch } from "react-icons/bs";
 import { HiOutlineBellAlert } from "react-icons/hi2";
 import { TbMessageCircle2 } from "react-icons/tb";
 import { IoIosArrowDown } from "react-icons/io";
-import userFour from '../images/user/user-04.png'
+import userFour from '../images/user/user-0.png'
 import { Link, useNavigate } from 'react-router-dom';
 
 
@@ -72,7 +72,7 @@ const toggleTheme = () => {
             <span></span>
             <span></span>
           </div>
-          <img aria-hidden="true" alt="user-avatar" width={'40px'}  src={userFour} className="rounded-full" />
+          <img aria-hidden="true" alt="user-avatar " width={'40px'}  src={userFour} className="rounded-full dark:filter" />
           <button className="p-2 hover:text-btnBlue" onClick={()=>setUserDropdownOpen((pre)=>!pre)}>
             <IoIosArrowDown className='text-2xl' />
           </button>

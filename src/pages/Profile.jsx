@@ -1,6 +1,6 @@
 
 import CoverOne from '../images/cover/cover-01.png';
-import userSix from '../images/user/user-06.png';
+import userSix from '../images/user/user-0.png';
 import { Link } from 'react-router-dom';
 
 const Profile = () => {
@@ -9,7 +9,7 @@ const Profile = () => {
       {/* <Breadcrumb pageName="Profile" /> */}
 
       <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="relative z-20 h-35 md:h-65">
+        <div className="relative z-20 h-35 md:h-[50%]">
           <img
             src={CoverOne}
             alt="profile cover"
@@ -51,7 +51,7 @@ const Profile = () => {
         <div className="px-4 pb-6 text-center lg:pb-8 xl:pb-11.5">
           <div className="relative z-30 mx-auto -mt-22 h-30 w-full max-w-30 rounded-full bg-white/20 p-1 backdrop-blur sm:h-44 sm:max-w-44 sm:p-3">
             <div className="relative drop-shadow-2">
-              <img src={userSix} alt="profile" />
+              <img src={userSix} alt="profile"  />
               <label
                 htmlFor="profile"
                 className="absolute bottom-0 right-0 flex h-8.5 w-8.5 cursor-pointer items-center justify-center rounded-full bg-primary text-white hover:bg-opacity-90 sm:bottom-2 sm:right-2"
@@ -87,11 +87,10 @@ const Profile = () => {
             </div>
           </div>
           <div className="mt-4">
-            <h3 className="mb-1.5 text-2xl font-semibold text-black dark:text-white">
-              Danish Heilium
-            </h3>
-            <p className="font-medium">Ui/Ux Designer</p>
-            <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
+            <h3 className="mb-4 text-2xl font-semibold text-black dark:text-white">
+            Prime Dealers            </h3>
+            {/* <p className="font-medium">Ui/Ux Designer</p> */}
+            {/* <div className="mx-auto mt-4.5 mb-5.5 grid max-w-94 grid-cols-3 rounded-md border border-stroke py-2.5 shadow-1 dark:border-strokedark dark:bg-[#37404F]">
               <div className="flex flex-col items-center justify-center gap-1 border-r border-stroke px-4 dark:border-strokedark xsm:flex-row">
                 <span className="font-semibold text-black dark:text-white">
                   259
@@ -110,9 +109,9 @@ const Profile = () => {
                 </span>
                 <span className="text-sm">Following</span>
               </div>
-            </div>
+            </div> */}
 
-            <div className="mx-auto max-w-180">
+            {/* <div className="mx-auto max-w-180">
               <h4 className="font-semibold text-black dark:text-white">
                 About Me
               </h4>
@@ -123,9 +122,9 @@ const Profile = () => {
                 ultricies. Sed vel aliquet libero. Nunc a augue fermentum,
                 pharetra ligula sed, aliquam lacus.
               </p>
-            </div>
+            </div> */}
 
-            <div className="mt-6.5">
+            {/* <div className="mt-6.5">
               <h4 className="mb-3.5 font-medium text-black dark:text-white">
                 Follow me on
               </h4>
@@ -276,7 +275,7 @@ const Profile = () => {
                   </svg>
                 </Link>
               </div>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>

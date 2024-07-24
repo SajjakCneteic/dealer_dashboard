@@ -4,12 +4,12 @@ import { Link } from 'react-router-dom';
 const OrderList = ({Heading,show,customerOrders}) => {
     return (
         <div className="w-full bg-white p-4 bg-card border border-border rounded-lg dark:bg-customBlue shadow-lg">
-            <div className="flex justify-between">
+            <div className="flex justify-between border-b-2 border-border pb-2">
 
             <div>
 
             <h2 className="text-2xl font-bold text-card-foreground">{Heading}</h2>
-            <p className="text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies lectus sem.</p>
+            {/* <p className="text-muted-foreground">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras ultricies lectus sem.</p> */}
             </div>
             <div>
                {show ? <Link to="/all-orders">
