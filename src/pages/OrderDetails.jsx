@@ -1,8 +1,11 @@
-import React from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useState } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import OrderProductTable from '../components/OrderProductTable';
 import TaxSummary from '../components/TaxSummary';
 import OrderHistory from '../components/OrderHistory';
+import { MdArrowForwardIos } from 'react-icons/md';
+import Breadcrumb from '../components/Breadcrumb';
+import QRCodeComponent from '../components/QrCode';
 
 const orderData = {
   orderId: "2EAWJDZJHGEN9A6E",
@@ -76,12 +79,16 @@ const mutedFgClass = 'text-muted-foreground dark:text-muted-foreground';
 
 const OrderDetails = () => {
   const { id } = useParams();
-
+const [status,setStatus]=useState(orderData.state)
   return (
-    <div className="p-6 bg-card dark:bg-card-foreground rounded-lg">
+    <div className="p-2 bg-card dark:bg-card-foreground rounded-lg">
+       <div className='mb-6'>
+        
+        <Breadcrumb/>
+      </div>
       <div className="flex justify-between mb-4">
-        <h2 className="text-lg font-semibold dark:text-card-foreground">#{orderData.orderId}</h2>
-        <button className="bg-primary text-white dark:bg-primary-foreground dark:text-primary-foreground px-4 py-2 rounded-md">
+        <h2 className="text-lg font-semibold dark:text-card-foreground">#{id}</h2>
+        <button disabled={orderData.state==status} className={`${orderData.state!==status?" bg-primary" :"bg-blue-300 text-black"} text-white dark:bg-primary-foreground dark:text-primary-foreground px-4 py-2 rounded-md`}>
           Fulfill order
         </button>
       </div>
@@ -98,14 +105,23 @@ const OrderDetails = () => {
           </div>
         </div>
         <div className={cardClass}>
-          <div className="p-4 mb-4 bg-card border border-border rounded-lg md:mt-5">
-            <div className="text-muted">State</div>
+          <div className="p-4 mb-4 bg-card border border-border rounded-lg md:mt-6">
+            <div className="text-muted font-semibold">State</div>
             <hr />
             <div className="flex items-center justify-between mt-2 ">
-              <span className="px-3 py-1 text-yellow-600 border border-yellow-600 rounded-full">{orderData.state}</span>
-              <button className="p-2 bg-muted rounded-full hover:bg-muted/80">
-                <img alt="icon" src="https://openui.fly.dev/openui/24x24.svg?text=📄" />
-              </button>
+              
+                <select className="w-full px-2 py-2 mr-1  font-semibold text-yellow-700 border bg-yellow-200 rounded" name="status" id="status" value={status} onChange={(e)=>setStatus(e.target.value)}>
+                  <option value="Payment settled">Payment Settled</option>
+                  <option value="Ready To PickUp">Ready To PickUp</option>
+                  <option value="Shipped">Shipped</option>
+                </select>
+              
+{/* {status==orderData.state?" ":
+               <button className="p-2 bg-primary text-white text-sm rounded hover:bg-muted/80">
+               <img alt="icon" src="https://openui.fly.dev/openui/24x24.svg?text=📄" />
+                 Update
+              </button> 
+} */}
             </div>
           </div>
           <div className="p-4 bg-card border border-border rounded-lg shadow-md">
@@ -134,7 +150,7 @@ const OrderDetails = () => {
               📞 03342 448822
             </p>
           </div>
-          <div className="my-4 p-2 rounded-lg border border-border">
+          <div className="my-4 p-4 rounded-lg border border-border">
             <h2 className="text-lg pb-2 font-semibold">Payments</h2>
             <hr />
             <div className=" bg-card mt-2 text-muted-foreground dark:bg-card dark:text-muted-foreground">
@@ -154,11 +170,12 @@ const OrderDetails = () => {
               </button>
             </div>
           </div>
-          <div className={`rounded-lg border border-border p-2 ${mutedFgClass}`}>
+          <div className={`rounded-lg border border-border p-4 ${mutedFgClass}`}>
             <p className='py-2'>ID: <span className="font-semibold">{id}</span></p>
             <hr />
             <p className='pt-2'>Created at: <span className="font-semibold">{orderData.orderHistory.createdAt}</span></p>
             <p>Updated at: <span className="font-semibold">{orderData.orderHistory.updatedAt}</span></p>
+           {status=="Ready To PickUp"? <QRCodeComponent orderId={id}/>:""}
           </div>
         </div>
       </div>

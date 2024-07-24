@@ -72,7 +72,7 @@ const LogIn = () => {
             </div>
           </div>
 
-          <div className="w-full border-stroke p-10 dark:border-strokedark  xl:border-l-2">
+          <div className="w-full border-stroke p-12 dark:border-strokedark  xl:border-l-2">
             <div className="w-full my-[20px] px-4 sm:px-12.5 xl:px-17.5">
               <h2 className="mb-9 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
                 Sign In 
