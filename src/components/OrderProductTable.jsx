@@ -6,7 +6,7 @@ const tableCellClass = 'py-2 px-4 border-b border-border';
 const ProductItem = ({ image,  name, sku, unitPrice, quantity, total }) => (
   <tr className="product-item">
     <td className={tableCellClass}>
-      <img className="w-16" alt={name} src={image} />
+      <img className="w-40" alt={name} src={image} />
     </td>
     <td className={tableCellClass}>{name}</td>
     <td className={tableCellClass}>{sku}</td>
@@ -32,7 +32,7 @@ const TotalSection = ({total}) => (
 
 const OrderProductTable = ({items,summary}) => (
   <div className="overflow-x-auto p-4 bg-card border border-border rounded-lg">
-    <table className="min-w-full bg-white dark:bg-zinc-800">
+    <table className="min-w-full bg-card dark:bg-zinc-800">
       <thead>
         <tr>
           <th className={tableHeaderClass}>IMAGE</th>
@@ -49,9 +49,7 @@ return  <ProductItem
 {...items}
 />
         })}
-       
-        
-      </tbody>
+       </tbody>
     </table>
     <div className="mt-4">
       <SubTotalShipping label="Sub total" value={summary.subTotal} />
