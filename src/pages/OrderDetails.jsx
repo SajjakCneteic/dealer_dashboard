@@ -81,7 +81,7 @@ const OrderDetails = () => {
   const { id } = useParams();
 const [status,setStatus]=useState(orderData.state)
   return (
-    <div className="p-2 bg-card dark:bg-card-foreground rounded-lg">
+    <div className="p-2 bg-white dark:bg-black rounded-lg">
        <div className='mb-6'>
         
         <Breadcrumb/>
@@ -110,12 +110,12 @@ const [status,setStatus]=useState(orderData.state)
             <hr />
             <div className="flex items-center justify-between mt-2 ">
               
-                <select className={`w-full px-2 py-2 mr-1  font-semibold  border
-                  ${status=="Ready To PickUp"?"text-orange-700 bg-orange-200":status=="Shipped"?"text-green-700 bg-green-200":"text-yellow-700 bg-yellow-200"}
+                <select className={`w-full px-4 py-2   font-semibold  border
+                  ${status=="Ready To PickUp"?"bg-orange-500 ":status=="Shipped"?"bg-green-500 ":"bg-blue-500 "} text-white
                    rounded`} name="status" id="status" value={status} onChange={(e)=>setStatus(e.target.value)}>
-                  <option value="Payment settled">Payment Settled</option>
+                  <option value="Payment settled">Payment Settled </option>
                   <option value="Ready To PickUp">Ready To PickUp</option>
-                  <option value="Shipped">Shipped</option>
+                  <option value="Shipped">Shipped </option>
                 </select>
               
 {/* {status==orderData.state?" ":

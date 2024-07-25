@@ -6,7 +6,7 @@ import OrderListComponent from '../components/OrderListComponent'
 const Dashboard = () => {
   return (
 
-<main className="w-full dark:bg-secondryDark bg-secondry flex flex-col items-center mt-2">
+<main className="w-full dark:bg-black bg-white flex flex-col items-center mt-2">
         <h2 className="text-3xl font-bold text-zinc-800 dark:text-zinc-100 mb-4">Dashboard</h2>
         <div className="w-full grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6 xl:grid-cols-4 2xl:gap-7.5">
         <DashboardItem title=" Order PickUp" total="$3.456K" rate="0.43%" levelUp>
@@ -97,7 +97,7 @@ const Dashboard = () => {
         <div className="w-full">
         <DashboardCharts/>
         </div>
-        <div className="w-full bg-white dark:bg-customBlue">
+        <div className="w-full bg-white dark:bg-black">
 
        < OrderListComponent/>
         </div>

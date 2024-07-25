@@ -2,7 +2,7 @@ import React from 'react';
 import QRCode from 'qrcode.react';
 
 const QRCodeComponent = ({ orderId }) => {
-  const qrValue = `order/${orderId}`;
+  const qrValue = orderId;
 
   return (
     <div className='py-4 space-y-4'>
