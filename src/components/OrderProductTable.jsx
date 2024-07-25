@@ -32,7 +32,7 @@ const TotalSection = ({total}) => (
 
 const OrderProductTable = ({items,summary}) => (
   <div className="overflow-x-auto p-4 bg-card border border-border rounded-lg">
-    <table className="min-w-full bg-card dark:bg-zinc-800">
+    <table className="min-w-full ">
       <thead>
         <tr>
           <th className={tableHeaderClass}>IMAGE</th>
