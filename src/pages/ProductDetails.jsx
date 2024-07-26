@@ -4,20 +4,35 @@ import { MdArrowForwardIos } from 'react-icons/md';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
+import Modal from '../components/Modal';
 
-
-const product1 = {
+const originalProduct = {
   id: 1,
   productName: "Comfy Padded Chair",
   slug: "comfy-padded-chair",
   description: "You sit comfortably thanks to the shaped back. The chair frame is made of solid wood, which is a durable natural material."
-}
+};
 
-const CreateProduct = ({ product }) => {
-  const [isDisabled, setIsDisabled] = useState(false)
+
+const CreateProduct = () => {
+  const [product, setProduct] = useState(originalProduct);
+  const [isDisabled, setIsDisabled] = useState(false);
+ 
+  const handleInputChange = (field, value) => {
+    const updatedProduct = { ...product, [field]: value };
+    setProduct(updatedProduct);
+    const isModified = product.productName !== originalProduct.productName ||
+        product.slug !== originalProduct.slug ||
+        product.description !== originalProduct.description;
+
+        setIsDisabled(isModified)
+  };
+
   
+
   return (
     <>
+    <Modal isDisabled={isDisabled}/>
       <div className="mb-6">
         <span className="text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md">
           <Link to="/dashboard" className="items-center inline-flex hover:text-btnBlue transition duration-200">
@@ -34,12 +49,14 @@ const CreateProduct = ({ product }) => {
       <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className="flex justify-end mb-3">
           <button className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
-            Delete
+            Delete  
           </button>
           <button
+            
+            onClick={()=>console.log("hello world")}
             disabled={isDisabled}
             className={` flex items-center ${isDisabled ? 'bg-btnBlue' : 'bg-blue-300'} 
-         
+         ${isDisabled ? 'hover:bg-blue-700 ' : ''} 
             rounded-lg text-white pl-3 pr-3 pt-2 pb-2`}
           >
             Update
@@ -56,11 +73,11 @@ const CreateProduct = ({ product }) => {
                   <input
                     type="text"
                     id="productName"
-                    value={product1.productName}
-                    onChange={()=>setIsDisabled(true)}
-                    className="mt-1 block w-full text-slate-900 text-lg dark:bg-customBlue border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                    value={product.productName}
+                    onChange={(e) => handleInputChange('productName', e.target.value)}
+                    className="mt-1 block w-full text-slate-900 text-lg dark:bg-customBlue dark:text-white   *: border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter product name"
-                  />
+                  />  
                 </div>
                 <div className="w-full">
                   <label htmlFor="slug" className="block text-sm font-medium text-gray-700">
@@ -69,8 +86,9 @@ const CreateProduct = ({ product }) => {
                   <input
                     type="text"
                     id="slug"
-                    value={product1.slug}
-                    className="mt-1 block w-full border text-slate-900 text-lg dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
+                    value={product.slug}
+                    onChange={(e) => handleInputChange('slug', e.target.value)}
+                    className="mt-1 block w-full border text-slate-900 text-lg dark:bg-customBlue dark:text-white  border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter slug"
                   />
                 </div>
@@ -92,8 +110,8 @@ const CreateProduct = ({ product }) => {
                   }}
                   style={{ height: '100px' }}
                   placeholder="Compose an epic..."
-
-                  value={product1.description}
+                  onChange={(value) => handleInputChange('description', value)}
+                  value={product.description}
                 />
               </div>
             </div>
