@@ -14,7 +14,7 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
     const [activeLink, setActiveLink] = useState(null);
     const navigate=useNavigate();
     // const [sidebarOpen , setSidebarOpen] = useState(true)
-
+ const location=window.location.pathname
 const handleLogout =()=>{
     localStorage.setItem("auth",false);
     navigate("/login")
@@ -47,7 +47,7 @@ const handleLogout =()=>{
                 <div className="mb-4">
                     <Link 
                         to="/dashboard"
-                        className={`flex items-center text-xl mb-4  p-2 rounded-lg ${activeLink === 'dashboard' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'dashboard' ? 'text-white' : 'hover:text-white'} `}
+                        className={`flex items-center text-xl mb-4  p-2 rounded-lg ${(activeLink === 'dashboard'|| location =='/' || location=='/dashboard') ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${(activeLink === 'dashboard'||location =='/' || location=='/dashboard') ? 'text-white' : 'hover:text-white'} `}
                         onClick={() => handleLinkClick('dashboard')}
                     >
                         <LuLayoutDashboard className='' />
@@ -107,7 +107,7 @@ const handleLogout =()=>{
                             <div className="ml-10 text-l">
                                 <Link 
                                     to="/profile"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'vendor-profile' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'vendor-profile' ? 'text-white' : 'hover:text-white'}`}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${(activeLink === 'vendor-profile' || location =='/profile') ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${(activeLink === 'vendor-profile'||location=='/profile') ? 'text-white' : 'hover:text-white'}`}
                                     onClick={() => handleLinkClick('vendor-profile')}
                                 >
                                     Profile
