@@ -72,7 +72,8 @@ const toggleTheme = () => {
             <span></span>
             <span></span>
           </div>
-          <img aria-hidden="true" alt="user-avatar " width={'40px'}  src={userFour} className="rounded-full dark:filter" />
+          <img aria-hidden="true" alt="user-avatar " width={'40px'}  src={userFour}             className={`rounded-full ${isDarkMode ? 'invert' : ''}`}
+ />
           <button className="p-2 hover:text-btnBlue" onClick={()=>setUserDropdownOpen((pre)=>!pre)}>
             <IoIosArrowDown className='text-2xl' />
           </button>
