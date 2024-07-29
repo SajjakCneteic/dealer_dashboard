@@ -14,7 +14,7 @@ const originalProduct = {
 };
 
 
-const CreateProduct = () => {
+const ProductDetails = () => {
   const [product, setProduct] = useState(originalProduct);
   const [isDisabled, setIsDisabled] = useState(false);
  
@@ -259,4 +259,4 @@ const CreateProduct = () => {
   );
 };
 
-export default CreateProduct;
+export default ProductDetails;
