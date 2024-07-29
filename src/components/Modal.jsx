@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link,useLocation, useNavigate } from 'react-router-dom';
 
 const ConfirmNavigationModal = ({ isOpen, onDiscard, onCancel }) => {
   if (!isOpen) return null;
@@ -28,51 +28,122 @@ const ConfirmNavigationModal = ({ isOpen, onDiscard, onCancel }) => {
   );
 };
 
+// const Modal = ({ isDisabled }) => {
+//     const [isModalOpen, setIsModalOpen] = useState(false);
+
+//     const current = window.location.pathname
+
+//   if(current!==window.location.pathname){
+//     setIsModalOpen(true)
+//     console.log('ture')
+//   }
+  
+//     useEffect(() => {
+//       const handlePopState = (event) => {
+//         if (isDisabled ) {
+//           event.preventDefault();
+//           setIsModalOpen(true);
+//           window.history.pushState(null, null, window.location.pathname); // Prevent actual back navigation
+//         }
+//       };
+  
+//       window.addEventListener('popstate', handlePopState);
+  
+//       return () => {
+//         window.removeEventListener('popstate', handlePopState);
+//       };
+//     }, [isDisabled]);
+  
+//     // Ensure modal state is managed properly
+//     useEffect(() => {
+//       if (isDisabled) {
+//         window.history.pushState(null, null, window.location.pathname);
+//       }
+//     }, [isDisabled]);
+  
+//     const handleDiscard = () => {
+//       // Handle discard changes logic here
+//       setIsModalOpen(false);
+//     };
+  
+//     const handleCancel = () => {
+//       // Handle cancel navigation logic here
+//       setIsModalOpen(false);
+//     };
+  
+//     return (
+//       <div className="p-4">
+//         <ConfirmNavigationModal
+//           isOpen={isModalOpen}
+//           onDiscard={handleDiscard}
+//           onCancel={handleCancel}
+//         />
+//       </div>
+//     );
+//   };
+  
+//   export default Modal;
+
 const Modal = ({ isDisabled }) => {
-    const [isModalOpen, setIsModalOpen] = useState(false);
-  
-    useEffect(() => {
-      const handlePopState = (event) => {
-        if (isDisabled) {
-          event.preventDefault();
-          setIsModalOpen(true);
-          window.history.pushState(null, null, window.location.pathname); // Prevent actual back navigation
-        }
-      };
-  
-      window.addEventListener('popstate', handlePopState);
-  
-      return () => {
-        window.removeEventListener('popstate', handlePopState);
-      };
-    }, [isDisabled]);
-  
-    // Ensure modal state is managed properly
-    useEffect(() => {
-      if (isDisabled) {
-        window.history.pushState(null, null, window.location.pathname);
-      }
-    }, [isDisabled]);
-  
-    const handleDiscard = () => {
-      // Handle discard changes logic here
-      setIsModalOpen(false);
-    };
-  
-    const handleCancel = () => {
-      // Handle cancel navigation logic here
-      setIsModalOpen(false);
-    };
-  
-    return (
-      <div className="p-4">
-        <ConfirmNavigationModal
-          isOpen={isModalOpen}
-          onDiscard={handleDiscard}
-          onCancel={handleCancel}
-        />
-      </div>
-    );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [currentPath, setCurrentPath] = useState(window.location.pathname);
+
+  const handlePathChange = () => {
+    if (isDisabled && currentPath !== window.location.pathname) {
+      setIsModalOpen(true);
+      window.history.pushState(null, null, currentPath); // Prevent actual path change
+    }
   };
-  
-  export default Modal;
+
+  useEffect(() => {
+    const handlePopState = (event) => {
+      if (isDisabled) {
+        event.preventDefault();
+        setIsModalOpen(true);
+        window.history.pushState(null, null, window.location.pathname); // Prevent actual back navigation
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    window.addEventListener('popstate', handlePathChange); // Add path change handler
+
+    return () => {
+      window.removeEventListener('popstate', handlePopState);
+      window.removeEventListener('popstate', handlePathChange); // Clean up path change handler
+    };
+  }, [isDisabled, currentPath]);
+
+  // Ensure modal state is managed properly
+  useEffect(() => {
+    if (isDisabled) {
+      window.history.pushState(null, null, window.location.pathname);
+      setCurrentPath(window.location.pathname);
+    }
+  }, [isDisabled]);
+
+  const handleDiscard = () => {
+    // Handle discard changes logic here
+    setIsModalOpen(false);
+    setCurrentPath(window.location.pathname); // Update currentPath after discard
+  };
+
+  const handleCancel = () => {
+    // Handle cancel navigation logic here
+    setIsModalOpen(false);
+    window.history.pushState(null, null, currentPath); // Return to the original path
+  };
+
+  return (
+    <div className="p-4">
+      <ConfirmNavigationModal
+        isOpen={isModalOpen}
+        onDiscard={handleDiscard}
+        onCancel={handleCancel}
+      />
+    </div>
+  );
+};
+
+export default Modal;
+
+

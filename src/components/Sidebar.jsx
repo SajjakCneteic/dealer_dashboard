@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { LuLayoutDashboard } from "react-icons/lu";
 import { MdLogout } from "react-icons/md";
 import { FaBorderStyle } from "react-icons/fa";
@@ -14,7 +14,8 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
     const [activeLink, setActiveLink] = useState(null);
     const navigate=useNavigate();
     // const [sidebarOpen , setSidebarOpen] = useState(true)
- const location=window.location.pathname
+//  console.log(window.location.pathname)
+
 const handleLogout =()=>{
     localStorage.setItem("auth",false);
     navigate("/login")
@@ -23,10 +24,13 @@ const handleLogout =()=>{
         setActiveAccordion(activeAccordion === accordionName ? null : accordionName);
     };
 
-    const handleLinkClick = (linkName) => {
-        setActiveLink(linkName);
-    };
+    const location = useLocation();
 
+    useEffect(() => {
+        setActiveLink(location.pathname);
+    }, [location.pathname]);
+   
+console.log(activeLink)
     return (
 
         // <div className=  {`bg-zinc-900 text-zinc-200 w-60 h-screen hidden p-4 lg:block`}>
@@ -47,8 +51,8 @@ const handleLogout =()=>{
                 <div className="mb-4">
                     <Link 
                         to="/dashboard"
-                        className={`flex items-center text-xl mb-4  p-2 rounded-lg ${(activeLink === 'dashboard'|| location =='/' || location=='/dashboard') ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${(activeLink === 'dashboard'||location =='/' || location=='/dashboard') ? 'text-white' : 'hover:text-white'} `}
-                        onClick={() => handleLinkClick('dashboard')}
+                        className={`flex items-center text-xl mb-4  p-2 rounded-lg ${(activeLink === '/dashboard'||activeLink=='/'||activeLink==null) ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${(activeLink === '/dashboard'||activeLink=='/'||activeLink==null) ? 'text-white' : 'hover:text-white'} `}
+                        
                     >
                         <LuLayoutDashboard className='' />
                         <span className="ml-3 ">Dashboard</span>
@@ -63,28 +67,28 @@ const handleLogout =()=>{
                                 <FaBorderStyle className="" />
                                 <span className="ml-3 ">Orders</span>
                             </div>
-                            <div>{activeAccordion === 'orders' ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
+                            <div>{(activeAccordion === 'orders'||activeLink=='/all-orders'||activeLink=='/orders/pending'||activeLink=='/orders/completed') ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
                         </Link>
-                        {activeAccordion === 'orders' && (
+                        {(activeAccordion === 'orders'||activeLink=='/all-orders'||activeLink=='/orders/pending'||activeLink=='/orders/completed') && (
                             <div className="ml-10 text-l">
                                 <Link 
                                     to="/all-orders"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'all-orders' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'all-orders' ? 'text-white' : 'hover:text-white'}`}
-                                    onClick={() => handleLinkClick('all-orders')}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/all-orders' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/all-orders' ? 'text-white' : 'hover:text-white'}`}
+                                   
                                 >
                                     All Orders
                                 </Link>
                                 <Link 
                                     to="/orders/pending"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'pending-orders' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'pending-orders' ? 'text-white' : 'hover:text-white'}`}
-                                    onClick={() => handleLinkClick('pending-orders')}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/orders/pending' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/orders/pending' ? 'text-white' : 'hover:text-white'}`}
+                                   
                                 >
                                     Pending Orders
                                 </Link>
                                 <Link 
                                     to="/orders/completed"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === 'completed-orders' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'completed-orders' ? 'text-white' : 'hover:text-white'}`}
-                                    onClick={() => handleLinkClick('completed-orders')}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/orders/completed' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/orders/completed' ? 'text-white' : 'hover:text-white'}`}
+                                    
                                 >
                                     Completed Orders
                                 </Link>
@@ -101,14 +105,14 @@ const handleLogout =()=>{
                                 <GrStatusInfo className='text-xl' />
                                 <span className="ml-3 text-l">Dealer Info</span>
                             </div>
-                            <div>{activeAccordion === 'vendorInfo' ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
+                            <div>{(activeAccordion === 'vendorInfo' || activeLink=='/profile') ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
                         </Link>
-                        {activeAccordion === 'vendorInfo' && (
+                        {(activeAccordion === 'vendorInfo'||activeLink=='/profile') && (
                             <div className="ml-10 text-l">
                                 <Link 
                                     to="/profile"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${(activeLink === 'vendor-profile' || location =='/profile') ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${(activeLink === 'vendor-profile'||location=='/profile') ? 'text-white' : 'hover:text-white'}`}
-                                    onClick={() => handleLinkClick('vendor-profile')}
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/profile' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/profile' ? 'text-white' : 'hover:text-white'}`}
+                                    
                                 >
                                     Profile
                                 </Link>
@@ -118,16 +122,16 @@ const handleLogout =()=>{
                     </div>
                     <Link 
                         to="/products"
-                        className={`flex items-center mb-4 text-xl p-2 rounded-lg ${activeLink === 'products' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'products' ? 'text-white' : 'hover:text-white'}`}
-                        onClick={() => handleLinkClick('products')}
+                        className={`flex items-center mb-4 text-xl p-2 rounded-lg ${activeLink === '/products' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/products' ? 'text-white' : 'hover:text-white'}`}
+                        
                     >
                         <AiOutlineProduct className='text-xl' />
                         <span className="ml-3 text-l">Products</span>
                     </Link>
                     <Link 
                         to="/scan-order"
-                        className={`flex items-center mb-4 text-xl p-2 rounded-lg ${activeLink === 'scan-order' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === 'scan-order' ? 'text-white' : 'hover:text-white'}`}
-                        onClick={() => handleLinkClick('scan-order')}
+                        className={`flex items-center mb-4 text-xl p-2 rounded-lg ${activeLink === '/scan-order' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/scan-order' ? 'text-white' : 'hover:text-white'}`}
+                        
                     >
                         <TbLineScan className='text-xl' />
                         <span className="ml-3 text-l">Scan Order</span>
