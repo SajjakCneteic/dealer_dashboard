@@ -20,7 +20,8 @@ const ScanOrder = () => {
       setIsCameraOpen(false);
 
       setTimeout(() => {
-        navigate(`/order/${orderId}`);
+        // navigate(`/order/${orderId}`);
+        navigate(`/order/${orderId}`, { state: 'scan-order' });
       }, 3000); // Delay for showing popup
     }
   };
