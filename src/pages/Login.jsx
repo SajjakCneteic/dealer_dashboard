@@ -25,11 +25,7 @@ const LogIn = () => {
     if (!password.trim()) {
       errors.password = 'Password is required';
     }
-    //  else if (password.length < 6) {
-    //   errors.password = 'Password must be at least 6 characters long';
-    // } else if (!/[A-Z]/.test(password)) {
-    //   errors.password = 'Password must contain at least one capital letter';
-    // }
+   
   
     setErrors(errors);
     return Object.keys(errors).length === 0;
