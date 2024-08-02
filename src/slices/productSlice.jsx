@@ -2,15 +2,27 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL;
+const API_URL = process.env.REACT_APP_API_URL ||'http://49.205.192.156:1775' ;
+
+// Helper function to get tokens from local storage
+const getAuthHeaders = () => {
+  const token = localStorage.getItem('token');
+  const dealerToken = localStorage.getItem('dealer-token');
+  return {
+    headers: {
+      Authorization: `Bearer ${token}`,
+      'Dealer-Token': dealerToken,
+    },
+  };
+};
 
 export const fetchAllProducts = createAsyncThunk('products/fetchAll', async () => {
-  const response = await axios.get(`${API_URL}/products`);
+  const response = await axios.get(`${API_URL}/api/v1/seller/products`, getAuthHeaders());
   return response.data;
 });
 
 export const fetchSingleProduct = createAsyncThunk('products/fetchSingle', async (id) => {
-  const response = await axios.get(`${API_URL}/products/${id}`);
+  const response = await axios.get(`${API_URL}/api/v1/seller/products/${id}`, getAuthHeaders());
   return response.data;
 });
 
