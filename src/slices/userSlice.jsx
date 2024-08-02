@@ -2,16 +2,33 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL; // Assuming you have your API URL in an .env file
+const API_URL = process.env.REACT_APP_API_URL || 'http://49.205.192.156:1775' ;
+// const API_URL = 'http://49.205.192.156:1775';
 
-export const login = createAsyncThunk('user/login', async (credentials) => {
-  const response = await axios.post(`${API_URL}/login`, credentials);
-  return response.data;
+console.log(API_URL)
+
+export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${API_URL}/api/v1/seller/login`, credentials);
+    const { token, 'dealer-token': dealerToken } = response.data.data;
+
+    // Save tokens to local storage
+    localStorage.setItem('token', token);
+    localStorage.setItem('dealer-token', dealerToken);
+
+    return response.data.data;
+  } catch (err) {
+    return rejectWithValue(err.response.data);
+  }
 });
 
-export const signup = createAsyncThunk('user/signup', async (userInfo) => {
-  const response = await axios.post(`${API_URL}/signup`, userInfo);
-  return response.data;
+export const signup = createAsyncThunk('user/signup', async (userInfo, { rejectWithValue }) => {
+  try {
+    const response = await axios.post(`${API_URL}/signup`, userInfo);
+    return response.data.data;
+  } catch (err) {
+    return rejectWithValue(err.response.data);
+  }
 });
 
 const userSlice = createSlice({
@@ -33,7 +50,7 @@ const userSlice = createSlice({
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload ? action.payload.message : action.error.message;
       })
       .addCase(signup.pending, (state) => {
         state.loading = true;
@@ -44,7 +61,7 @@ const userSlice = createSlice({
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.error.message;
+        state.error = action.payload ? action.payload.message : action.error.message;
       });
   },
 });

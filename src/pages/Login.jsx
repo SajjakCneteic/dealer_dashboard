@@ -1,44 +1,52 @@
 import React, { useState } from 'react';
-
+import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
+import { login } from '../slices/userSlice'; // Import the login action
 import LogoDark from '../images/logo/logo-dark.svg';
 import Logo from '../images/logo/logo.svg';
 import img from "../images/mob.svg";
 import lock from "../images/lock.svg";
-import email from "../images/email.svg"
+import emailIcon from "../images/email.svg"; // Renamed to avoid conflict with useState variable
+
 const LogIn = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [errors, setErrors] = useState({});
-  const navigate=useNavigate();
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.user); // Accessing user state
 
   const validateForm = () => {
     let errors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  
+
     if (!email.trim()) {
       errors.email = 'Email is required';
     } else if (!emailRegex.test(email)) {
       errors.email = 'Invalid email format';
     }
-  
+
     if (!password.trim()) {
       errors.password = 'Password is required';
     }
-   
-  
+
     setErrors(errors);
     return Object.keys(errors).length === 0;
   };
-  
-  const handleSubmit = (e) => {
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (validateForm()) {
-      console.log('Email:', email);
-      console.log('Password:', password);
-      localStorage.setItem("auth",true);
-      navigate("/")
-      // Here you can add your logic to submit the form data to an API or perform other actions
+      const credentials = { email, password };
+      const resultAction = await dispatch(login(credentials));
+
+      if (login.fulfilled.match(resultAction)) {
+        localStorage.setItem("auth", true);
+        navigate("/");
+      } else {
+        // Handle login error (optional)
+        setErrors({ ...errors, form: 'Login failed. Please try again.' });
+      }
     }
   };
   
