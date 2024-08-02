@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { login } from '../slices/userSlice'; // Import the login action
@@ -7,6 +7,7 @@ import Logo from '../images/logo/logo.svg';
 import img from "../images/mob.svg";
 import lock from "../images/lock.svg";
 import emailIcon from "../images/email.svg"; // Renamed to avoid conflict with useState variable
+import toast, { Toaster } from 'react-hot-toast';
 
 const LogIn = () => {
   const [email, setEmail] = useState('');
@@ -15,7 +16,11 @@ const LogIn = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const { loading, error } = useSelector((state) => state.user); // Accessing user state
+useEffect(()=>{
+  if(error){
+    toast.error(error)  }
 
+},[error])
   const validateForm = () => {
     let errors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -41,22 +46,26 @@ const LogIn = () => {
       const resultAction = await dispatch(login(credentials));
 
       if (login.fulfilled.match(resultAction)) {
+        toast.success("Login Successful")
         localStorage.setItem("auth", true);
         navigate("/");
       } else {
         // Handle login error (optional)
         setErrors({ ...errors, form: 'Login failed. Please try again.' });
       }
-    }
-  };
-  
+     
+  };}
+
   return (
     <>
-
-      <div className="rounded-sm pb-6 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
+<Toaster
+  position="bottom-right"
+  reverseOrder={false}
+/>
+      <div className="rounded-sm pb-2 border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
         <div className="flex justify-center items-center">
-          <div className="hidden w-full md:block ">
-            <div className=" px-26 text-center">
+          <div className="  hidden w-full md:block ">
+            <div className="sticky px-26 text-center">
               <div className=" inline-block" >
               <h2 className="mt-12 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
               Dealer Panel</h2>
@@ -157,11 +166,17 @@ const LogIn = () => {
                 </div>
 
                 <div className="mb-5">
+                  {loading?
+                  <button className=" relative w-full h-14 cursor-pointer rounded-lg border border-primary bg-blue-600 p-4 text-white transition hover:bg-opacity-90">
+<div className="absolute top-[40%] left-[50%] h-4 w-4 animate-spin rounded-full border-4 border-solid border-white border-t-transparent"></div>
+                  </button>
+                :
                   <input
                     type="submit"
                     value="Sign In"
-                    className="w-full cursor-pointer rounded-lg border border-primary bg-blue-600 p-4 text-white transition hover:bg-opacity-90"
-                  />
+                    
+                    className="w-full h-14 cursor-pointer rounded-lg border border-primary bg-blue-600 p-4 text-white transition hover:bg-opacity-90"
+                  />}
                 </div>
 
                
@@ -169,7 +184,7 @@ const LogIn = () => {
                 <div className="mt-6 text-center">
                   <p>
                     Don’t have any account?{' '}
-                    <Link to="/signup" className="text-primary">
+                    <Link to="/auth/sign-up" className="text-primary">
                       Sign Up
                     </Link>
                   </p>

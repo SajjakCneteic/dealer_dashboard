@@ -1,9 +1,12 @@
-import React ,{useState} from 'react';
+import React ,{useEffect, useState} from 'react';
 import { Link } from 'react-router-dom';
 // import Breadcrumb from '../../components/Breadcrumbs/Breadcrumb';
 import LogoDark from '../images/logo/logo-dark.svg';
 import Logo from '../images/logo/logo.svg';
 import img from "../images/mob.svg"
+import { signup } from '../slices/userSlice';
+import { useDispatch, useSelector } from 'react-redux';
+import toast, { Toaster } from 'react-hot-toast';
 
 const SignUp= () => {
   const [name, setName] = useState('');
@@ -11,7 +14,23 @@ const SignUp= () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errors, setErrors] = useState({});
+  const dispatch = useDispatch();
+  const state = useSelector(state => state); 
 
+  const loading = useSelector(state => state.user.loading); 
+  const error = useSelector(state => state.user.error); 
+  const success = useSelector(state => state.user.success); 
+  console.log(state)
+useEffect(()=>{
+  if(success){
+    toast.error(error)
+  }
+},[success])
+useEffect(()=>{
+  if(error){
+    toast.error(error)
+  }
+},[error])
   const validateForm = () => {
     let errors = {};
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
@@ -42,23 +61,53 @@ const SignUp= () => {
     return Object.keys(errors).length === 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async(e) => {
     e.preventDefault();
     const isValid = validateForm();
+   const data = {
+    shopName: "Northbay",
+    firstName: name,
+    lastName: "G",
+    emailAddress: email,
+    password: password,
+    phoneNumber: "+1 715 261 9709",
+    additionalFields: {
+        aadharNo: "9876 1234 5679",
+        gstNo: "77ABCDE1234L1Z9",
+        panNo: "MNOPQ1234P",
+        addressLine1: "111 S 1st Avm",
+        addressLine2: "Suite 509",
+        city: "Wausaus",
+        organization: "Northbay, Inc.",
+        postalCode: "54401",
+        province: "Wisconsin",
+        countryCode: "US",
+        googleMapLink: "https://maps.google.com/?q=111+S+1st+Ave+Wausau+WI+54401"
+    }
+}
+
     if (isValid) {
       // Submit the form
-      console.log('Form submitted:', { name, email, password, confirmPassword });
+      
+       dispatch(signup(data));
+
+      
+      console.log('Form submitted:', { name, email, password, confirmPassword },data);
     } else {
       console.log('Form has errors:', errors);
     }
+   
   };
 
   return (
     <>
-
+<Toaster
+  position="bottom-right"
+  reverseOrder={false}
+/>
       <div className="rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
-        <div className="flex justify-center ">
-        <div className="hidden w-full p-4  md:block ">
+        <div className="relative flex justify-center ">
+        <div className="w-1/2 h-screen left-0 fixed  hidden  p-4  md:block ">
             <div className=" px-26 text-center">
               <div className=" inline-block" >
               <h2 className=" text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
@@ -79,7 +128,7 @@ const SignUp= () => {
             </div>
           </div>
 
-          <div className="w-full border-stroke p-4 dark:border-strokedark  xl:border-l-2">
+          <div className="w-full md:w-1/2 md:ml-[50%] overflow-y-auto   border-stroke p-4 dark:border-strokedark  xl:border-l-2">
             <div className="w-full px-4 sm:px-12.5 xl:px-17.5">
               {/* <span className="mb-2 block font-medium">Start for free</span> */}
               <h2 className="mb-4 text-2xl font-bold text-black dark:text-white sm:text-title-xl2">
@@ -245,11 +294,17 @@ const SignUp= () => {
                 </div>
 
                 <div className="mb-5">
-                  <input
-                    type="submit"
-                    value="Create account"
-                    className="w-full cursor-pointer rounded-lg border border-primary bg-blue-600 p-4 text-white transition hover:bg-opacity-90"
-                  />
+                {loading?
+                  <button className=" relative w-full h-14 cursor-pointer rounded-lg border border-primary bg-blue-600 p-4 text-white transition hover:bg-opacity-90">
+<div className="absolute top-[40%] left-[50%] h-4 w-4 animate-spin rounded-full border-4 border-solid border-white border-t-transparent"></div>
+                  </button>
+                :
+                <input
+                type="submit"
+                value="Create account"
+                className="w-full cursor-pointer rounded-lg border border-primary bg-blue-600 p-4 text-white transition hover:bg-opacity-90"
+              />}
+                 
                 </div>
 
                
@@ -257,7 +312,7 @@ const SignUp= () => {
                 <div className="mt-6 text-center">
                   <p>
                     Already have an account?{' '}
-                    <Link to="/login" className="text-primary">
+                    <Link to="/auth/sign-in" className="text-primary">
                       Sign in
                     </Link>
                   </p>

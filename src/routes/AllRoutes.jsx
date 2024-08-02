@@ -27,8 +27,8 @@ const AllRoutes = () => {
     <><Routes>
         <Route path="/" element={<DefaultLayout><Dashboard/></DefaultLayout>} />
         <Route path="/dashboard" element={<DefaultLayout><Dashboard/></DefaultLayout>} />
-        <Route path="/login" element={<LogIn />} />
-        <Route path="/signup" element={<SignUp />} />
+        <Route path="/auth/sign-in" element={<LogIn />} />
+        <Route path="/auth/sign-up" element={<SignUp />} />
         <Route path='/all-orders' element={<DefaultLayout><AllOrderList/></DefaultLayout>} />
         <Route path='/orders/pending' element={<DefaultLayout><PendingOrderList/></DefaultLayout>} />
         <Route path='/orders/completed' element={<DefaultLayout><CompleteOrderList/></DefaultLayout>} />
