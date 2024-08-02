@@ -1,10 +1,11 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigation } from 'react-router-dom';
 import { MdArrowForwardIos } from 'react-icons/md';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
 import Modal from '../components/Modal';
+
 
 const originalProduct = {
   id: 1,
@@ -29,7 +30,6 @@ const ProductDetails = () => {
   };
 
   
-
   return (
     <>
     <Modal isDisabled={isDisabled}/>
