@@ -11,38 +11,49 @@ import { fetchSingleProduct } from '../slices/productSlice';
 
 
 const ProductDetails = () => {
-  const [originalProduct,setOriginalProduct] = useState({})
+  const [originalProduct, setOriginalProduct] = useState({})
   const dispatch = useDispatch()
   const [product, setProduct] = useState(originalProduct);
   const [isDisabled, setIsDisabled] = useState(false);
-  const {id} = useParams()
+  const { id } = useParams()
   console.log(product)
- 
+
   const handleInputChange = (field, value) => {
     const updatedProduct = { ...product, [field]: value };
     setProduct(updatedProduct);
-    const isModified = product.productName !== originalProduct.productName ||
-        product.slug !== originalProduct.slug ||
-        product.description !== originalProduct.description;
+    const isModified = product.name !== originalProduct.name ||
+      product.slug !== originalProduct.slug ||
+      product.description !== originalProduct.description;
 
-        setIsDisabled(isModified)
+    setIsDisabled(isModified)
   };
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await dispatch( fetchSingleProduct(id));
+      const data = await dispatch(fetchSingleProduct(id));
       setOriginalProduct(data.payload.data.product)
       setProduct(data.payload.data.product)
     };
-  
+
     fetchData();
-    
+
   }, []);
 
-  
+  // date correction in good formate
+  function formatDate(dateString) {
+    const dateObj = new Date(dateString);
+
+    const day = String(dateObj.getDate()).padStart(2, '0');
+    const month = String(dateObj.getMonth() + 1).padStart(2, '0'); // Months are zero-indexed
+    const year = dateObj.getFullYear();
+
+    return `${day}-${month}-${year}`;
+  }
+
+
   return (
     <>
-    <Modal isDisabled={isDisabled}/>
+      <Modal isDisabled={isDisabled} />
       <div className="mb-6">
         <span className="text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md">
           <Link to="/dashboard" className="items-center inline-flex hover:text-btnBlue transition duration-200">
@@ -56,14 +67,14 @@ const ProductDetails = () => {
           </Link>
         </span>
       </div>
-    <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
+      <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className="flex justify-end mb-3">
           <button className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
-            Delete  
+            Delete
           </button>
           <button
-            
-            onClick={()=>console.log("hello world")}
+
+            onClick={() => console.log("hello world")}
             disabled={isDisabled}
             className={` flex items-center ${isDisabled ? 'bg-btnBlue' : 'bg-blue-300'} 
          ${isDisabled ? 'hover:bg-blue-700 ' : ''} 
@@ -87,7 +98,7 @@ const ProductDetails = () => {
                     onChange={(e) => handleInputChange('name', e.target.value)}
                     className="mt-1 block w-full text-slate-900 text-lg dark:bg-customBlue dark:text-white   *: border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter product name"
-                  />  
+                  />
                 </div>
                 <div className="w-full">
                   <label htmlFor="slug" className="block text-sm font-medium text-gray-700">
@@ -256,10 +267,12 @@ const ProductDetails = () => {
                   <p className='text-gray-700'>ID: <span className='text-black-2'>{product?.id}</span></p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
-                  <p className='text-gray-700'>Created at: <span className='text-black-2'>{product?.createdAt}</span></p>
+                  <p className="text-gray-700">
+                    Created at: <span className="text-black-2">{formatDate(product?.createdAt)}</span>
+                  </p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
-                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{product?.updatedAt}</span></p>
+                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{formatDate(product?.updatedAt)}</span></p>
                 </div>
               </div>
             </div>
