@@ -1,23 +1,22 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigation } from 'react-router-dom';
+import { Link, useNavigation, useParams } from 'react-router-dom';
 import { MdArrowForwardIos } from 'react-icons/md';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
 import Modal from '../components/Modal';
+import { useDispatch } from 'react-redux';
+import { fetchSingleProduct } from '../slices/productSlice';
 
-
-const originalProduct = {
-  id: 1,
-  productName: "Comfy Padded Chair",
-  slug: "comfy-padded-chair",
-  description: "You sit comfortably thanks to the shaped back. The chair frame is made of solid wood, which is a durable natural material."
-};
 
 
 const ProductDetails = () => {
+  const [originalProduct,setOriginalProduct] = useState({})
+  const dispatch = useDispatch()
   const [product, setProduct] = useState(originalProduct);
   const [isDisabled, setIsDisabled] = useState(false);
+  const {id} = useParams()
+  console.log(product)
  
   const handleInputChange = (field, value) => {
     const updatedProduct = { ...product, [field]: value };
@@ -28,6 +27,17 @@ const ProductDetails = () => {
 
         setIsDisabled(isModified)
   };
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await dispatch( fetchSingleProduct(id));
+      setOriginalProduct(data.payload.data.product)
+      setProduct(data.payload.data.product)
+    };
+  
+    fetchData();
+    
+  }, []);
 
   
   return (
@@ -46,7 +56,7 @@ const ProductDetails = () => {
           </Link>
         </span>
       </div>
-      <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
+    <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className="flex justify-end mb-3">
           <button className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
             Delete  
@@ -72,9 +82,9 @@ const ProductDetails = () => {
                   </label>
                   <input
                     type="text"
-                    id="productName"
-                    value={product.productName}
-                    onChange={(e) => handleInputChange('productName', e.target.value)}
+                    id="name"
+                    value={product?.name}
+                    onChange={(e) => handleInputChange('name', e.target.value)}
                     className="mt-1 block w-full text-slate-900 text-lg dark:bg-customBlue dark:text-white   *: border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter product name"
                   />  
@@ -86,7 +96,7 @@ const ProductDetails = () => {
                   <input
                     type="text"
                     id="slug"
-                    value={product.slug}
+                    value={product?.slug}
                     onChange={(e) => handleInputChange('slug', e.target.value)}
                     className="mt-1 block w-full border text-slate-900 text-lg dark:bg-customBlue dark:text-white  border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter slug"
@@ -120,8 +130,9 @@ const ProductDetails = () => {
               <div className="flex items-center">
                 <div className="flex-shrink-0 w-1/3 h-48 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
                   <div className="text-center p-8">
-                    <GrImage size={'100%'} />
-                    <p className="text-gray-500 mt-2">No featured asset</p>
+                    {/* <GrImage size={'100%'} /> */}
+                    <img src={product?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
+                    {/* <p className="text-gray-500 mt-2">No featured asset</p> */}
                   </div>
                 </div>
                 {/* <button className="ml-4 dark:bg-btnBlue mt-35 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300">
@@ -242,13 +253,13 @@ const ProductDetails = () => {
               </div> */}
               <div className="border  p-3 rounded-lg dark:bg-slate-700">
                 <div className="flex  text-sm font-medium">
-                  <p className='text-gray-700'>ID: <span className='text-black-2'>50</span></p>
+                  <p className='text-gray-700'>ID: <span className='text-black-2'>{product?.id}</span></p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
-                  <p className='text-gray-700'>Created at: <span className='text-black-2'>22/07/24, 2:46 pm</span></p>
+                  <p className='text-gray-700'>Created at: <span className='text-black-2'>{product?.createdAt}</span></p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
-                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>22/07/24, 2:46 pm</span></p>
+                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{product?.updatedAt}</span></p>
                 </div>
               </div>
             </div>
