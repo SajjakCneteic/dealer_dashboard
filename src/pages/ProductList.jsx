@@ -5,30 +5,23 @@ import { AiOutlineDelete } from "react-icons/ai";
 import { LuView } from "react-icons/lu";
 import { Link } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa6";
+import { fetchAllProducts } from '../slices/productSlice';
+import { useDispatch } from 'react-redux';
 
 const ProductList = () => {
+  const dispatch = useDispatch()
+const [products,setProducts] = useState([])
 
+useEffect(() => {
+  const fetchData = async () => {
+    const data = await dispatch( fetchAllProducts());
+    setProducts(data.payload.data.products.items)
+  };
 
-  const products = [
-    {
-      name: 'Apple Watch Series 7',
-      category: 'Electronics',
-      price: '$269',
-      img: 'https://placehold.co/50',
-    },
-    {
-      name: 'Macbook Pro M1',
-      category: 'Electronics',
-      price: '$546',
-      img: 'https://placehold.co/50',
-    },
-    {
-      name: 'Dell Inspiron 15',
-      category: 'Electronics',
-      price: '$444',
-      img: 'https://placehold.co/50',
-    },
-  ];
+  fetchData();
+  
+}, []);
+
 
   return (
     <>
@@ -52,11 +45,11 @@ const ProductList = () => {
             {products.map((product, index) => (
               <tr key={index} className="border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-slate-800 transition duration-300">
                 <td className="py-4 px-6 flex items-center">
-                  <img src={'https://images.pexels.com/photos/90946/pexels-photo-90946.jpeg?auto=compress&cs=tinysrgb&dpr=1&w=500'} alt={product.name} className="w-20 h-20 object-cover mr-4 rounded-sm shadow-md" />
+                  <img src={product?.featuredAsset?.preview} alt={product.name} className="w-20 h-20 object-cover mr-4 rounded-sm shadow-md" />
                   <span className="text-zinc-900 dark:text-zinc-100">{product.name}</span>
                 </td>
                 <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product.category}</td>
-                <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product.price}</td>
+                <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product?.variantList?.items?.[0]?.price}.00</td>
 
                 <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300 relative">
                   <div className="flex space-x-4">
@@ -77,7 +70,7 @@ const ProductList = () => {
                     <Link
                       className="flex items-center text-teal-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 focus:outline-none transition-colors duration-200"
                       title="View"
-                      to='/product/1'
+                      to={`/product/${product.id}`}
                       about='View'
                     >
                       <LuView />
