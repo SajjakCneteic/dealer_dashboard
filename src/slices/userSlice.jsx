@@ -2,14 +2,11 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL || 'http://49.205.192.156:1775' ;
-// const API_URL = 'http://49.205.192.156:1775';
-
-console.log(API_URL)
+const API_URL = process.env.REACT_APP_API_URL || 'http://49.205.192.156:1775/api/v1';
 
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_URL}/api/v1/seller/login`, credentials);
+    const response = await axios.post(`${API_URL}/seller/login`, credentials);
     const { token, 'dealer-token': dealerToken } = response.data.data;
 
     // Save tokens to local storage
@@ -24,8 +21,10 @@ export const login = createAsyncThunk('user/login', async (credentials, { reject
 
 export const signup = createAsyncThunk('user/signup', async (userInfo, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_URL}/signup`, userInfo);
-    return response.data.data;
+    const response = await axios.post(`${API_URL}/seller/signup`, userInfo);
+    // toast.success("Resgistration Successful")
+    console.log(response)
+    return response.data;
   } catch (err) {
     return rejectWithValue(err.response.data);
   }
@@ -37,8 +36,21 @@ const userSlice = createSlice({
     user: null,
     loading: false,
     error: null,
+    success:null
   },
-  reducers: {},
+  reducers: {
+    logout: (state) => {
+      // Clear tokens from local storage
+      localStorage.removeItem('token');
+      localStorage.removeItem('dealer-token');
+      
+      // Reset the user state
+      state.user = null;
+      state.error = null;
+      state.loading = false;
+
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(login.pending, (state) => {
@@ -47,6 +59,7 @@ const userSlice = createSlice({
       .addCase(login.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        
       })
       .addCase(login.rejected, (state, action) => {
         state.loading = false;
@@ -54,16 +67,21 @@ const userSlice = createSlice({
       })
       .addCase(signup.pending, (state) => {
         state.loading = true;
+        state.success= null;
       })
       .addCase(signup.fulfilled, (state, action) => {
         state.loading = false;
         state.user = action.payload;
+        state.success= action.payload.message;
       })
       .addCase(signup.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload ? action.payload.message : action.error.message;
+        state.error = action.payload ? action.payload.msg : action.error.msg;
+        state.success= null;
       });
   },
 });
+
+export const { logout } = userSlice.actions;
 
 export default userSlice.reducer;

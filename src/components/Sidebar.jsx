@@ -8,17 +8,20 @@ import { TbLineScan } from "react-icons/tb";
 import { AiOutlineProduct } from "react-icons/ai";
 import { IoIosArrowDown, IoIosArrowUp } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
-
+import { useDispatch } from 'react-redux';
+import { logout } from '../slices/userSlice';
 const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
     const [activeAccordion, setActiveAccordion] = useState(null);
     const [activeLink, setActiveLink] = useState(null);
+    const dispatch = useDispatch();
     const navigate=useNavigate();
     // const [sidebarOpen , setSidebarOpen] = useState(true)
 //  console.log(window.location.pathname)
 
 const handleLogout =()=>{
+    dispatch(logout());
     localStorage.setItem("auth",false);
-    navigate("/login")
+    navigate("/auth/sign-in")
 }
     const toggleAccordion = (accordionName) => {
         setActiveAccordion(activeAccordion === accordionName ? null : accordionName);
