@@ -2,12 +2,12 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL ||'http://49.205.192.156:1775' ;
+const API_URL = process.env.REACT_APP_API_URL ||'http://106.51.242.196:50102' ;
 
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_URL}/api/v1/seller/login`, credentials);
-    const { token, 'dealer-token': dealerToken } = response.data.data;
+    const response = await axios.post(`${API_URL}/api/v1/dealer/login`, credentials);
+    const { token, 'dealer-token': dealerToken } = response.data;
 
     // Save tokens to local storage
     localStorage.setItem('token', token);
@@ -21,7 +21,7 @@ export const login = createAsyncThunk('user/login', async (credentials, { reject
 
 export const signup = createAsyncThunk('user/signup', async (userInfo, { rejectWithValue }) => {
   try {
-    const response = await axios.post(`${API_URL}/api/v1/seller/signup`, userInfo);
+    const response = await axios.post(`${API_URL}/api/v1/dealer/signup`, userInfo);
     // toast.success("Resgistration Successful")
     console.log(response)
     return response.data;

@@ -25,7 +25,7 @@ const Navbar = ({sidebarOpen,setSidebarOpen}) => {
 
   const handleLogout =()=>{
     localStorage.setItem("auth",false);
-    Navigate("/login")
+    Navigate("/auth/sign-in")
 }
 
 const toggleTheme = () => {
