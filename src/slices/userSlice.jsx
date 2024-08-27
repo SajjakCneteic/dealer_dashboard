@@ -2,7 +2,8 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-const API_URL = process.env.REACT_APP_API_URL ||'http://106.51.242.196:50102' ;
+const API_URL = process.env.REACT_APP_API_URL  ;
+
 
 export const login = createAsyncThunk('user/login', async (credentials, { rejectWithValue }) => {
   try {

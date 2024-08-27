@@ -32,6 +32,8 @@ const AllRoutes = () => {
         <Route path='/all-orders' element={<DefaultLayout><AllOrderList/></DefaultLayout>} />
         <Route path='/orders/pending' element={<DefaultLayout><PendingOrderList/></DefaultLayout>} />
         <Route path='/orders/completed' element={<DefaultLayout><CompleteOrderList/></DefaultLayout>} />
+        <Route path='/orders/cancle' element={<DefaultLayout><CompleteOrderList/></DefaultLayout>} />
+
         <Route path='/order/:id' element={<DefaultLayout><OrderDetails/></DefaultLayout>} />
         <Route path='/profile' element={<DefaultLayout><Profile/></DefaultLayout>} />
         <Route path='/scan-order' element={<DefaultLayout><Scan_order/></DefaultLayout>} />

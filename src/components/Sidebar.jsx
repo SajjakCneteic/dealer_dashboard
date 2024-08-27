@@ -82,6 +82,13 @@ console.log(activeLink)
                                     All Orders
                                 </Link>
                                 <Link 
+                                    to="/orders/completed"
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/orders/completed' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/orders/completed' ? 'text-white' : 'hover:text-white'}`}
+                                    
+                                >
+                                    Completed Orders
+                                </Link>
+                                <Link 
                                     to="/orders/pending"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/orders/pending' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/orders/pending' ? 'text-white' : 'hover:text-white'}`}
                                    
@@ -89,11 +96,11 @@ console.log(activeLink)
                                     Pending Orders
                                 </Link>
                                 <Link 
-                                    to="/orders/completed"
+                                    to="/orders/cancle"
                                     className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/orders/completed' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/orders/completed' ? 'text-white' : 'hover:text-white'}`}
                                     
                                 >
-                                    Completed Orders
+                                    Cancled Orders
                                 </Link>
                             </div>
                         )}
