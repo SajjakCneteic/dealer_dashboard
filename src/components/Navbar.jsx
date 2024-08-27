@@ -25,6 +25,7 @@ const Navbar = ({sidebarOpen,setSidebarOpen}) => {
 
   const handleLogout =()=>{
     localStorage.clear()
+
     Navigate("/auth/sign-in")
 }
 
