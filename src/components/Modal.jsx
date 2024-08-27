@@ -30,13 +30,16 @@ const ConfirmNavigationModal = ({ isOpen, onDiscard, onCancel }) => {
 
 const Modal = ({ isDisabled }) => {
     const [isModalOpen, setIsModalOpen] = useState(false);
+    const location = useLocation()
 
-    const current = window.location.pathname
+    const current = location.pathname
+useEffect(()=>{
 
   if(current!==window.location.pathname){
     setIsModalOpen(true)
     console.log('ture')
   }
+},[current])
   
     useEffect(() => {
       const handlePopState = (event) => {

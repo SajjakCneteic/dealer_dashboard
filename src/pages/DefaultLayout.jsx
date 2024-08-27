@@ -23,7 +23,7 @@ const DefaultLayout = ({ children }) => {
     return () => clearTimeout(timer);
   }, [Location.pathname]);
 if(!isAuth){
-  naviagate("/login")
+  naviagate("/auth/sign-in")
 }
   return (
     <div className="dark:bg-boxdark-2 dark:text-bodydark">
