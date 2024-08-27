@@ -24,8 +24,8 @@ const Navbar = ({sidebarOpen,setSidebarOpen}) => {
   }, [isDarkMode]);
 
   const handleLogout =()=>{
-    localStorage.setItem("auth",false);
-    Navigate("/login")
+    localStorage.clear()
+    Navigate("/auth/sign-in")
 }
 
 const toggleTheme = () => {

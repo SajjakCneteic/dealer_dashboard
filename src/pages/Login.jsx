@@ -18,7 +18,10 @@ const LogIn = () => {
   const { loading, error } = useSelector((state) => state.user); // Accessing user state
 useEffect(()=>{
   if(error){
-    toast.error(error)  }
+    toast.error(error)  
+    window.location.reload(true);
+
+  }
 
 },[error])
   const validateForm = () => {

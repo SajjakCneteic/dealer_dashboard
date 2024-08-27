@@ -4,15 +4,27 @@ import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL;
 
-export const fetchAllOrders = createAsyncThunk('orders/fetchAll', async () => {
-  const response = await axios.get(`${API_URL}/orders`);
-  return response.data;
-});
+// Fetch all orders with an optional query
+export const fetchAllOrders = createAsyncThunk(
+  'orders/fetchAll', 
+  async (query = '') => {
+    let url = `${API_URL}/api/v1/dealer/orders`;
+    if (query) {
+      url += `?q=${query}`;
+    }
+    const response = await axios.get(url);
+    return response.data;
+  }
+);
 
-export const fetchSingleOrder = createAsyncThunk('orders/fetchSingle', async (id) => {
-  const response = await axios.get(`${API_URL}/orders/${id}`);
-  return response.data;
-});
+// Fetch a single order by ID
+export const fetchSingleOrder = createAsyncThunk(
+  'orders/fetchSingle', 
+  async (id) => {
+    const response = await axios.get(`${API_URL}/api/v1/dealer/orders/${id}`);
+    return response.data;
+  }
+);
 
 const orderSlice = createSlice({
   name: 'orders',
@@ -25,6 +37,7 @@ const orderSlice = createSlice({
   reducers: {},
   extraReducers: (builder) => {
     builder
+      // Fetch all orders
       .addCase(fetchAllOrders.pending, (state) => {
         state.loading = true;
       })
@@ -36,6 +49,7 @@ const orderSlice = createSlice({
         state.loading = false;
         state.error = action.error.message;
       })
+      // Fetch single order
       .addCase(fetchSingleOrder.pending, (state) => {
         state.loading = true;
       })

@@ -122,7 +122,7 @@ const ScanOrder = () => {
           ) : previewImage ? (
             <img src={previewImage} alt="QR Code Preview" className="h-full w-full object-contain" />
           ) : (
-            <div {...getRootProps()} className="flex items-center justify-center h-full w-full">
+            <div {...getRootProps()} className="flex cursor-pointer items-center justify-center h-full w-full">
               <input {...getInputProps()} />
               {isDragActive ? (
                 <p className="text-gray-500">Drop the files here...</p>
