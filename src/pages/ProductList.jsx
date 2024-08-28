@@ -7,26 +7,39 @@ import { Link } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa6";
 import { fetchAllProducts } from '../slices/productSlice';
 import { useDispatch } from 'react-redux';
+import Loader from '../components/Loader';
 
+const rupees = process.env.REACT_APP_CURRENCY_SIGN;
 const ProductList = () => {
   const dispatch = useDispatch()
-const [products,setProducts] = useState([])
+  const [products, setProducts] = useState([])
+  const [isLoader ,setIsLoader] = useState(false)
 
-useEffect(() => {
-  const fetchData = async () => {
-    const data = await dispatch( fetchAllProducts());
-    setProducts(data.payload.products.items)
-    console.log(data)
-  };
+  console.log("ruppess", rupees)
 
-  fetchData();
-  
-}, []);
+  useEffect(() => {
+    const fetchData = async () => {
+      setIsLoader(true)
+      const data = await dispatch(fetchAllProducts());
+      setProducts(data.payload.products.items)
+      setIsLoader(false)
+    };
 
+    fetchData();
+
+  }, []);
+
+  function formatPrice(price) {
+    return price.toLocaleString('en-IN');
+  }
+
+  if(isLoader){
+    return <Loader/>
+  }
 
   return (
     <>
-      
+
       <div className=" h-full bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className='flex justify-end mb-3'>
           <Link to='/products/create' className='bg-btnBlue  flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2'>
@@ -37,7 +50,7 @@ useEffect(() => {
           <thead className='border-b '>
             <tr className="bg-zinc-100 dark:bg-customBlue">
               <th className="py-4 px-6 text-left text-l font-medium text-zinc-700 dark:text-zinc-300">Product Name</th>
-              <th className="py-4 px-6 text-left text-l font-medium text-zinc-700 dark:text-zinc-300">Category</th>
+              <th className="py-4 px-6 text-left  text-l font-medium text-zinc-700 dark:text-zinc-300">Category</th>
               <th className="py-4 px-6 text-left text-l font-medium text-zinc-700 dark:text-zinc-300">Price</th>
               <th className="py-4 px-6 text-left text-l font-medium text-zinc-700 dark:text-zinc-300"></th>
             </tr>
@@ -49,8 +62,10 @@ useEffect(() => {
                   <img src={product?.featuredAsset?.preview} alt={product.name} className="w-20 h-20 object-cover mr-4 rounded-sm shadow-md" />
                   <span className="text-zinc-900 dark:text-zinc-100">{product.name}</span>
                 </td>
-                <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product.category}</td>
-                <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product?.variantList?.items?.[0]?.price}.00</td>
+                <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product?.category||'N/A'}</td>
+                <td className="py-4 px-6 whitespace-nowrap text-zinc-700 dark:text-zinc-300">
+                  {rupees} { formatPrice(product?.variantList?.items?.[0]?.price) }
+                </td>
 
                 <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300 relative">
                   <div className="flex space-x-4">

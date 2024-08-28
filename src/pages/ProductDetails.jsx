@@ -7,7 +7,9 @@ import { GrImage } from 'react-icons/gr';
 import Modal from '../components/Modal';
 import { useDispatch } from 'react-redux';
 import { fetchSingleProduct } from '../slices/productSlice';
-
+import Loader from '../components/Loader';
+import { RiH1 } from 'react-icons/ri';
+const rupees = process.env.REACT_APP_CURRENCY_SIGN;
 
 
 const ProductDetails = () => {
@@ -16,7 +18,8 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(originalProduct);
   const [isDisabled, setIsDisabled] = useState(false);
   const { id } = useParams()
-  console.log(originalProduct)
+  const [isLoader, setIsLoader] = useState(false)
+
 
   const handleInputChange = (field, value) => {
     const updatedProduct = { ...product, [field]: value };
@@ -30,10 +33,11 @@ const ProductDetails = () => {
 
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoader(true)
       const data = await dispatch(fetchSingleProduct(id));
       setOriginalProduct(data.payload.product)
       setProduct(data.payload.product)
-      
+      setIsLoader(false)
     };
 
     fetchData();
@@ -51,6 +55,13 @@ const ProductDetails = () => {
     return `${day}-${month}-${year}`;
   }
 
+  function formatPrice(price) {
+    return price.toLocaleString('en-IN');
+  }
+
+  if(isLoader){
+    return <Loader/>
+  }
 
   return (
     <>
@@ -143,114 +154,94 @@ const ProductDetails = () => {
                 <div className="flex-shrink-0 w-1/3 h-48 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
                   <div className="text-center p-8">
                     {/* <GrImage size={'100%'} /> */}
-                    <img src={originalProduct?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
+                    <img src={product?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
                     {/* <p className="text-gray-500 mt-2">No featured asset</p> */}
                   </div>
                 </div>
-               
+
                 <div className='h-full' >
                   <div className='flex flex-wrap'>
-                    {originalProduct?.assets?.map((el)=>
-                    <img src={el?.preview} alt="" className='ml-4 w-18 h-18' />
-                  )}
+                    {product?.assets?.map((el) =>
+                      <img src={el?.preview} alt="" className='ml-4 w-18 h-18' />
+                    )}
                   </div>
-                 <div className="  ml-4 flex mt-20">
-                  <label className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer dark:bg-btnBlue">
-                    <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                    </svg>
-                    Add asset
-                    <input type="file" className="hidden" />
-                  </label>
+                  <div className="  ml-4 flex mt-20">
+                    <label className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer dark:bg-btnBlue">
+                      <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                      </svg>
+                      Add asset
+                      <input type="file" className="hidden" />
+                    </label>
                   </div>
                 </div>
               </div>
             </div>
             <div className="p-4 mt-5 border rounded-lg bg-white dark:bg-slate-700 shadow-md max-w-4xl mx-auto">
-              <h2 className="text-xl font-semibold mb-4">Product variants</h2>
-              <div className="space-y-4">
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  <div>
-                    <label htmlFor="option" className="block text-sm font-medium text-gray-700">Option</label>
-                    <input
-                      type="text"
-                      id="option"
-                      placeholder="e.g. Size"
-                      className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-gray-700"
-                    />
-                  </div>
-                  <div className="relative">
-                    <label htmlFor="option-values" className="block text-sm font-medium text-gray-700">Option values</label>
-                    <input
-                      type="text"
-                      id="option-values"
-                      className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-2 focus:ring-indigo-500"
-                    />
-
-                  </div>
-                </div>
-                <button className="mt-2 px-4 py-2 border dark:bg-btnBlue border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 flex items-center">
-                  <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  Add option
-                </button>
-                <div>
-                  <label htmlFor="stock-location" className="block text-sm font-medium text-gray-700">Add stock to location</label>
-                  <select
-                    id="stock-location"
-                    className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-                  >
-                    <option>Default Stock Location</option>
-                  </select>
-                </div>
-                <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                  <div>
-                    <label htmlFor="sku" className="block text-sm font-medium text-gray-700">SKU</label>
-                    <input
-                      type="text"
-                      id="sku"
-                      className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-                    />
-                  </div>
-                  <div>
-                    <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
-                    <div className="relative mt-1 rounded-md shadow-sm">
-                      <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span className="text-gray-500 sm:text-sm">US$</span>
-                      </div>
-                      <input
-                        type="text"
-                        id="price"
-                        className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-                      />
-                    </div>
-                  </div>
-                  <div>
-                    <label htmlFor="stock" className="block text-sm font-medium text-gray-700">Stock</label>
-                    <input
-                      type="text"
-                      id="stock"
-                      className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
-                    />
-                  </div>
-                </div>
+              <h2 className="text-xl font-semibold mb-4">Product Variants</h2>
+           {(!product?.variants?.length ) ?<h1>No Variants</h1> :
+              <div className="overflow-x-auto">
+                <table className="min-w-full divide-y divide-gray-200">
+                  <thead className="bg-gray-50 dark:bg-slate-600">
+                    <tr>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">SKU</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Stock</th>
+                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Options</th>
+                    </tr>
+                  </thead>
+                  
+                  <tbody className="bg-white dark:bg-slate-700 divide-y divide-gray-200">
+                    {product?.variants?.map((variant, index) => (
+                      <tr key={index}>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{variant?.sku}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                          {rupees}{(variant.price )}
+                        </td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{variant.stockOnHand}</td>
+                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                          {variant.options.map((option, optIndex) => (
+                            <span key={optIndex} className="block">
+                              {option.name}
+                            </span>
+                          ))}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
               </div>
+                } 
             </div>
+
           </div>
           <div className="col-span-30">
             <div className="items-center">
               <div className="border  p-3 rounded-lg dark:bg-slate-700">
                 <div className="flex  text-sm font-medium">
-                  <p className='text-gray-700'>ID: <span className='text-black-2'>{originalProduct?.id}</span></p>
+                  <p className='text-gray-700'>ID: <span className='text-black-2'>{product?.id}</span></p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
                   <p className="text-gray-700">
-                    Created at: <span className="text-black-2">{formatDate(originalProduct?.createdAt)}</span>
+                    Created at: <span className="text-black-2">{formatDate(product?.createdAt)}</span>
                   </p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
-                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{formatDate(originalProduct?.updatedAt)}</span></p>
+                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{formatDate(product?.updatedAt)}</span></p>
+                </div>
+              </div>
+              <div className="border mt-5 p-3 mb-4 rounded-lg dark:bg-slate-700">
+                <label htmlFor="visibility" className="block text-sm font-medium text-gray-700">
+                  Visibility
+                </label>
+                <div className="flex items-center mt-1">
+                  <input
+                    type="checkbox"
+                    id="visibility"
+                    className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
+                    defaultChecked
+                  />
+                  <span className="ml-2 text-sm text-gray-700">Enabled</span>
                 </div>
               </div>
             </div>
