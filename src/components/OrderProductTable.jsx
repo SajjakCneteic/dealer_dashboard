@@ -44,7 +44,7 @@ const OrderProductTable = ({items,summary}) => (
         </tr>
       </thead>
       <tbody>
-        {items.map((items)=>{
+        {items?.map((items)=>{
 return  <ProductItem
 {...items}
 />

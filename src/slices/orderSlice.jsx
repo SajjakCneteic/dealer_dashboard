@@ -1,27 +1,38 @@
-// src/slices/orderSlice.js
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axios from 'axios';
 
 const API_URL = process.env.REACT_APP_API_URL;
+const AUTH_TOKEN = localStorage.getItem("token");
+const DEALER_TOKEN = localStorage.getItem("dealer-token");
 
 // Fetch all orders with an optional query
 export const fetchAllOrders = createAsyncThunk(
-  'orders/fetchAll', 
+  'orders/fetchAll',
   async (query = '') => {
     let url = `${API_URL}/api/v1/dealer/orders`;
     if (query) {
       url += `?q=${query}`;
     }
-    const response = await axios.get(url);
+    const response = await axios.get(url, {
+      headers: {
+        'Authorization': `Bearer ${AUTH_TOKEN}`,
+        'dealer-token': DEALER_TOKEN,
+      }
+    });
     return response.data;
   }
 );
 
 // Fetch a single order by ID
 export const fetchSingleOrder = createAsyncThunk(
-  'orders/fetchSingle', 
+  'orders/fetchSingle',
   async (id) => {
-    const response = await axios.get(`${API_URL}/api/v1/dealer/orders/${id}`);
+    const response = await axios.get(`${API_URL}/api/v1/dealer/orders/${id}`, {
+      headers: {
+        'Authorization': `Bearer ${AUTH_TOKEN}`,
+        'dealer-token': DEALER_TOKEN,
+      }
+    });
     return response.data;
   }
 );

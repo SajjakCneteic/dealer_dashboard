@@ -22,9 +22,9 @@ const AllOrderList = () => {
   if (error) {
     return <div>Error: {error}</div>;
   }
-
+  console.log(orders);
   return (
-    <OrderList Heading="All Order List" show={false} customerOrders={orders} />
+    <OrderList Heading="All Orders" show={false} customerOrders={orders.orders} />
   );
 };
 
