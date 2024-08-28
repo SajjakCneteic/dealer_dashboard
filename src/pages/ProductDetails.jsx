@@ -16,7 +16,7 @@ const ProductDetails = () => {
   const [product, setProduct] = useState(originalProduct);
   const [isDisabled, setIsDisabled] = useState(false);
   const { id } = useParams()
-  console.log(product)
+  console.log(originalProduct)
 
   const handleInputChange = (field, value) => {
     const updatedProduct = { ...product, [field]: value };
@@ -31,8 +31,9 @@ const ProductDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       const data = await dispatch(fetchSingleProduct(id));
-      setOriginalProduct(data.payload.data.product)
-      setProduct(data.payload.data.product)
+      setOriginalProduct(data.payload.product)
+      setProduct(data.payload.product)
+      
     };
 
     fetchData();
@@ -138,21 +139,22 @@ const ProductDetails = () => {
             </div>
             <div className="p-4 border mt-5 rounded-lg dark:bg-slate-700 bg-white shadow-md max-w-4xl mx-auto">
               <h2 className="text-xl font-semibold mb-4">Assets</h2>
-              <div className="flex items-center">
+              <div className="flex ">
                 <div className="flex-shrink-0 w-1/3 h-48 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
                   <div className="text-center p-8">
                     {/* <GrImage size={'100%'} /> */}
-                    <img src={product?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
+                    <img src={originalProduct?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
                     {/* <p className="text-gray-500 mt-2">No featured asset</p> */}
                   </div>
                 </div>
-                {/* <button className="ml-4 dark:bg-btnBlue mt-35 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                  <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                  </svg>
-                  Add asset
-                </button> */}
-                <div className="ml-4 mt-35">
+               
+                <div className='h-full' >
+                  <div className='flex flex-wrap'>
+                    {originalProduct?.assets?.map((el)=>
+                    <img src={el?.preview} alt="" className='ml-4 w-18 h-18' />
+                  )}
+                  </div>
+                 <div className="  ml-4 flex mt-20">
                   <label className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer dark:bg-btnBlue">
                     <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
@@ -160,6 +162,7 @@ const ProductDetails = () => {
                     Add asset
                     <input type="file" className="hidden" />
                   </label>
+                  </div>
                 </div>
               </div>
             </div>
@@ -237,42 +240,17 @@ const ProductDetails = () => {
           </div>
           <div className="col-span-30">
             <div className="items-center">
-              {/* <div className="border p-3 mb-4 rounded-lg dark:bg-slate-700">
-                <label htmlFor="visibility" className="block text-sm font-medium text-gray-700">
-                  Visibility
-                </label>
-                <div className="flex items-center mt-1">
-                  <input
-                    type="checkbox"
-                    id="visibility"
-                    className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                    defaultChecked
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Enabled</span>
-                </div>
-              </div>
-              <div className="border p-3 rounded-lg dark:bg-slate-700">
-                <label htmlFor="facets" className="block text-sm font-medium text-gray-700">
-                  Facets
-                </label>
-                <button
-                  type="button"
-                  className="mt-1 inline-flex items-center px-3 py-2 border border-gray-300 shadow-sm text-sm leading-4 font-medium rounded-md text-gray-700 dark:bg-black bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
-                >
-                  + Add facets
-                </button>
-              </div> */}
               <div className="border  p-3 rounded-lg dark:bg-slate-700">
                 <div className="flex  text-sm font-medium">
-                  <p className='text-gray-700'>ID: <span className='text-black-2'>{product?.id}</span></p>
+                  <p className='text-gray-700'>ID: <span className='text-black-2'>{originalProduct?.id}</span></p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
                   <p className="text-gray-700">
-                    Created at: <span className="text-black-2">{formatDate(product?.createdAt)}</span>
+                    Created at: <span className="text-black-2">{formatDate(originalProduct?.createdAt)}</span>
                   </p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
-                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{formatDate(product?.updatedAt)}</span></p>
+                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{formatDate(originalProduct?.updatedAt)}</span></p>
                 </div>
               </div>
             </div>
