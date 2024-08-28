@@ -16,6 +16,11 @@ const getAuthHeaders = () => {
   };
 };
 
+export const UserDetails = createAsyncThunk('user/details', async () => {
+  const response = await axios.get(`${API_URL}/api/v1/dealer/me`, getAuthHeaders());
+  return response.data;
+});
+
 export const fetchAllProducts = createAsyncThunk('products/fetchAll', async () => {
   const response = await axios.get(`${API_URL}/api/v1/dealer/products`, getAuthHeaders());
   return response.data;
