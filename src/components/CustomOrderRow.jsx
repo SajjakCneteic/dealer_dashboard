@@ -5,24 +5,29 @@ const CustomerOrderRow = ({ customer, lines, createdAt, hide, id, state }) => {
   const [buttonText, setButtonText] = useState("");
   const [confirmationEnabled, setConfirmationEnabled] = useState(true);
   const navigate = useNavigate();
+  const [textColor,setColor]=useState("text-blue-500")
 
   useEffect(() => {
     // Set button text and confirmation state based on the order state
     switch (state) {
       case "Delivered":
         setButtonText("Delivered");
+        setColor("text-green-400")
         setConfirmationEnabled(false);
         break;
       case "Cancelled":
         setButtonText("Cancelled");
+        setColor("text-red-400")
+
         setConfirmationEnabled(false);
         break;
       case "PaymentSettled":
-        setButtonText("Confirm Order");
+        setButtonText("Approval Required");
         setConfirmationEnabled(true);
         break;
       default:
         setButtonText("Confirmed");
+
         setConfirmationEnabled(false);
     }
   }, [state]);
@@ -76,7 +81,7 @@ const CustomerOrderRow = ({ customer, lines, createdAt, hide, id, state }) => {
           {state}
         </span>
       </td>
-      <td className={`${hide ? "hidden" : "block"} py-4 whitespace-nowrap`}>
+      <td className={`${hide ? "hidden" : "block"} ${textColor} py-4 whitespace-nowrap`}>
         {buttonText && (
           <button
             onClick={handleConfirm}
