@@ -5,20 +5,27 @@ import { UserDetails } from '../slices/productSlice';
 import { useDispatch } from 'react-redux';
 import { useEffect, useState } from 'react';
 import { FiEdit } from "react-icons/fi";
+import Loader from '../components/Loader';
 
 const Profile = () => {
   const dispatch = useDispatch();
   const [userData, setUserData] = useState({});
+  const [isLoader , setIsLoader] = useState(false)
 console.log(userData)
   useEffect(() => {
     const fetchData = async () => {
+      setIsLoader(true)
       const data = await dispatch(UserDetails());
-      console.log(data)
       setUserData(data?.payload?.me);
+      setIsLoader(false)
     };
 
     fetchData();
   }, []);
+
+  if(isLoader){
+    return <Loader/>
+  }
 
   return (
     <div className="overflow-hidden rounded-sm border border-stroke bg-white shadow-default dark:border-strokedark dark:bg-boxdark">
