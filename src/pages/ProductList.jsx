@@ -15,7 +15,8 @@ const [products,setProducts] = useState([])
 useEffect(() => {
   const fetchData = async () => {
     const data = await dispatch( fetchAllProducts());
-    setProducts(data.payload.data.products.items)
+    setProducts(data.payload.products.items)
+    console.log(data)
   };
 
   fetchData();
@@ -26,7 +27,7 @@ useEffect(() => {
   return (
     <>
       
-      <div className="overflow-x-auto h-screen bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
+      <div className=" h-full bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className='flex justify-end mb-3'>
           <Link to='/products/create' className='bg-btnBlue  flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2'>
             <FaPlus className='mr-2' /> New Product
