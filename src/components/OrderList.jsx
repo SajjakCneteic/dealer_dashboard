@@ -23,7 +23,7 @@ const OrderList = ({ Heading, show, customerOrders }) => {
                     </h2>
                 </div>
                 <div>
-                    {show && customerOrders?.totalItems > 4 && (
+                    {show &&  (
                         <Link to="/all-orders">
                             <button className="bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-700">
                                 View More
@@ -47,7 +47,7 @@ const OrderList = ({ Heading, show, customerOrders }) => {
                                 <th className="pr-4 py-3 text-left text-s font-medium text-muted-foreground uppercase tracking-wider">Order ID</th>
                                 <th className="pr-4 py-3 text-left text-s font-medium text-muted-foreground uppercase tracking-wider">Date</th>
                                 <th className="pr-2 py-3 text-left text-s font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                                <th className={`${hide ? "hidden" : "block"} pr-1 py-3 text-left text-s font-medium text-muted-foreground uppercase tracking-wider`}>Confirmation</th>
+                                <th className={`${hide ? "hidden" : "block"} pr-1 py-3 text-left text-s font-medium text-muted-foreground uppercase tracking-wider`}>Approval</th>
                             </tr>
                         </thead>
                         <tbody className="divide-y divide-border">

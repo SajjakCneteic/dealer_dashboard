@@ -20,7 +20,8 @@ const Sidebar = ({sidebarOpen,setSidebarOpen}) => {
 
 const handleLogout =()=>{
     dispatch(logout());
-    localStorage.setItem("auth",false);
+    localStorage.clear()
+
     navigate("/auth/sign-in")
 }
     const toggleAccordion = (accordionName) => {

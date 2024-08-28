@@ -643,6 +643,8 @@ const SignUp = () => {
       dispatch(signup(dataToSubmit));
       console.log('Form submitted:', dataToSubmit);
     } else {
+      toast.error(`Form has errors:${errors} `);
+
       console.log('Form has errors:', errors);
     }
   };

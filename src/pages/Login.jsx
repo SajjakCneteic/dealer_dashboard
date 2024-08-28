@@ -52,6 +52,7 @@ useEffect(()=>{
         toast.success("Login Successful")
         localStorage.setItem("auth", true);
         navigate("/");
+        window.location.reload();
       } else {
         // Handle login error (optional)
         setErrors({ ...errors, form: 'Login failed. Please try again.' });
