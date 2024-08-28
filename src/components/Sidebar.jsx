@@ -72,7 +72,7 @@ console.log(activeLink)
                             </div>
                             <div>{(activeAccordion === 'orders'||activeLink=='/all-orders'||activeLink=='/orders/pending'||activeLink=='/orders/completed') ? <IoIosArrowUp /> : <IoIosArrowDown />}</div>
                         </Link>
-                        {(activeAccordion === 'orders'||activeLink=='/all-orders'||activeLink=='/orders/pending'||activeLink=='/orders/completed') && (
+                        {(activeAccordion === 'orders'||activeLink=='/all-orders'||activeLink=='/orders/pending'||activeLink=='/orders/completed' || activeLink=="/orders/cancel") && (
                             <div className="ml-10 text-l">
                                 <Link 
                                     to="/all-orders"
@@ -96,11 +96,11 @@ console.log(activeLink)
                                     Pending Orders
                                 </Link>
                                 <Link 
-                                    to="/orders/cancle"
-                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/orders/completed' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/orders/completed' ? 'text-white' : 'hover:text-white'}`}
+                                    to="/orders/cancel"
+                                    className={`block mb-2 text-l p-2 rounded-lg ${activeLink === '/orders/cancel' ? 'bg-btnBlue' : 'hover:bg-btnBlue'} ${activeLink === '/orders/cancel' ? 'text-white' : 'hover:text-white'}`}
                                     
                                 >
-                                    Cancled Orders
+                                    Cancelled Orders
                                 </Link>
                             </div>
                         )}

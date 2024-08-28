@@ -22,7 +22,7 @@ const Breadcrumb = () => {
   return (
     <span className='text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md'>
       <Link to='#' onClick={handleGoBack} className='items-center inline-flex hover:text-btnBlue transition duration-200'>
-        OrdersList<MdArrowForwardIos className='ml-2 mr-2' />
+        Orders<MdArrowForwardIos className='ml-2 mr-2' />
       </Link>
       <span className='items-center pointer-events-none inline-flex hover:text-btnBlue transition duration-200'>
         Order Details

@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders } from '../slices/orderSlice';
 import OrderList from '../components/OrderList';
 
-const CompleteOrderList = () => {
+const CanceledOrderList = () => {
   const dispatch = useDispatch();
   const { orders, loading, error } = useSelector((state) => state.orders);
 
   useEffect(() => {
-    dispatch(fetchAllOrders('completed')); // Fetch completed orders
+    dispatch(fetchAllOrders('cancelled')); // Fetch canceled orders
   }, [dispatch]);
 
   // Handle loading and error states
@@ -21,8 +21,8 @@ const CompleteOrderList = () => {
   }
 
   return (
-    <OrderList Heading="Completed Orders" show={false} customerOrders={orders.orders} />
+    <OrderList Heading="Canceled Orders" show={false} customerOrders={orders.orders} />
   );
 };
 
-export default CompleteOrderList;
+export default CanceledOrderList;
