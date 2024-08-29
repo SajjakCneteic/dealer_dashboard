@@ -11,7 +11,7 @@ const ProductItem = ({ image,  name, sku, unitPrice, quantity, total }) => (
     <td className={tableCellClass}>{name}</td>
     <td className={tableCellClass}>{sku}</td>
     <td className={tableCellClass}>{unitPrice}</td>
-    <td className={tableCellClass}>{quantity}</td>
+    <td className={`${tableCellClass} text-center`}>{quantity}</td>
     <td className={tableCellClass}>{total}</td>
   </tr>
 );

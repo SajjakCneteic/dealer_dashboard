@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders } from '../slices/orderSlice'; // Import the action
 import OrderList from '../components/OrderList';
+import Loader from '../components/Loader';
 
 const AllOrderList = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const AllOrderList = () => {
 
   // Handle loading and error states
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   if (error) {
