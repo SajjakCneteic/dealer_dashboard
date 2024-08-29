@@ -33,8 +33,7 @@ const handleLogout =()=>{
     useEffect(() => {
         setActiveLink(location.pathname);
     }, [location.pathname]);
-   
-console.log(activeLink)
+
     return (
 
         // <div className=  {`bg-zinc-900 text-zinc-200 w-60 h-screen hidden p-4 lg:block`}>

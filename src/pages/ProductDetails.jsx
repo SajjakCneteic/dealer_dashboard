@@ -1,12 +1,12 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link, useNavigation, useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import { MdArrowForwardIos } from 'react-icons/md';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
 import Modal from '../components/Modal';
 import { useDispatch } from 'react-redux';
-import { fetchSingleProduct } from '../slices/productSlice';
+import { deleteProductItem, fetchSingleProduct } from '../slices/productSlice';
 import Loader from '../components/Loader';
 import { RiH1 } from 'react-icons/ri';
 const rupees = process.env.REACT_APP_CURRENCY_SIGN;
@@ -19,6 +19,8 @@ const ProductDetails = () => {
   const [isDisabled, setIsDisabled] = useState(false);
   const { id } = useParams()
   const [isLoader, setIsLoader] = useState(false)
+  const navigate = useNavigate()
+ 
 
 
   const handleInputChange = (field, value) => {
@@ -59,6 +61,26 @@ const ProductDetails = () => {
     return price.toLocaleString('en-IN');
   }
 
+  const handleDelete = async () => {
+    try {
+      // Dispatch the delete action
+      const deleteAction = await dispatch(deleteProductItem(product.id));
+  
+      // Check if the action was successful
+      if (deleteAction.meta.requestStatus === 'fulfilled') {
+        alert('Product deleted successfully');
+        setTimeout(()=>{
+          navigate('/products'); // Navigate to /products
+        },200)
+      } else {
+        alert('Failed to delete product');
+      }
+    } catch (error) {
+      alert('Failed to delete product');
+      console.error('Error deleting product:', error);
+    }
+  };
+
   if(isLoader){
     return <Loader/>
   }
@@ -81,7 +103,7 @@ const ProductDetails = () => {
       </div>
       <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className="flex justify-end mb-3">
-          <button className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
+          <button onClick={handleDelete} className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
             Delete
           </button>
           <button
