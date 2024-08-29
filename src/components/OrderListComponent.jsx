@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchAllOrders } from '../slices/orderSlice';
 import OrderList from './OrderList';
+import Loader from './Loader';
 
 const OrderListComponent = () => {
   const dispatch = useDispatch();
@@ -16,7 +17,7 @@ const OrderListComponent = () => {
 
   return (
     <div>
-      {loading && <p>Loading...</p>}
+      {loading && <Loader/>}
       {error && <p>Error: {error}</p>}
       <OrderList Heading="All Orders " show={true} customerOrders={orders.orders} />
     </div>

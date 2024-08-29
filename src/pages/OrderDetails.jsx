@@ -6,6 +6,7 @@ import OrderProductTable from '../components/OrderProductTable';
 import TaxSummary from '../components/TaxSummary';
 import QRCodeComponent from '../components/QrCode';
 import Breadcrumb from '../components/Breadcrumb';
+import Loader from '../components/Loader';
 
 const mutedFgClass = 'text-muted-foreground dark:text-muted-foreground';
 
@@ -17,7 +18,7 @@ const formatCurrency = (amount) => {
     currency === 'GBP' ? '£' : 
     currency === 'INR' ? '₹' : ''; // Added support for INR
 
-  return `${symbol}${amount}`; // No value conversion, just appending the symbol
+  return `${symbol}${amount.toLocaleString()}`; // No value conversion, just appending the symbol
 };
 
 
@@ -39,7 +40,7 @@ const OrderDetails = () => {
   }, [order]);
 
   if (loading) {
-    return <div>Loading...</div>;
+    return <Loader/>;
   }
 
   if (error) {
@@ -63,6 +64,7 @@ const OrderDetails = () => {
     createdAt,
     updatedAt,
     nextStates,
+    fulfillments
   } = order.order;
 
   return (
@@ -73,10 +75,10 @@ const OrderDetails = () => {
       <div className="flex justify-between mb-4">
         <h2 className="text-lg font-semibold dark:text-card-foreground">OrderNumber : #{id}</h2>
         <button 
-          disabled={state === status}
-          className={`${state !== status ? "bg-primary" : "bg-blue-300 text-black"} text-white dark:bg-primary-foreground dark:text-primary-foreground px-4 py-2 rounded-md`}
+          disabled={fulfillments?.[0]?.id== undefined}
+          className={`${fulfillments?.[0]?.id == undefined? "bg-primary" : "bg-blue-300 text-black"} text-white dark:bg-primary-foreground dark:text-primary-foreground px-4 py-2 rounded-md`}
         >
-          Fulfill order
+          {fulfillments?.[0]?.id?"Approved" :"Approval Required" }
         </button>
       </div>
       <div className="flex flex-col-reverse md:flex-row">
@@ -125,7 +127,7 @@ const OrderDetails = () => {
                 value={status}
                 onChange={(e) => setStatus(e.target.value)}
               >
-                <option  value={state}>{state}</option>
+                <option  value={state}>{state=="PaymentSettled"? "Payment Settled" : state}</option>
                 {
                 (nextStates?.map((state, i) => (
                   <option key={i} value={state}>{state}</option>
