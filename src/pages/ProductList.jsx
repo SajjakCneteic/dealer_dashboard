@@ -15,13 +15,11 @@ const ProductList = () => {
   const [products, setProducts] = useState([])
   const [isLoader ,setIsLoader] = useState(false)
 
-  console.log("ruppess", rupees)
-
   useEffect(() => {
     const fetchData = async () => {
       setIsLoader(true)
       const data = await dispatch(fetchAllProducts());
-      setProducts(data.payload.products.items)
+      setProducts(data?.payload?.products?.items)
       setIsLoader(false)
     };
 
@@ -30,7 +28,8 @@ const ProductList = () => {
   }, []);
 
   function formatPrice(price) {
-    return price.toLocaleString('en-IN');
+    // return price.toLocaleString('en-IN');
+    return price
   }
 
   if(isLoader){

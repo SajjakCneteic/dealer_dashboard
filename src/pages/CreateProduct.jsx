@@ -1,13 +1,65 @@
-import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { MdArrowForwardIos } from 'react-icons/md';
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
+import { useDispatch } from 'react-redux';
+import { createProductItem } from '../slices/productSlice';
+import toast, { Toaster } from 'react-hot-toast';
+
 
 const CreateProduct = ({ product }) => {
+  const navigate = useNavigate()
+  const dispatch = useDispatch()
+  const [createItem, setCreateItem] = useState({
+    name: "",
+    slug: "",
+    description: "",
+    enable: false,
+    assetIds: ["476","479"]
+  })
+
+ 
+  const handleInputChange = (e) => {
+    const { name, type, checked, value } = e.target;
+    setCreateItem((prevState) => ({
+      ...prevState,
+      [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleDescriptionChange = (value) => {
+    setCreateItem((prevState) => ({
+      ...prevState,
+      description: value,
+    }));
+  };
+
+  const handleSubmit = async () => {
+    const isNameEmpty = createItem.name.trim() === "" && createItem.description.trim() === "";
+    
+    if (isNameEmpty) {
+      toast.error("Name and Description cannot be empty");
+    } else {
+      try {
+        const submitResponse = await dispatch(createProductItem(createItem));
+        toast.success("Created Product");
+        
+        // Delay navigation
+        setTimeout(() => {
+          navigate("/products");
+        }, 2000); // 2000 milliseconds = 2 seconds delay
+      } catch (error) {
+        // Handle errors here if needed
+        toast.error("Failed to create product");
+      }
+    }
+  };
+
   return (
     <>
+    <Toaster/>
       <div className="mb-6">
         <span className="text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md">
           <Link to="/dashboard" className="items-center inline-flex hover:text-btnBlue transition duration-200">
@@ -23,8 +75,8 @@ const CreateProduct = ({ product }) => {
       </div>
       <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className="flex justify-end mb-3">
-          
-          <button className="bg-blue-300 flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2">
+
+          <button onClick={handleSubmit} className="bg-blue-300 flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2">
             Create
           </button>
         </div>
@@ -39,6 +91,8 @@ const CreateProduct = ({ product }) => {
                   <input
                     type="text"
                     id="productName"
+                    onChange={handleInputChange}
+                    name='name'
                     className="mt-1 block w-full dark:bg-customBlue border border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter product name"
                   />
@@ -50,6 +104,8 @@ const CreateProduct = ({ product }) => {
                   <input
                     type="text"
                     id="slug"
+                    name='slug'
+                    onChange={handleInputChange}
                     className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter slug"
                   />
@@ -62,6 +118,8 @@ const CreateProduct = ({ product }) => {
                 <ReactQuill
                   className="dark:bg-customBlue  dark:text-gray-700"
                   theme="snow"
+                  value={createItem.description}
+                  onChange={handleDescriptionChange}
                   modules={{
                     toolbar: [
                       [{ header: [1, 2, false] }],
@@ -70,7 +128,8 @@ const CreateProduct = ({ product }) => {
                       ['insert',]
                     ],
                   }}
-                  style={{height:'100px'}}
+                  style={{ height: '100px' }}
+
                   placeholder="Compose an epic..."
                 />
               </div>
@@ -178,6 +237,9 @@ const CreateProduct = ({ product }) => {
                   <input
                     type="checkbox"
                     id="visibility"
+                    onChange={handleInputChange}
+                    name='enable'
+                    checked={createItem.enable}
                     className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
                     defaultChecked
                   />
