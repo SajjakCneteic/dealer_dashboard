@@ -42,15 +42,15 @@ const OrderList = ({ Heading, show, customerOrders }) => {
                     <table className="w-full mt-6 bg-card border-border rounded-lg">
                         <thead>
                             <tr className="border-b-[1px]">
-                                <th className="pl-2 pr-4 py-3 text-left text-s font-medium text-muted-foreground uppercase tracking-wider">Customer</th>
+                                <th className=" pl-2 pr-4 py-3 text-left text-s font-medium text-muted-foreground uppercase tracking-wider">Customer</th>
                                 <th className="pr-4 py-3  text-s font-medium text-muted-foreground uppercase tracking-wider text-center">Product</th>
                                 <th className="pr-4 py-3 text-center text-s font-medium text-muted-foreground uppercase tracking-wider">Order ID</th>
                                 <th className="pr-4 py-3 text-center text-s font-medium text-muted-foreground uppercase tracking-wider">Date</th>
                                 <th className="pr-2 py-3 text-center text-s font-medium text-muted-foreground uppercase tracking-wider">Status</th>
-                                <th className={`${hide ? "hidden" : "block"} pr-1 py-3 text-center text-s font-medium text-muted-foreground uppercase tracking-wider`}>Approval</th>
+                                <th className={`${hide ? "hidden" : "block"} pr-1 py-3  text-s font-medium text-muted-foreground uppercase tracking-wider`}>Approval</th>
                             </tr>
                         </thead>
-                        <tbody className="divide-y divide-border">
+                        <tbody className="divide-y divide-border ">
                             {itemsToDisplay?.map((order) => (
                                 <CustomerOrderRow key={order.id} {...order} hide={hide} />
                             ))}

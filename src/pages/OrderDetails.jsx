@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { fetchSingleOrder } from '../slices/orderSlice'; 
+import { fetchSingleOrder, updateOrderStatus } from '../slices/orderSlice'; 
 import OrderProductTable from '../components/OrderProductTable';
 import TaxSummary from '../components/TaxSummary';
 import QRCodeComponent from '../components/QrCode';
@@ -21,8 +21,6 @@ const formatCurrency = (amount) => {
   return `${symbol}${amount.toLocaleString()}`; // No value conversion, just appending the symbol
 };
 
-
-
 const OrderDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
@@ -34,20 +32,34 @@ const OrderDetails = () => {
   }, [dispatch, id]);
 
   useEffect(() => {
-    if (order) {
-      setStatus(order.order.state); // Set initial state
+ 
+    if (order && order.order && order.order.state) {
+      setStatus(order.order.state); // Set initial state if available
     }
   }, [order]);
 
+  const handleApprovalClick = () => {
+    dispatch(updateOrderStatus({ id, status: "fulfill" }));
+  };
+
+  const handleStatusChange = (e) => {
+    const newStatus = e.target.value;
+    setStatus(newStatus);
+    dispatch(updateOrderStatus({ id, status: newStatus.toLowerCase() })).then(() => {
+      dispatch(fetchSingleOrder(id)); // Refetch order to get updated state
+    });
+  };
+
   if (loading) {
-    return <Loader/>;
+    return <Loader />;
   }
 
   if (error) {
     return <div>Error: {error}</div>;
   }
 
-  if (!order) {
+   // Ensure order and order.order are defined before destructuring
+   if (!order || !order.order) {
     return <div>No order found</div>;
   }
 
@@ -67,18 +79,23 @@ const OrderDetails = () => {
     fulfillments
   } = order.order;
 
+  const isApproved = fulfillments?.[0]?.id !== undefined;
+
   return (
     <div className="p-2 bg-white dark:bg-black rounded-lg">
       <div className="mb-6">
         <Breadcrumb />
       </div>
       <div className="flex justify-between mb-4">
-        <h2 className="text-lg font-semibold dark:text-card-foreground">OrderNumber : #{id}</h2>
+        <h2 className="text-lg font-semibold dark:text-card-foreground">Order: #{id}</h2>
         <button 
-          disabled={fulfillments?.[0]?.id== undefined}
-          className={`${fulfillments?.[0]?.id == undefined? "bg-primary" : "bg-blue-300 text-black"} text-white dark:bg-primary-foreground dark:text-primary-foreground px-4 py-2 rounded-md`}
+          onClick={handleApprovalClick}
+          disabled={isApproved}
+          className={`${
+            isApproved ? "bg-blue-300 text-white" : "bg-primary text-white dark:bg-primary-foreground dark:text-primary-foreground"
+          } px-4 py-2 rounded-md`}
         >
-          {fulfillments?.[0]?.id?"Approved" :"Approval Required" }
+          {isApproved ? "Approved" : "Approval Required"}
         </button>
       </div>
       <div className="flex flex-col-reverse md:flex-row">
@@ -113,27 +130,35 @@ const OrderDetails = () => {
         </div>
         <div className="rounded-lg bg-card text-card-foreground dark:bg-card dark:text-card-foreground">
           <div className="p-4 mb-4 bg-card border border-border rounded-lg md:mt-6">
-            <div className="text-muted font-semibold">State</div>
+            <div className="text-muted font-semibold">Status</div>
             <hr />
             <div className="flex items-center justify-between mt-2">
-              <select
-                className={`w-full px-4 py-2 font-semibold border ${
-                  state === "Delivered" ? "bg-orange-500" :
-                  state === "Shipped" ? "bg-green-500" :
-                  state === "Cancelled" ? "bg-red-500" : "bg-blue-500"
-                } text-white rounded`}
-                name="state"
-                id="state"
-                value={status}
-                onChange={(e) => setStatus(e.target.value)}
-              >
-                <option  value={state}>{state=="PaymentSettled"? "Payment Settled" : state}</option>
-                {
-                (nextStates?.map((state, i) => (
-                  <option key={i} value={state}>{state}</option>
-                )))
-              }
-              </select>
+            <select
+  className={`w-full px-4 py-2 font-semibold border ${
+    state === "Delivered" ? "bg-green-600" :
+    state === "Shipped" ? "bg-green-300" :
+    state === "Cancelled" ? "bg-red-500" : "bg-blue-500"
+  } text-white rounded ${
+    !isApproved ? "bg-gray-200 text-gray-500 " : "" // Apply disabled styles
+  }`}
+  name="state"
+  id="state"
+  value={status}
+  onChange={handleStatusChange}
+>
+  <option value={state}>{state === "PaymentSettled" ? "Payment Settled" : state}</option>
+  {nextStates?.map((nextState, i) => (
+    <option 
+      key={i} 
+      value={nextState} 
+      disabled={!isApproved} // Disable only if not approved
+    >
+      {nextState}
+    </option>
+  ))}
+</select>
+
+
             </div>
           </div>
           <div className="p-4 bg-card border border-border rounded-lg shadow-md">

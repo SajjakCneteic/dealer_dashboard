@@ -1,12 +1,15 @@
 import { useEffect, useState } from "react";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import { fetchAllOrders, updateOrderStatus } from "../slices/orderSlice";
+import toast, { Toaster } from "react-hot-toast";
 
 const CustomerOrderRow = ({ customer, lines, createdAt, hide, id, state,fulfillments }) => {
   const [buttonText, setButtonText] = useState("");
   const [confirmationEnabled, setConfirmationEnabled] = useState(true);
   const navigate = useNavigate();
   const [textColor,setColor]=useState("text-blue-500")
-
+const dispatch = useDispatch();
   useEffect(() => {
     // Set button text and confirmation state based on the order state
     if(fulfillments?.[0]?.id && state=="PaymentSettled"){
@@ -46,7 +49,11 @@ const CustomerOrderRow = ({ customer, lines, createdAt, hide, id, state,fulfillm
 
   const handleConfirm = () => {
     if (state === "PaymentSettled"  ) {
-      setButtonText("Approved");
+      dispatch(updateOrderStatus({ id: id,status: "fulfill" }));
+      toast.success("Order Approved Successfully")
+      dispatch(fetchAllOrders());
+
+      // setButtonText("Approved");
       setConfirmationEnabled(false);
     }
   };
@@ -57,17 +64,17 @@ const CustomerOrderRow = ({ customer, lines, createdAt, hide, id, state,fulfillm
   }
 
   return (
-    <tr >
-      <td className="pl-2 pr-4 py-4 whitespace-nowrap cursor-pointer" onClick={handleClick}>
+    <tr  className="">
+      <td className="  pl-2 pr-4 py-4 whitespace-nowrap cursor-pointer" onClick={handleClick}>
         <div className="text-card-foreground font-semibold">{`${customer?.firstName} ${customer?.lastName}`}</div>
         <div className="text-muted-foreground">{customer?.emailAddress}</div>
       </td>
-      <td className=" text-center pr-4 py-4 whitespace-nowrap cursor-pointer" onClick={handleClick}>
+      <td className=" text-center   pr-4 py-4 whitespace-nowrap cursor-pointer" onClick={handleClick}>
         <div className="text-card-foreground ">{lines?.[0]?.productVariant?.name}</div>
       </td>
-      <td className="pr-4 py-4 whitespace-nowrap text-center text-card-foreground cursor-pointer" onClick={handleClick}>#{id}</td>
-      <td className="  text-center pr-4 py-4 whitespace-nowrap text-card-foreground cursor-pointer" onClick={handleClick}>{formatDate(createdAt)}</td>
-      <td className="pr-2 py-4 text-center whitespace-nowrap cursor-pointer" onClick={handleClick}>
+      <td className="pr-4 py-4 text-center  whitespace-nowrap  text-card-foreground cursor-pointer" onClick={handleClick}>#{id}</td>
+      <td className="  text-center   pr-4 py-4 whitespace-nowrap text-card-foreground cursor-pointer" onClick={handleClick}>{formatDate(createdAt)}</td>
+      <td className="pr-2 py-4  text-center  whitespace-nowrap cursor-pointer" onClick={handleClick}>
         <span
           className={`py-1 px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${
             state === "PaymentSettled"
@@ -89,7 +96,7 @@ const CustomerOrderRow = ({ customer, lines, createdAt, hide, id, state,fulfillm
           {state}
         </span>
       </td>
-      <td className={`${hide ? "hidden" : "block"} ${textColor} text-center py-4 whitespace-nowrap`}>
+      <td className={`${hide ? "hidden" : "block"} ${textColor}  py-4 whitespace-nowrap`}>
         {buttonText && (
           <button
             onClick={handleConfirm}

@@ -37,6 +37,20 @@ export const fetchSingleOrder = createAsyncThunk(
   }
 );
 
+// Update order status by ID and query
+export const updateOrderStatus = createAsyncThunk(
+  'orders/updateStatus',
+  async ({ id, status }) => {
+    const url = `${API_URL}/api/v1/dealer/orders/${id}?q=${status}`;
+    const response = await axios.put(url, null, {
+      headers: {
+        'Authorization': `Bearer ${AUTH_TOKEN}`,
+        'dealer-token': DEALER_TOKEN,
+      }
+    });
+    return response.data;
+  }
+);
 const orderSlice = createSlice({
   name: 'orders',
   initialState: {
@@ -69,6 +83,18 @@ const orderSlice = createSlice({
         state.order = action.payload;
       })
       .addCase(fetchSingleOrder.rejected, (state, action) => {
+        state.loading = false;
+        state.error = action.error.message;
+      })
+      // Update order status
+      .addCase(updateOrderStatus.pending, (state) => {
+        state.loading = true;
+      })
+      .addCase(updateOrderStatus.fulfilled, (state, action) => {
+        state.loading = false;
+        state.order = action.payload;
+      })
+      .addCase(updateOrderStatus.rejected, (state, action) => {
         state.loading = false;
         state.error = action.error.message;
       });
