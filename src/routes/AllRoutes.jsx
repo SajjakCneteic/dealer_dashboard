@@ -18,6 +18,7 @@ import PageNotFound from '../pages/PageNotFound'
 import CreateProduct from '../pages/CreateProduct'
 import OrderDetails from '../pages/OrderDetails'
 import CanceledOrderList from '../pages/CanceledOrderList'
+import Varients from '../pages/Varients'
 
 
 
@@ -41,6 +42,8 @@ const AllRoutes = () => {
         <Route path='/products' element={<DefaultLayout><ProductList/></DefaultLayout>} />
         <Route path='/product/:id' element={<DefaultLayout><ProductDetails/></DefaultLayout>} />
         <Route path='/products/create' element={<DefaultLayout><CreateProduct/></DefaultLayout>} />
+        <Route path='/product/:productId/varient/:varientId' element={<DefaultLayout><Varients/></DefaultLayout>} />
+
         <Route path="*" element={<PageNotFound />} />
 
         </Routes>
