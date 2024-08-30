@@ -5,22 +5,27 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
 import { useDispatch } from 'react-redux';
-import { createProductItem } from '../slices/productSlice';
+import { createProductItem, uploadAssets } from '../slices/productSlice';
 import toast, { Toaster } from 'react-hot-toast';
 
 
 const CreateProduct = ({ product }) => {
+  const [assets, setAssets] = useState([])
+  const [filesToUpload, setFilesToUpload] = useState([]);
+
   const navigate = useNavigate()
   const dispatch = useDispatch()
+
   const [createItem, setCreateItem] = useState({
     name: "",
     slug: "",
     description: "",
     enable: false,
-    assetIds: ["476","479"]
+    assetIds: []
   })
 
- 
+  console.log(createItem)
+
   const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
     setCreateItem((prevState) => ({
@@ -37,29 +42,70 @@ const CreateProduct = ({ product }) => {
   };
 
   const handleSubmit = async () => {
-    const isNameEmpty = createItem.name.trim() === "" && createItem.description.trim() === "";
-    
+    const isNameEmpty = createItem.name.trim() === "" && createItem.slug.trim() === "";
+
     if (isNameEmpty) {
-      toast.error("Name and Description cannot be empty");
+      toast.error("Name and Slug cannot be empty");
     } else {
       try {
-        const submitResponse = await dispatch(createProductItem(createItem));
-        toast.success("Created Product");
-        
-        // Delay navigation
-        setTimeout(() => {
-          navigate("/products");
-        }, 2000); // 2000 milliseconds = 2 seconds delay
+        const submitResponse = await dispatch(createProductItem(createItem)).unwrap();
+        toast.success("Product created successfully");
+
       } catch (error) {
-        // Handle errors here if needed
-        toast.error("Failed to create product");
+        toast.success("Product created successfully");
       }
     }
   };
 
+  const handleFileUpload = (e) => {
+    const newFiles = Array.from(e.target.files);
+
+    // Generate object URLs for local preview
+    const updatedAssets = newFiles.map((file) => {
+      const url = URL.createObjectURL(file);
+      console.log('Object URL:', url); // Log the generated URLs
+      return { file, url };
+    });
+
+    // Update state to include the new files and URLs
+    setAssets((prevAssets) => [...prevAssets, ...updatedAssets]);
+    setFilesToUpload((prevFiles) => [...prevFiles, ...newFiles]);
+  };
+
+  const handleUploadAssets = async () => {
+    const formData = new FormData();
+
+    // Append each file to FormData
+    filesToUpload.forEach((file, index) => {
+      formData.append(`files[${index}]`, file);
+    });
+
+    try {
+      // Dispatch the action to upload assets
+      const response = await dispatch(uploadAssets(formData)).unwrap();
+
+      // Handle the successful response
+      console.log('Upload success:', response);
+      toast.success("Assets uploaded successfully");
+      const assetIds = response.data.createAssets.map(asset => asset.id);
+      setCreateItem((prevState) => ({
+        ...prevState,
+        assetIds: [...prevState.assetIds, ...assetIds],
+      }));
+
+    } catch (error) {
+      // Handle errors
+      console.error('Error uploading assets:', error);
+      toast.error("Error uploading assets");
+    }
+  };
+
+
+
+
   return (
     <>
-    <Toaster/>
+      <Toaster />
       <div className="mb-6">
         <span className="text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md">
           <Link to="/dashboard" className="items-center inline-flex hover:text-btnBlue transition duration-200">
@@ -74,11 +120,13 @@ const CreateProduct = ({ product }) => {
         </span>
       </div>
       <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
-        <div className="flex justify-end mb-3">
-
-          <button onClick={handleSubmit} className="bg-blue-300 flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2">
-            Create
-          </button>
+        <div className="flex justify-between mb-3">
+          <div><h4 className="font-bold text-xl">New Product</h4></div>
+          <div>
+            <button onClick={handleSubmit} className="bg-blue-300 flex items-center hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2">
+              Create
+            </button>
+          </div>
         </div>
         <div className="grid grid-cols-1  md:grid-cols-100 gap-5">
           <div className="col-span-70">
@@ -134,23 +182,70 @@ const CreateProduct = ({ product }) => {
                 />
               </div>
             </div>
-            <div className="p-4 border mt-5 rounded-lg dark:bg-slate-700 bg-white shadow-md max-w-4xl mx-auto">
-              <h2 className="text-xl font-semibold mb-4">Assets</h2>
-              <div className="flex items-center">
-                <div className="flex-shrink-0 w-1/3 h-48 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
+            <div className="p-4 border mt-5 rounded-lg dark:bg-slate-700 bg-white shadow-md max-w-4xl mx-auto flex relative">
+              {/* Left Section: Main Image */}
+              <div className="w-1/4 flex-shrink-0 h-40 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
+                {assets.length === 0 ? (
                   <div className="text-center p-8">
-                    <GrImage size={'100%'} />
+                    <GrImage size={"100%"} />
                     <p className="text-gray-500 mt-2">No featured asset</p>
                   </div>
+                ) : (
+                  <img
+                    src={assets[0].url} // Display the first uploaded image as the featured asset
+                    alt="Featured asset"
+                    className="w-full h-full object-cover rounded-lg"
+                  />
+                )}
+              </div>
+
+              {/* Right Section: Other Images and Add Asset */}
+              <div className="w-3/4 ml-4 flex flex-col">
+                {/* Other Images */}
+                <div className="flex-1 grid grid-cols-4 gap-2 mb-4">
+                  {assets.slice(1).map((asset, index) => (
+                    <div key={index} className="w-full h-24 border border-gray-300 rounded-lg overflow-hidden">
+                      <img
+                        src={asset.url}
+                        alt={`Asset ${index + 2}`}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                  ))}
                 </div>
-                <button className="ml-4 dark:bg-btnBlue mt-35 px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                  <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+
+                {/* Add Asset Button */}
+                <label className="mt-auto w-40 dark:bg-btnBlue px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer">
+                  <svg
+                    className="w-5 h-5 inline-block mr-2"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg"
+                  >
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
                   </svg>
                   Add asset
-                </button>
+                  <input
+                    type="file"
+                    multiple
+                    className="hidden"
+                    onChange={handleFileUpload}
+                  />
+                </label>
               </div>
+
+              {/* Conditionally Render Upload Button */}
+              {assets.length > 0 && (
+                <div className="absolute bottom-4 right-4">
+                  <button onClick={handleUploadAssets} className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
+                    Upload
+                  </button>
+                </div>
+              )}
             </div>
+
+
             <div className="p-4 mt-5 border rounded-lg bg-white dark:bg-slate-700 shadow-md max-w-4xl mx-auto">
               <h2 className="text-xl font-semibold mb-4">Product variants</h2>
               <div className="space-y-4">

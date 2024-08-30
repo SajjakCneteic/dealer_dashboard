@@ -3,7 +3,7 @@ import 'tailwindcss/tailwind.css';
 import { FaRegEdit } from "react-icons/fa";
 import { AiOutlineDelete } from "react-icons/ai";
 import { LuView } from "react-icons/lu";
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaPlus } from "react-icons/fa6";
 import { fetchAllProducts } from '../slices/productSlice';
 import { useDispatch } from 'react-redux';
@@ -13,7 +13,8 @@ const rupees = process.env.REACT_APP_CURRENCY_SIGN;
 const ProductList = () => {
   const dispatch = useDispatch()
   const [products, setProducts] = useState([])
-  const [isLoader ,setIsLoader] = useState(false)
+  const [isLoader, setIsLoader] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     const fetchData = async () => {
@@ -27,13 +28,15 @@ const ProductList = () => {
 
   }, []);
 
-  function formatPrice(price) {
-    // return price.toLocaleString('en-IN');
-    return price
+  function formatPrice(price, decimalPlaces = 2) {
+    return price.toLocaleString('en-IN', {
+      minimumFractionDigits: decimalPlaces,
+      maximumFractionDigits: decimalPlaces
+    });
   }
 
-  if(isLoader){
-    return <Loader/>
+  if (isLoader) {
+    return <Loader />
   }
 
   return (
@@ -55,33 +58,33 @@ const ProductList = () => {
             </tr>
           </thead>
           <tbody>
-            {products.map((product, index) => (
-              <tr key={index} className="border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-slate-800 transition duration-300">
+            {products?.map((product, index) => (
+              <tr key={index} onClick={() => navigate(`/product/${product.id}`)} className="border-b border-zinc-200 dark:border-zinc-700 hover:bg-zinc-50 dark:hover:bg-slate-800 transition duration-300">
                 <td className="py-4 px-6 flex items-center">
                   <img src={product?.featuredAsset?.preview} alt={product.name} className="w-20 h-20 object-cover mr-4 rounded-sm shadow-md" />
                   <span className="text-zinc-900 dark:text-zinc-100">{product.name}</span>
                 </td>
-                <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product?.category||'N/A'}</td>
+                <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300">{product?.category || 'N/A'}</td>
                 <td className="py-4 px-6 whitespace-nowrap text-zinc-700 dark:text-zinc-300">
-                  {rupees} { formatPrice(product?.variantList?.items?.[0]?.price) }
+                  {rupees} {formatPrice(Number(product?.variantList?.items?.[0]?.price) || 0)}
                 </td>
 
                 <td className="py-4 px-6 text-zinc-700 dark:text-zinc-300 relative">
                   <div className="flex space-x-4">
-                    <button
+                    {/* <button
                       className="flex items-center text-blue-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 focus:outline-none transition-colors duration-200"
                       title="Edit"
                       about='Edit'
                     >
                       <FaRegEdit />
-                    </button>
-                    <button
+                    </button> */}
+                    {/* <button
                       className="flex items-center text-red-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 focus:outline-none transition-colors duration-200"
                       title="Delete"
                       about='Delete'
                     >
                       <AiOutlineDelete />
-                    </button>
+                    </button> */}
                     <Link
                       className="flex items-center text-teal-500 dark:text-zinc-400 hover:text-zinc-700 dark:hover:text-zinc-300 focus:outline-none transition-colors duration-200"
                       title="View"

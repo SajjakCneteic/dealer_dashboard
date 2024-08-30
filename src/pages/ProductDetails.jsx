@@ -9,6 +9,9 @@ import { useDispatch } from 'react-redux';
 import { deleteProductItem, fetchSingleProduct } from '../slices/productSlice';
 import Loader from '../components/Loader';
 import { RiH1 } from 'react-icons/ri';
+import toast from 'react-hot-toast';
+import { Toaster } from 'react-hot-toast';
+import ConfirmDeleteModal from './DeleteModal';
 const rupees = process.env.REACT_APP_CURRENCY_SIGN;
 
 
@@ -20,8 +23,10 @@ const ProductDetails = () => {
   const { id } = useParams()
   const [isLoader, setIsLoader] = useState(false)
   const navigate = useNavigate()
- 
+  const [isOpen, setIsOpen] = useState(false)
+  // const [confirmDelete,setConfirmDelete] = useState(false)
 
+console.log(product)
 
   const handleInputChange = (field, value) => {
     const updatedProduct = { ...product, [field]: value };
@@ -61,33 +66,35 @@ const ProductDetails = () => {
     return price.toLocaleString('en-IN');
   }
 
-  const handleDelete = async () => {
-    try {
-      // Dispatch the delete action
-      const deleteAction = await dispatch(deleteProductItem(product.id));
-  
-      // Check if the action was successful
-      if (deleteAction.meta.requestStatus === 'fulfilled') {
-        alert('Product deleted successfully');
-        setTimeout(()=>{
-          navigate('/products'); // Navigate to /products
-        },200)
-      } else {
-        alert('Failed to delete product');
-      }
-    } catch (error) {
-      alert('Failed to delete product');
-      console.error('Error deleting product:', error);
-    }
+  const handleDelete = () => {
+    setIsOpen(true)
+  }
+  const confirmDeletion = async () => {
+
+    // Dispatch delete action
+    dispatch(deleteProductItem(product.id));
+
+
+    toast.success('Product Deleted Successfully!');
+    setTimeout(() => {
+
+      navigate('/products');
+    }, 1000)
+
+
+    setIsOpen(false);
+
   };
 
-  if(isLoader){
-    return <Loader/>
+  if (isLoader) {
+    return <Loader />
   }
 
   return (
     <>
+      <Toaster />
       <Modal isDisabled={isDisabled} />
+      {isOpen && <ConfirmDeleteModal isOpen={isOpen} setIsOpen={setIsOpen} confirmDeletion={confirmDeletion} />}
       <div className="mb-6">
         <span className="text-l inline-flex items-center dark:bg-customBlue bg-white p-2 pl-5 pr-5 rounded-full shadow-md">
           <Link to="/dashboard" className="items-center inline-flex hover:text-btnBlue transition duration-200">
@@ -96,26 +103,29 @@ const ProductDetails = () => {
           <Link to="/products" className="items-center inline-flex hover:text-btnBlue transition duration-200">
             Products<MdArrowForwardIos className="ml-2 mr-2" />
           </Link>
-          <Link className="items-center pointer-events-none inline-flex hover:text-btnBlue transition duration-200">
-            Product Details
+          <Link className="items-center pointer-events-none inline-flex text-blue-800 hover:text-btnBlue transition duration-200">
+            {product?.name}
           </Link>
         </span>
       </div>
       <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
-        <div className="flex justify-end mb-3">
-          <button onClick={handleDelete} className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
-            Delete
-          </button>
-          <button
+        <div className="flex justify-between mb-3">
+          <div><h4 className="font-bold text-xl">{product?.name}</h4></div>
+          <div className='flex'>
+            <button onClick={handleDelete} className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
+              Delete
+            </button>
+            <button
 
-            onClick={() => console.log("hello world")}
-            disabled={isDisabled}
-            className={` flex items-center ${isDisabled ? 'bg-btnBlue' : 'bg-blue-300'} 
+              onClick={() => console.log("hello world")}
+              disabled={isDisabled}
+              className={` flex items-center ${isDisabled ? 'bg-btnBlue' : 'bg-blue-300'} 
          ${isDisabled ? 'hover:bg-blue-700 ' : ''} 
             rounded-lg text-white pl-3 pr-3 pt-2 pb-2`}
-          >
-            Update
-          </button>
+            >
+              Update
+            </button>
+          </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-100 gap-5">
           <div className="col-span-70">
@@ -201,39 +211,40 @@ const ProductDetails = () => {
             </div>
             <div className="p-4 mt-5 border rounded-lg bg-white dark:bg-slate-700 shadow-md max-w-4xl mx-auto">
               <h2 className="text-xl font-semibold mb-4">Product Variants</h2>
-           {(!product?.variants?.length ) ?<h1>No Variants</h1> :
-              <div className="overflow-x-auto">
-                <table className="min-w-full divide-y divide-gray-200">
-                  <thead className="bg-gray-50 dark:bg-slate-600">
-                    <tr>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">SKU</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Stock</th>
-                      <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Options</th>
-                    </tr>
-                  </thead>
-                  
-                  <tbody className="bg-white dark:bg-slate-700 divide-y divide-gray-200">
-                    {product?.variants?.map((variant, index) => (
-                      <tr key={index}>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{variant?.sku}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                          {rupees}{(variant.price )}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{variant.stockOnHand}</td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
-                          {variant.options.map((option, optIndex) => (
-                            <span key={optIndex} className="block">
-                              {option.name}
-                            </span>
-                          ))}
-                        </td>
+              {(!product?.variants?.length) ? <h1>No Variants</h1> :
+                <div className="overflow-x-auto">
+                  <table className="min-w-full divide-y divide-gray-200">
+                    <thead className="bg-gray-50 dark:bg-slate-600">
+                      <tr>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">SKU</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Price</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Stock</th>
+                        <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-300 uppercase tracking-wider">Options</th>
                       </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-                } 
+                    </thead>
+
+                    <tbody className="bg-white dark:bg-slate-700 divide-y divide-gray-200">
+                      {product?.variants?.map((variant, index) => (
+                        <tr key={index}>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{variant?.sku}</td>
+                          <td className="py-4 px-6 whitespace-nowrap text-zinc-700 dark:text-zinc-300">
+                            {rupees} {formatPrice(Number(variant?.price) || 0)}
+                          </td>
+
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">{variant.stockOnHand}</td>
+                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500 dark:text-gray-300">
+                            {variant.options.map((option, optIndex) => (
+                              <span key={optIndex} className="block">
+                                {option.name}
+                              </span>
+                            ))}
+                          </td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              }
             </div>
 
           </div>
