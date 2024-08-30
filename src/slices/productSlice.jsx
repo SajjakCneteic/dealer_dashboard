@@ -25,14 +25,37 @@ export const fetchAllProducts = createAsyncThunk('products/fetchAll', async () =
   return response.data;
 });
 
-export const createProductItem = createAsyncThunk('products/createItem', async (data) => {
-  const response = await axios.post(`${API_URL}/api/v1/dealer/products`, data, getAuthHeaders());
-  return response.data;
+export const createProductItem = createAsyncThunk('products/createItem', async (data, { rejectWithValue }) => {
+  try {
+    
+    const response = await axios.post(`${API_URL}/api/v1/dealer/products`, data, getAuthHeaders());
+  
+    const newData = { name: response.data.createProduct.name };
+
+    await axios.post(`${API_URL}/api/v1/dealer/products/${response.data.createProduct.id}/variants`, newData, getAuthHeaders());
+
+      return response.data;
+  } catch (error) {
+    // Return error message if any request fails
+    return rejectWithValue(error.response.data);
+  }
 });
 
-export const deleteProductItem = createAsyncThunk('products/deleteItem', async (id) => {
-  const response = await axios.delete(`${API_URL}/api/v1/dealer/products/${id}`, getAuthHeaders());
-  return response.data;
+export const uploadAssets = createAsyncThunk('asset/upload',async(formData)=>{
+  const responseAssest = await axios.post(`${API_URL}/api/v1/dealer/uploads`, formData, getAuthHeaders())
+  return responseAssest.data
+})
+
+
+export const deleteProductItem = createAsyncThunk('products/deleteItem', async (id,{rejectWithValue}) => {
+  try {
+    
+    const response = await axios.delete(`${API_URL}/api/v1/dealer/products/${id}`, getAuthHeaders());
+    return response;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+  
 });
 
 export const fetchSingleProduct = createAsyncThunk('products/fetchSingle', async (id) => {
@@ -99,9 +122,9 @@ const productSlice = createSlice({
       .addCase(deleteProductItem.fulfilled, (state, action) => {
         state.loading = false;
         state.success = true;
-        state.products = state.products.filter(
-          (product) => product.id !== action.meta.arg
-        );
+        // state.products = state.products?.filter(
+        //   (product) => product.id !== action.meta.arg
+        // );
       })
       .addCase(deleteProductItem.rejected, (state, action) => {
         state.loading = false;
