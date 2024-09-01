@@ -27,7 +27,8 @@ export const fetchAllProducts = createAsyncThunk('products/fetchAll', async () =
 
 export const createProductItem = createAsyncThunk('products/createItem', async (data, { rejectWithValue }) => {
   try {
-    
+    // const responseAssest = await axios.post(`${API_URL}/api/v1/dealer/uploads`, formData, getAuthHeaders())
+
     const response = await axios.post(`${API_URL}/api/v1/dealer/products`, data, getAuthHeaders());
   
     const newData = { name: response.data.createProduct.name };
@@ -51,6 +52,26 @@ export const deleteProductItem = createAsyncThunk('products/deleteItem', async (
   try {
     
     const response = await axios.delete(`${API_URL}/api/v1/dealer/products/${id}`, getAuthHeaders());
+    return response;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+  
+});
+export const getVariantsById = createAsyncThunk('variants/variantsId', async (id,{rejectWithValue}) => {
+  try {
+    
+    const response = await axios.get(`${API_URL}/api/v1/dealer/products/variants/${id}`, getAuthHeaders());
+    return response;
+  } catch (error) {
+    return rejectWithValue(error.response.data);
+  }
+  
+});
+export const deleteVariantsById = createAsyncThunk('variants/variantsId', async (id,{rejectWithValue}) => {
+  try {
+    
+    const response = await axios.delete(`${API_URL}/api/v1/dealer/products/variants/${id}`, getAuthHeaders());
     return response;
   } catch (error) {
     return rejectWithValue(error.response.data);

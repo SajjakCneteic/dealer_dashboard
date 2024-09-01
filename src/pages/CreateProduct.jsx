@@ -24,8 +24,7 @@ const CreateProduct = ({ product }) => {
     assetIds: []
   })
 
-  console.log(createItem)
-
+  
   const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
     setCreateItem((prevState) => ({
