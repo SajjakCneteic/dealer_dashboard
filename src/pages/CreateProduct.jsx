@@ -7,6 +7,7 @@ import { GrImage } from 'react-icons/gr';
 import { useDispatch } from 'react-redux';
 import { createProductItem, uploadAssets } from '../slices/productSlice';
 import toast, { Toaster } from 'react-hot-toast';
+
 const rupees = process.env.REACT_APP_CURRENCY_SIGN;
 
 const CreateProduct = ({ product }) => {
@@ -31,7 +32,6 @@ const CreateProduct = ({ product }) => {
     stock: 0,
   })
 
-  console.log(variantsData)
   const handleVariantsInput =(e)=>{
     const {name,value} = e.target;
     setVariantsData((prevState) => ({
@@ -39,14 +39,35 @@ const CreateProduct = ({ product }) => {
       [name]: value
     }))
   }
+
   
   const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
-    setCreateItem((prevState) => ({
-      ...prevState,
-      [name]: type === 'checkbox' ? checked : value,
-    }));
+  
+    // If the input field being changed is the "name" field
+    if (name === "name") {
+      // Generate the slug based on the name value
+      const slugValue = value
+        .trim() // Remove leading/trailing spaces
+        .toLowerCase() // Convert to lowercase
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/[^a-z0-9-]/g, ''); // Remove all non-alphanumeric characters except hyphens
+  
+      // Update both the name and slug fields in the state
+      setCreateItem((prevState) => ({
+        ...prevState,
+        name: value,
+        slug: slugValue,
+      }));
+    } else {
+      // For other fields, handle the input change normally
+      setCreateItem((prevState) => ({
+        ...prevState,
+        [name]: type === 'checkbox' ? checked : value,
+      }));
+    }
   };
+  
 
   const handleDescriptionChange = (value) => {
     setCreateItem((prevState) => ({
@@ -91,9 +112,11 @@ const CreateProduct = ({ product }) => {
           ...createItem,
           assetIds: [...(createItem.assetIds || []), ...assetIds],
         };
-  
+        const data ={
+         product: updatedCreateItem,variant:variantsData
+        }
         // Dispatch createProductItem with the updated createItem including assetIds
-        const submitResponse = await dispatch(createProductItem(updatedCreateItem)).unwrap();
+        const submitResponse = await dispatch(createProductItem(data)).unwrap();
         toast.success("Product created successfully");
         console.log('Product creation success:', submitResponse);
       } catch (error) {
@@ -103,7 +126,10 @@ const CreateProduct = ({ product }) => {
     } else {
       try {
         // No assets to upload, proceed with product creation directly
-        const submitResponse = await dispatch(createProductItem(createItem,variantsData)).unwrap();
+        const data ={
+         product: createItem,variant:variantsData
+        }
+        const submitResponse = await dispatch(createProductItem(createItem)).unwrap();
         toast.success("Product created successfully");
         console.log('Product creation success:', submitResponse);
       } catch (error) {
@@ -132,6 +158,7 @@ const CreateProduct = ({ product }) => {
   };
 
   
+
   return (
     <>
       <Toaster />
@@ -182,6 +209,7 @@ const CreateProduct = ({ product }) => {
                     type="text"
                     id="slug"
                     name='slug'
+                    value={createItem.slug}
                     onChange={handleInputChange}
                     className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     placeholder="Enter slug"
@@ -217,7 +245,7 @@ const CreateProduct = ({ product }) => {
                 {assets.length === 0 ? (
                   <div className="text-center p-8">
                     <GrImage size={"100%"} />
-                   {/*<p className="text-gray-500 mt-2">No featured asset</p>*/} 
+                   
                   </div>
                 ) : (
                   <img
@@ -323,7 +351,7 @@ const CreateProduct = ({ product }) => {
                     <input
                       type="text"
                       id="sku"
-                      name="sku"
+                      name='sku'
                       onChange={handleVariantsInput}
                       className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     />
@@ -332,14 +360,14 @@ const CreateProduct = ({ product }) => {
                     <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
                     <div className="relative mt-1 rounded-md shadow-sm">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        {/* <span className="text-gray-500 sm:text-sm">{rupees}</span> */}
+                        {/* <span className="text-gray-500 sm:text-sm">US$</span> */}
                       </div>
                       <input
                         type="text"
                         id="price"
-                        name="price"
-                        onChange={handleVariantsInput}
+                        name='price'
                         placeholder={`${rupees} 0.00`}
+                        onChange={handleVariantsInput}
                         className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                       />
                     </div>
@@ -349,7 +377,7 @@ const CreateProduct = ({ product }) => {
                     <input
                       type="text"
                       id="stock"
-                      name="stock"
+                      name='stock'
                       onChange={handleVariantsInput}
                       className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     />

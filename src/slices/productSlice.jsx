@@ -25,17 +25,20 @@ export const fetchAllProducts = createAsyncThunk('products/fetchAll', async () =
   return response.data;
 });
 
-
-
 export const createProductItem = createAsyncThunk(
   'products/createItem',
   async (data, { rejectWithValue }) => {
     try {
-      console.log(data)
-      const response = await axios.post(`${API_URL}/api/v1/dealer/products`, data, getAuthHeaders());
- 
-      const newData = { name: response.data.createProduct.name };
-     
+      const response = await axios.post(`${API_URL}/api/v1/dealer/products`, data.product, getAuthHeaders());
+      console.log(data.variant.price)
+      const newData = {
+        name: response.data.createProduct.name,
+        sku: data.variant.sku,
+        price: +((data.variant.price) * 100),
+        stock: data.variant.stock
+      };
+      
+console.log(newData)
       await axios.post(
         `${API_URL}/api/v1/dealer/products/${response.data.createProduct.id}/variants`,
         newData,
@@ -54,6 +57,17 @@ export const uploadAssets = createAsyncThunk(
   async (formData, { rejectWithValue }) => {
     try {
       const responseAssest = await axios.post(`${API_URL}/api/v1/dealer/uploads`, formData, getAuthHeaders());
+      return responseAssest.data;
+    } catch (error) {
+      return rejectWithValue(error.response?.data || error.message);
+    }
+  }
+);
+export const updateProductById = createAsyncThunk(
+  'update/product',
+  async (data, { rejectWithValue }) => {
+    try {
+      const responseAssest = await axios.put(`${API_URL}/api/v1/dealer/products/${data.id}`, data.product, getAuthHeaders());
       return responseAssest.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || error.message);
