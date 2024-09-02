@@ -49,9 +49,9 @@ const dispatch = useDispatch();
 
   const handleConfirm = () => {
     if (state === "PaymentSettled"  ) {
-      dispatch(updateOrderStatus({ id: id,status: "fulfill" }));
-      toast.success("Order Approved Successfully")
-      dispatch(fetchAllOrders());
+      dispatch(updateOrderStatus({ id: id,status: "fulfill" })).then(()=>{    
+          dispatch(fetchAllOrders());
+      });
 
       // setButtonText("Approved");
       setConfirmationEnabled(false);
@@ -70,7 +70,12 @@ const dispatch = useDispatch();
         <div className="text-muted-foreground">{customer?.emailAddress}</div>
       </td>
       <td className=" text-center   pr-2 py-4 whitespace-nowrap cursor-pointer" onClick={handleClick}>
-        <div className="text-card-foreground ">{lines?.[0]?.productVariant?.name}</div>
+        <div className="text-card-foreground ">{lines?.[0]?.productVariant?.name
+    ?.split(' ')
+    .slice(0, 4)
+    .join(' ')
+  }
+</div>
       </td>
       <td className="pr-2 py-4 text-center  whitespace-nowrap  text-card-foreground cursor-pointer" onClick={handleClick}>#{id}</td>
       <td className="  text-center   pr-2 py-4 whitespace-nowrap text-card-foreground cursor-pointer" onClick={handleClick}>{formatDate(createdAt)}</td>
