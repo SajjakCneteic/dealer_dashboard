@@ -7,7 +7,7 @@ import { GrImage } from 'react-icons/gr';
 import { useDispatch } from 'react-redux';
 import { createProductItem, uploadAssets } from '../slices/productSlice';
 import toast, { Toaster } from 'react-hot-toast';
-
+const rupees = process.env.REACT_APP_CURRENCY_SIGN;
 
 const CreateProduct = ({ product }) => {
   const [assets, setAssets] = useState([])
@@ -24,8 +24,22 @@ const CreateProduct = ({ product }) => {
     assetIds: []
   })
 
-  console.log(createItem)
+  const [variantsData,setVariantsData] = useState({
+    name:"",
+    sku:"",
+    price: 0,
+    stock: 0,
+  })
 
+  console.log(variantsData)
+  const handleVariantsInput =(e)=>{
+    const {name,value} = e.target;
+    setVariantsData((prevState) => ({
+      ...prevState,
+      [name]: value
+    }))
+  }
+  
   const handleInputChange = (e) => {
     const { name, type, checked, value } = e.target;
     setCreateItem((prevState) => ({
@@ -42,20 +56,65 @@ const CreateProduct = ({ product }) => {
   };
 
   const handleSubmit = async () => {
-    const isNameEmpty = createItem.name.trim() === "" && createItem.slug.trim() === "";
-
+    const isNameEmpty = createItem.name.trim() === "" || createItem.slug.trim() === "";
+  
     if (isNameEmpty) {
       toast.error("Name and Slug cannot be empty");
+      return;
+    }
+  
+    const formData = new FormData();
+    
+    if (filesToUpload.length > 0) {
+      // Append each file to FormData
+      filesToUpload.forEach((file, index) => {
+        formData.append(`files[${index}]`, file);
+      });
+    
+      try {
+        // Await the upload assets dispatch to get the response
+        const response = await dispatch(uploadAssets(formData)).unwrap();
+    
+        // Handle the successful response
+        console.log('Upload success:', response);
+        toast.success("Assets uploaded successfully");
+    
+        // Extract asset IDs and update the createItem state
+        const assetIds = response.data.createAssets.map(asset => asset.id);
+        setCreateItem((prevState) => ({
+          ...prevState,
+          assetIds: [...(prevState.assetIds || []), ...assetIds],
+        }));
+    
+        // Ensure createItem is updated with the latest asset IDs
+        const updatedCreateItem = {
+          ...createItem,
+          assetIds: [...(createItem.assetIds || []), ...assetIds],
+        };
+  
+        // Dispatch createProductItem with the updated createItem including assetIds
+        const submitResponse = await dispatch(createProductItem(updatedCreateItem)).unwrap();
+        toast.success("Product created successfully");
+        console.log('Product creation success:', submitResponse);
+      } catch (error) {
+        console.error('Error:', error);
+        // toast.error(error.message || "An error occurred during asset upload");
+      }
     } else {
       try {
-        const submitResponse = await dispatch(createProductItem(createItem)).unwrap();
+        // No assets to upload, proceed with product creation directly
+        const submitResponse = await dispatch(createProductItem(createItem,variantsData)).unwrap();
         toast.success("Product created successfully");
-
+        console.log('Product creation success:', submitResponse);
       } catch (error) {
-        toast.success("Product created successfully");
+        console.error('Error:', error);
+        toast.success("Product Added Successfully")
+        // toast.error(error.message || "An error occurred during product creation");
       }
     }
   };
+  
+  
 
   const handleFileUpload = (e) => {
     const newFiles = Array.from(e.target.files);
@@ -72,37 +131,7 @@ const CreateProduct = ({ product }) => {
     setFilesToUpload((prevFiles) => [...prevFiles, ...newFiles]);
   };
 
-  const handleUploadAssets = async () => {
-    const formData = new FormData();
-
-    // Append each file to FormData
-    filesToUpload.forEach((file, index) => {
-      formData.append(`files[${index}]`, file);
-    });
-
-    try {
-      // Dispatch the action to upload assets
-      const response = await dispatch(uploadAssets(formData)).unwrap();
-
-      // Handle the successful response
-      console.log('Upload success:', response);
-      toast.success("Assets uploaded successfully");
-      const assetIds = response.data.createAssets.map(asset => asset.id);
-      setCreateItem((prevState) => ({
-        ...prevState,
-        assetIds: [...prevState.assetIds, ...assetIds],
-      }));
-
-    } catch (error) {
-      // Handle errors
-      console.error('Error uploading assets:', error);
-      toast.error("Error uploading assets");
-    }
-  };
-
-
-
-
+  
   return (
     <>
       <Toaster />
@@ -188,7 +217,7 @@ const CreateProduct = ({ product }) => {
                 {assets.length === 0 ? (
                   <div className="text-center p-8">
                     <GrImage size={"100%"} />
-                    <p className="text-gray-500 mt-2">No featured asset</p>
+                   {/*<p className="text-gray-500 mt-2">No featured asset</p>*/} 
                   </div>
                 ) : (
                   <img
@@ -236,13 +265,13 @@ const CreateProduct = ({ product }) => {
               </div>
 
               {/* Conditionally Render Upload Button */}
-              {assets.length > 0 && (
+              {/* {assets.length > 0 && (
                 <div className="absolute bottom-4 right-4">
                   <button onClick={handleUploadAssets} className="px-4 py-2 bg-blue-600 text-white rounded-lg shadow hover:bg-blue-700">
                     Upload
                   </button>
                 </div>
-              )}
+              )} */}
             </div>
 
 
@@ -294,6 +323,8 @@ const CreateProduct = ({ product }) => {
                     <input
                       type="text"
                       id="sku"
+                      name="sku"
+                      onChange={handleVariantsInput}
                       className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     />
                   </div>
@@ -301,11 +332,14 @@ const CreateProduct = ({ product }) => {
                     <label htmlFor="price" className="block text-sm font-medium text-gray-700">Price</label>
                     <div className="relative mt-1 rounded-md shadow-sm">
                       <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <span className="text-gray-500 sm:text-sm">US$</span>
+                        {/* <span className="text-gray-500 sm:text-sm">{rupees}</span> */}
                       </div>
                       <input
                         type="text"
                         id="price"
+                        name="price"
+                        onChange={handleVariantsInput}
+                        placeholder={`${rupees} 0.00`}
                         className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                       />
                     </div>
@@ -315,6 +349,8 @@ const CreateProduct = ({ product }) => {
                     <input
                       type="text"
                       id="stock"
+                      name="stock"
+                      onChange={handleVariantsInput}
                       className="mt-1 block w-full border dark:bg-customBlue border-gray-300 rounded-md shadow-sm focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm p-2"
                     />
                   </div>

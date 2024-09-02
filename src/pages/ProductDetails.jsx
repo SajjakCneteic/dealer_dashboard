@@ -24,20 +24,29 @@ const ProductDetails = () => {
   const [isLoader, setIsLoader] = useState(false)
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
-  // const [confirmDelete,setConfirmDelete] = useState(false)
-
-console.log(product)
-
+ 
   const handleInputChange = (field, value) => {
     const updatedProduct = { ...product, [field]: value };
     setProduct(updatedProduct);
-    const isModified = product.name !== originalProduct.name ||
-      product.slug !== originalProduct.slug ||
-      product.description !== originalProduct.description;
-
-    setIsDisabled(isModified)
+  
+    // Normalize text comparison
+    const normalizeHtml = (html) => {
+      const tempDiv = document.createElement('div');
+      tempDiv.innerHTML = html;
+      return tempDiv.textContent || tempDiv.innerText || '';
+    };
+  
+    const normalizedOriginalDescription = normalizeHtml(originalProduct.description || '');
+    const normalizedUpdatedDescription = normalizeHtml(updatedProduct.description || '');
+  
+    const isModified = 
+      updatedProduct.name !== originalProduct.name ||
+      updatedProduct.slug !== originalProduct.slug ||
+      normalizedUpdatedDescription !== normalizedOriginalDescription;
+  
+    setIsDisabled(isModified);
   };
-
+  
   useEffect(() => {
     const fetchData = async () => {
       setIsLoader(true)
@@ -225,7 +234,7 @@ console.log(product)
 
                     <tbody className="bg-white dark:bg-slate-700 divide-y divide-gray-200">
                       {product?.variants?.map((variant, index) => (
-                        <tr key={index}>
+                        <tr onClick={()=>navigate(`/product/${product.id}/varients/${variant?.id}`)} key={index}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{variant?.sku}</td>
                           <td className="py-4 px-6 whitespace-nowrap text-zinc-700 dark:text-zinc-300">
                             {rupees} {formatPrice(Number(variant?.price) || 0)}

@@ -42,7 +42,7 @@ const AllRoutes = () => {
         <Route path='/products' element={<DefaultLayout><ProductList/></DefaultLayout>} />
         <Route path='/product/:id' element={<DefaultLayout><ProductDetails/></DefaultLayout>} />
         <Route path='/products/create' element={<DefaultLayout><CreateProduct/></DefaultLayout>} />
-        <Route path='/product/:productId/varient/:varientId' element={<DefaultLayout><Varients/></DefaultLayout>} />
+        <Route path='/product/:productId/varients/:varientId' element={<DefaultLayout><Varients/></DefaultLayout>} />
 
         <Route path="*" element={<PageNotFound />} />
 
