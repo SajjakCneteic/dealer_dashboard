@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
 import Modal from '../components/Modal';
 import { useDispatch } from 'react-redux';
-import { deleteProductItem, fetchSingleProduct } from '../slices/productSlice';
+import { deleteProductItem, fetchSingleProduct, updateProductById } from '../slices/productSlice';
 import Loader from '../components/Loader';
 import { RiH1 } from 'react-icons/ri';
 import toast from 'react-hot-toast';
@@ -18,47 +18,82 @@ const rupees = process.env.REACT_APP_CURRENCY_SIGN;
 const ProductDetails = () => {
   const [originalProduct, setOriginalProduct] = useState({})
   const dispatch = useDispatch()
-  const [product, setProduct] = useState(originalProduct);
+  const [product, setProduct] = useState({
+    name: '',
+    slug: '',
+    description: '',
+    assets: [],
+  });
   const [isDisabled, setIsDisabled] = useState(false);
   const { id } = useParams()
   const [isLoader, setIsLoader] = useState(false)
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
- 
+
+
   const handleInputChange = (field, value) => {
     const updatedProduct = { ...product, [field]: value };
+
+    // If the field being changed is the "name" field, generate the slug
+    if (field === "name") {
+      const slugValue = value
+        .trim() // Remove leading/trailing spaces
+        .toLowerCase() // Convert to lowercase
+        .replace(/\s+/g, '-') // Replace spaces with hyphens
+        .replace(/[^a-z0-9-]/g, ''); // Remove all non-alphanumeric characters except hyphens
+
+      // Update both the name and slug in the updatedProduct object
+      updatedProduct.slug = slugValue;
+    }
+
+    // Update the product state with the new values
     setProduct(updatedProduct);
-  
-    // Normalize text comparison
+
+    // Normalize text comparison for description
     const normalizeHtml = (html) => {
       const tempDiv = document.createElement('div');
       tempDiv.innerHTML = html;
       return tempDiv.textContent || tempDiv.innerText || '';
     };
-  
+
     const normalizedOriginalDescription = normalizeHtml(originalProduct.description || '');
     const normalizedUpdatedDescription = normalizeHtml(updatedProduct.description || '');
-  
-    const isModified = 
+
+    // Check if any of the fields have been modified
+    const isModified =
       updatedProduct.name !== originalProduct.name ||
       updatedProduct.slug !== originalProduct.slug ||
       normalizedUpdatedDescription !== normalizedOriginalDescription;
-  
+
+    // Update the isDisabled state based on whether there are modifications
     setIsDisabled(isModified);
   };
-  
+
+
   useEffect(() => {
     const fetchData = async () => {
-      setIsLoader(true)
+      setIsLoader(true);
       const data = await dispatch(fetchSingleProduct(id));
-      setOriginalProduct(data.payload.product)
-      setProduct(data.payload.product)
-      setIsLoader(false)
+      const fetchedProduct = data.payload.product;
+
+      // Extract only the required fields
+      const productData = {
+        name: fetchedProduct.name,
+        slug: fetchedProduct.slug,
+        description: fetchedProduct.description,
+        enabled: fetchedProduct.enabled,
+        assets: fetchedProduct.assets,
+      };
+
+      // Set the extracted data into the state
+      setOriginalProduct(fetchedProduct); // Set the full product as the original product
+      setProduct(productData); // Set only the specific fields
+      setIsLoader(false);
     };
 
     fetchData();
+  }, [id, dispatch]);
 
-  }, []);
 
   // date correction in good formate
   function formatDate(dateString) {
@@ -95,6 +130,17 @@ const ProductDetails = () => {
 
   };
 
+  const handleUpdateData = () => {
+ 
+    const data = {
+      id: originalProduct.id,
+      product: product
+    }
+    dispatch(updateProductById(data))
+    toast.success("Updated Product")
+
+  }
+
   if (isLoader) {
     return <Loader />
   }
@@ -113,27 +159,25 @@ const ProductDetails = () => {
             Products<MdArrowForwardIos className="ml-2 mr-2" />
           </Link>
           <Link className="items-center pointer-events-none inline-flex text-blue-800 hover:text-btnBlue transition duration-200">
-            {product?.name}
+            {originalProduct?.name}
           </Link>
         </span>
       </div>
       <div className="overflow-x-auto bg-white dark:bg-customBlue p-6 rounded-lg shadow-lg">
         <div className="flex justify-between mb-3">
-          <div><h4 className="font-bold text-xl">{product?.name}</h4></div>
+          <div><h4 className="font-bold text-xl">{originalProduct?.name}</h4></div>
           <div className='flex'>
             <button onClick={handleDelete} className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
               Delete
             </button>
-            <button
-
-              onClick={() => console.log("hello world")}
-              disabled={isDisabled}
-              className={` flex items-center ${isDisabled ? 'bg-btnBlue' : 'bg-blue-300'} 
-         ${isDisabled ? 'hover:bg-blue-700 ' : ''} 
-            rounded-lg text-white pl-3 pr-3 pt-2 pb-2`}
+            {isDisabled&&  <button
+              onClick={handleUpdateData}
+              className={`flex items-center bg-btnBlue hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2`}
             >
               Update
-            </button>
+            </button>}
+           
+
           </div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-100 gap-5">
@@ -195,14 +239,14 @@ const ProductDetails = () => {
                 <div className="flex-shrink-0 w-1/3 h-48 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
                   <div className="text-center p-8">
                     {/* <GrImage size={'100%'} /> */}
-                    <img src={product?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
+                    <img src={originalProduct?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
                     {/* <p className="text-gray-500 mt-2">No featured asset</p> */}
                   </div>
                 </div>
 
                 <div className='h-full' >
                   <div className='flex flex-wrap'>
-                    {product?.assets?.map((el) =>
+                    {originalProduct?.assets?.map((el) =>
                       <img src={el?.preview} alt="" className='ml-4 w-18 h-18' />
                     )}
                   </div>
@@ -220,7 +264,7 @@ const ProductDetails = () => {
             </div>
             <div className="p-4 mt-5 border rounded-lg bg-white dark:bg-slate-700 shadow-md max-w-4xl mx-auto">
               <h2 className="text-xl font-semibold mb-4">Product Variants</h2>
-              {(!product?.variants?.length) ? <h1>No Variants</h1> :
+              {(!originalProduct?.variants?.length) ? <h1>No Variants</h1> :
                 <div className="overflow-x-auto">
                   <table className="min-w-full divide-y divide-gray-200">
                     <thead className="bg-gray-50 dark:bg-slate-600">
@@ -233,8 +277,8 @@ const ProductDetails = () => {
                     </thead>
 
                     <tbody className="bg-white dark:bg-slate-700 divide-y divide-gray-200">
-                      {product?.variants?.map((variant, index) => (
-                        <tr onClick={()=>navigate(`/product/${product.id}/varients/${variant?.id}`)} key={index}>
+                      {originalProduct?.variants?.map((variant, index) => (
+                        <tr onClick={() => navigate(`/product/${originalProduct?.id}/varients/${variant?.id}`)} key={index}>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900 dark:text-gray-100">{variant?.sku}</td>
                           <td className="py-4 px-6 whitespace-nowrap text-zinc-700 dark:text-zinc-300">
                             {rupees} {formatPrice(Number(variant?.price) || 0)}
@@ -261,15 +305,15 @@ const ProductDetails = () => {
             <div className="items-center">
               <div className="border  p-3 rounded-lg dark:bg-slate-700">
                 <div className="flex  text-sm font-medium">
-                  <p className='text-gray-700'>ID: <span className='text-black-2'>{product?.id}</span></p>
+                  <p className='text-gray-700'>ID: <span className='text-black-2'>{originalProduct?.id}</span></p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
                   <p className="text-gray-700">
-                    Created at: <span className="text-black-2">{formatDate(product?.createdAt)}</span>
+                    Created at: <span className="text-black-2">{formatDate(originalProduct?.createdAt)}</span>
                   </p>
                 </div>
                 <div className="flex mt-1 text-sm font-medium">
-                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{formatDate(product?.updatedAt)}</span></p>
+                  <p className='text-gray-700'>Updated at: <span className='text-black-2'>{formatDate(originalProduct?.updatedAt)}</span></p>
                 </div>
               </div>
               <div className="border mt-5 p-3 mb-4 rounded-lg dark:bg-slate-700">

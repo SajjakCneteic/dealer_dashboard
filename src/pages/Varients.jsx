@@ -14,14 +14,15 @@ const VarientDetails = () => {
     const [isLoader, setIsLoader] = useState(false);
     const [variantsData, setVariantsData] = useState({});
     const dispatch = useDispatch();
-    const { varientId } = useParams();
+    const {productId, varientId } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             try {
                 setIsLoader(true);
                 const result = await dispatch(getVariantsById(varientId));
-                setVariantsData(result.payload.data.data);
+               
+                setVariantsData(result.payload.data);
             } catch (error) {
                 console.error("Failed to fetch variant data", error);
             } finally {
@@ -51,6 +52,7 @@ const VarientDetails = () => {
     } = variantsData;
 
     return (
+        
         <div className="container mx-auto p-4 max-w-4xl">
             <div className="text-right mb-4">
                 <button className="bg-green-600 text-white hover:bg-green-700 p-2 rounded">Update</button>
