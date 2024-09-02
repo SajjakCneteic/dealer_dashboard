@@ -7,18 +7,20 @@ import TaxSummary from '../components/TaxSummary';
 import QRCodeComponent from '../components/QrCode';
 import Breadcrumb from '../components/Breadcrumb';
 import Loader from '../components/Loader';
+import ConfirmationModal from '../components/ConformationModal';  // Import the modal
 
 const mutedFgClass = 'text-muted-foreground dark:text-muted-foreground';
-
+const inputClasses = 'bg-input border border-border rounded-md py-2 px-3 pr-8 text-primary   focus:outline-none focus:ring focus:ring-primary focus:border-primary/80';
+const textInputClasses = 'pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-input';
 const formatCurrency = (amount) => {
-  const currency = process.env.REACT_APP_CURRENCY || 'INR'; // Default to USD
+  const currency = process.env.REACT_APP_CURRENCY || 'INR';
   const symbol = 
     currency === 'USD' ? '$' : 
     currency === 'EUR' ? '€' : 
     currency === 'GBP' ? '£' : 
-    currency === 'INR' ? '₹' : ''; // Added support for INR
+    currency === 'INR' ? '₹' : '';
 
-  return `${symbol}${amount.toLocaleString()}`; // No value conversion, just appending the symbol
+  return `${symbol}${amount.toLocaleString()}`;
 };
 
 const OrderDetails = () => {
@@ -26,30 +28,45 @@ const OrderDetails = () => {
   const dispatch = useDispatch();
   const { order, loading, error } = useSelector((state) => state.orders);
   const [status, setStatus] = useState('');
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [pendingStatus, setPendingStatus] = useState('');
+const [update,setUpdate]=useState(0);
 
   useEffect(() => {
-    dispatch(fetchSingleOrder(id)); // Fetch order by ID
-  }, [dispatch, id]);
+    dispatch(fetchSingleOrder(id));
+  }, [dispatch, id,update]);
 
   useEffect(() => {
- 
     if (order && order.order && order.order.state) {
-      setStatus(order.order.state); // Set initial state if available
+      setStatus(order.order.state);
     }
   }, [order]);
 
-  const handleApprovalClick = () => {
-    dispatch(updateOrderStatus({ id, status: "fulfill" }));
-  };
-
   const handleStatusChange = (e) => {
     const newStatus = e.target.value;
-    setStatus(newStatus);
-    dispatch(updateOrderStatus({ id, status: newStatus.toLowerCase() })).then(() => {
-      dispatch(fetchSingleOrder(id)); // Refetch order to get updated state
-    });
+    setPendingStatus(newStatus);
+    setIsModalOpen(true); // Open confirmation modal
   };
 
+  const confirmStatusChange = () => {
+    setStatus(pendingStatus);
+    dispatch(updateOrderStatus({ id, status: pendingStatus.toLowerCase() })).then(() => {
+      dispatch(fetchSingleOrder(id)); // Refetch order to get updated state
+    });
+    setIsModalOpen(false); // Close modal
+  };
+
+  const cancelStatusChange = () => {
+    setIsModalOpen(false); // Close modal without changing status
+  };
+  const handleApprovalClick = () => {
+    // Update the order status to "fulfill" when the approval button is clicked
+    dispatch(updateOrderStatus({ id, status: "fulfill" })).then(() => {
+      // Refetch the order details to get the updated status
+      dispatch(fetchSingleOrder(id));
+      setUpdate((pre)=>pre+1)
+    });
+  };
   if (loading) {
     return <Loader />;
   }
@@ -58,8 +75,7 @@ const OrderDetails = () => {
     return <div>Error: {error}</div>;
   }
 
-   // Ensure order and order.order are defined before destructuring
-   if (!order || !order.order) {
+  if (!order || !order.order) {
     return <div>No order found</div>;
   }
 
@@ -132,33 +148,31 @@ const OrderDetails = () => {
           <div className="p-4 mb-4 bg-card border border-border rounded-lg md:mt-6">
             <div className="text-muted font-semibold">Status</div>
             <hr />
-            <div className="flex items-center justify-between mt-2">
-            <select
-  className={`w-full px-4 py-2 font-semibold border ${
-    state === "Delivered" ? "bg-green-600" :
-    state === "Shipped" ? "bg-green-300" :
-    state === "Cancelled" ? "bg-red-500" : "bg-blue-500"
-  } text-white rounded ${
-    !isApproved ? "bg-gray-200 text-gray-500 " : "" // Apply disabled styles
-  }`}
-  name="state"
-  id="state"
-  value={status}
-  onChange={handleStatusChange}
->
-  <option value={state}>{state === "PaymentSettled" ? "Payment Settled" : state}</option>
-  {nextStates?.map((nextState, i) => (
-    <option 
-      key={i} 
-      value={nextState} 
-      disabled={!isApproved} // Disable only if not approved
-    >
-      {nextState}
-    </option>
-  ))}
-</select>
-
-
+            <div className={`flex items-center justify-between mt-2 `} >
+              <select
+                className={`w-full  ${inputClasses} ${
+                  state === "Delivered" ? "bg-green-100" :
+                  state === "Shipped" ? "bg-orange-100" :
+                  state === "Cancelled" ? "bg-red-200" : "bg-blue-200"
+                } px-4 py-2 font-semibold border  rounded ${
+                  !isApproved ? "bg-gray-200 text-black " : "" // Apply disabled styles
+                }`}
+                name="state"
+                id="state"
+                value={status}
+                onChange={handleStatusChange}
+              >
+                <option value={state}>{state === "PaymentSettled" ? "Payment Settled" : state}</option>
+                {nextStates?.map((nextState, i) => (
+                  <option 
+                    key={i} 
+                    value={nextState} 
+                    disabled={!isApproved} // Disable only if not approved
+                  >
+                    {nextState}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
           <div className="p-4 bg-card border border-border rounded-lg shadow-md">
@@ -210,6 +224,15 @@ const OrderDetails = () => {
           </div>
         </div>
       </div>
+
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={isModalOpen}
+        onConfirm={confirmStatusChange}
+        onCancel={cancelStatusChange}
+        message={`Are you sure you want to change the order status to "${pendingStatus}"?`}
+        status={pendingStatus} // Pass the pending status to the modal
+      />
     </div>
   );
 };
