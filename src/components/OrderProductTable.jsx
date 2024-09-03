@@ -30,8 +30,11 @@ const TotalSection = ({total}) => (
   </div>
 );
 
-const OrderProductTable = ({items,summary}) => (
-  <div className="overflow-x-auto p-4 bg-card border border-border rounded-lg">
+const OrderProductTable = ({items,summary}) => {
+  const totalDiscount = summary.totalDiscount || 0;
+
+
+return  <div className="overflow-x-auto p-4 bg-card border border-border rounded-lg">
     <table className="min-w-full ">
       <thead>
         <tr>
@@ -52,11 +55,13 @@ return  <ProductItem
        </tbody>
     </table>
     <div className="mt-4">
+    <SubTotalShipping label="Discount" value={totalDiscount} />
+
       <SubTotalShipping label="Sub total" value={summary.subTotal} />
       <SubTotalShipping label="Shipping" value={summary.shipping} />
       <TotalSection total={summary.total} />
     </div>
   </div>
-);
+}
 
 export default OrderProductTable;

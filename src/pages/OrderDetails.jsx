@@ -96,7 +96,9 @@ const [update,setUpdate]=useState(0);
   } = order.order;
 
   const isApproved = fulfillments?.[0]?.id !== undefined;
-
+  const discount = lines?.reduce((acc, el) => {
+    return acc + el.linePrice;
+}, 0) - subTotal;
   return (
     <div className="p-2 bg-white dark:bg-black rounded-lg">
       <div className="mb-6">
@@ -111,7 +113,7 @@ const [update,setUpdate]=useState(0);
             isApproved ? "bg-blue-300 text-white" : "bg-primary text-white dark:bg-primary-foreground dark:text-primary-foreground"
           } px-4 py-2 rounded-md`}
         >
-          {isApproved ? "Approved" : "Approval Required"}
+          {isApproved ? "Approved" : "Approve"}
         </button>
       </div>
       <div className="flex flex-col-reverse md:flex-row">
@@ -127,6 +129,7 @@ const [update,setUpdate]=useState(0);
                 image: line.featuredAsset.preview,
               }))}
               summary={{
+                totalDiscount:formatCurrency(discount),
                 subTotal: formatCurrency(subTotal),
                 shipping: formatCurrency(shipping),
                 total: formatCurrency(total),
