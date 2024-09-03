@@ -32,7 +32,7 @@ const dispatch = useDispatch();
         setConfirmationEnabled(false);
         break;
       case "PaymentSettled":
-        setButtonText("Approval Required");
+        setButtonText("Approve");
         setConfirmationEnabled(true);
         break;
       default:
