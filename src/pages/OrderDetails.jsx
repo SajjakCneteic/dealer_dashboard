@@ -129,7 +129,7 @@ const [update,setUpdate]=useState(0);
                 image: line.featuredAsset.preview,
               }))}
               summary={{
-                totalDiscount:formatCurrency(discount),
+                totalDiscount:`- ${formatCurrency(discount)}`,
                 subTotal: formatCurrency(subTotal),
                 shipping: formatCurrency(shipping),
                 total: formatCurrency(total),
@@ -223,7 +223,7 @@ const [update,setUpdate]=useState(0);
             <hr />
             <p className="pt-2">Created at: <span className="font-semibold">{new Date(createdAt).toLocaleString()}</span></p>
             <p>Updated at: <span className="font-semibold">{new Date(updatedAt).toLocaleString()}</span></p>
-            {status === "Ready To PickUp" && <QRCodeComponent orderId={id} />}
+             <QRCodeComponent orderId={id} />
           </div>
         </div>
       </div>
