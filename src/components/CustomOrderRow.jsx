@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchAllOrders, updateOrderStatus } from "../slices/orderSlice";
 import toast, { Toaster } from "react-hot-toast";
 
@@ -10,6 +10,7 @@ const CustomerOrderRow = ({ customer, lines, createdAt, hide, id, state,fulfillm
   const navigate = useNavigate();
   const [textColor,setColor]=useState("text-blue-500")
 const dispatch = useDispatch();
+const orderstate=useParams();
   useEffect(() => {
     // Set button text and confirmation state based on the order state
     if(fulfillments?.[0]?.id && state=="PaymentSettled"){
@@ -50,7 +51,7 @@ const dispatch = useDispatch();
   const handleConfirm = () => {
     if (state === "PaymentSettled"  ) {
       dispatch(updateOrderStatus({ id: id,status: "fulfill" })).then(()=>{    
-          dispatch(fetchAllOrders());
+          dispatch(fetchAllOrders(orderstate));
       });
 
       // setButtonText("Approved");
