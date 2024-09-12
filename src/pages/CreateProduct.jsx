@@ -97,8 +97,8 @@ const CreateProduct = ({ product }) => {
         const response = await dispatch(uploadAssets(formData)).unwrap();
     
         // Handle the successful response
-        console.log('Upload success:', response);
-        toast.success("Assets uploaded successfully");
+       
+        toast.success("Product Added successfully");
     
         // Extract asset IDs and update the createItem state
         const assetIds = response.data.createAssets.map(asset => asset.id);
@@ -118,9 +118,9 @@ const CreateProduct = ({ product }) => {
         // Dispatch createProductItem with the updated createItem including assetIds
         const submitResponse = await dispatch(createProductItem(data)).unwrap();
         toast.success("Product created successfully");
-        console.log('Product creation success:', submitResponse);
+       
       } catch (error) {
-        console.error('Error:', error);
+       
         // toast.error(error.message || "An error occurred during asset upload");
       }
     } else {
@@ -131,9 +131,9 @@ const CreateProduct = ({ product }) => {
         }
         const submitResponse = await dispatch(createProductItem(createItem)).unwrap();
         toast.success("Product created successfully");
-        console.log('Product creation success:', submitResponse);
+        
       } catch (error) {
-        console.error('Error:', error);
+       
         toast.success("Product Added Successfully")
         // toast.error(error.message || "An error occurred during product creation");
       }
