@@ -10,7 +10,7 @@ import Loader from '../components/Loader';
 import ConfirmationModal from '../components/ConformationModal';  // Import the modal
 
 const mutedFgClass = 'text-muted-foreground dark:text-muted-foreground';
-const inputClasses = 'bg-input border border-border rounded-md py-2 px-3 pr-8 text-primary   focus:outline-none focus:ring focus:ring-primary focus:border-primary/80';
+const inputClasses = 'bg-input border text-sm border-border rounded-md py-2 px-3 pr-8 text-primary   focus:outline-none focus:ring focus:ring-primary focus:border-primary/80';
 const textInputClasses = 'pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-input';
 const formatCurrency = (amount) => {
   const currency = process.env.REACT_APP_CURRENCY || 'INR';
@@ -92,10 +92,22 @@ const [update,setUpdate]=useState(0);
     createdAt,
     updatedAt,
     nextStates,
-    fulfillments
+    fulfillments,deliveryType
   } = order.order;
-
+console.log(order.order)
   const isApproved = fulfillments?.[0]?.id !== undefined;
+  const getBadgeColor = () => {
+    switch (deliveryType) {
+      case 'Standard Shipment':
+        return 'bg-blue-200 text-white'; // blue background for standard shipment
+      case 'ship':
+        return 'bg-green-200 text-white'; // green background for ship
+      case 'pickup':
+        return 'bg-orange-200 text-white'; // yellow background for pickup
+      default:
+        return 'bg-gray-200 text-white'; // default gray for other types
+    }
+  };
   const discount = lines?.reduce((acc, el) => {
     return acc + el.linePrice;
 }, 0) - subTotal;
@@ -185,7 +197,16 @@ const [update,setUpdate]=useState(0);
               <img alt="user-icon" src="https://openui.fly.dev/openui/24x24.svg?text=👤" className="w-6 h-6 mr-2" />
               <span className="text-primary font-medium">{customer?.firstName} {customer?.lastName}</span>
             </div>
-            <h3 className="text-md font-semibold mb-1">Shipping address</h3>
+            {shippingAddress?.company?<>
+              <div className="flex items-center space-x-2">
+      <div>DeliveryType:</div>
+      <span
+        className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
+      >
+        {deliveryType
+        }
+      </span>
+    </div>            <h3 className="text-md font-semibold mb-1">Shipping address</h3>
             <hr />
             <p className="text-muted-foreground">
               {shippingAddress?.company}
@@ -198,6 +219,15 @@ const [update,setUpdate]=useState(0);
               <br />
               📞 {shippingAddress?.phoneNumber}
             </p>
+            </>:  <div className="flex items-center space-x-2">
+      <div>DeliveryType:</div>
+      <span
+        className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
+      >
+        {deliveryType
+        }
+      </span>
+    </div>}
           </div>
           <div className="my-4 p-4 rounded-lg border border-border">
             <h2 className="text-lg pb-2 font-semibold">Payments</h2>
