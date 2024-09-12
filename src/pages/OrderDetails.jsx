@@ -99,13 +99,13 @@ console.log(order.order)
   const getBadgeColor = () => {
     switch (deliveryType) {
       case 'Standard Shipment':
-        return 'bg-blue-200 text-white'; // blue background for standard shipment
+        return 'bg-blue-400 text-white'; // blue background for standard shipment
       case 'ship':
-        return 'bg-green-200 text-white'; // green background for ship
+        return 'bg-green-400 text-white'; // green background for ship
       case 'pickup':
-        return 'bg-orange-200 text-white'; // yellow background for pickup
+        return 'bg-orange-400 text-white'; // yellow background for pickup
       default:
-        return 'bg-gray-200 text-white'; // default gray for other types
+        return 'bg-gray-400 text-white'; // default gray for other types
     }
   };
   const discount = lines?.reduce((acc, el) => {
@@ -199,12 +199,12 @@ console.log(order.order)
             </div>
             {shippingAddress?.company?<>
               <div className="flex items-center space-x-2">
-      <div>DeliveryType:</div>
+      <div>Delivery Type:</div>
       <span
         className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
       >
-        {deliveryType
-        }
+        {deliveryType.charAt(0).toUpperCase() + deliveryType.slice(1)}
+
       </span>
     </div>            <h3 className="text-md font-semibold mb-1">Shipping address</h3>
             <hr />
@@ -220,12 +220,12 @@ console.log(order.order)
               📞 {shippingAddress?.phoneNumber}
             </p>
             </>:  <div className="flex items-center space-x-2">
-      <div>DeliveryType:</div>
+      <div>Delivery Type:</div>
       <span
         className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
       >
-        {deliveryType
-        }
+        {deliveryType.charAt(0).toUpperCase() + deliveryType.slice(1)}
+
       </span>
     </div>}
           </div>
