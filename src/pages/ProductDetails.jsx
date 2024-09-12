@@ -6,7 +6,7 @@ import 'react-quill/dist/quill.snow.css'; // import styles
 import { GrImage } from 'react-icons/gr';
 import Modal from '../components/Modal';
 import { useDispatch } from 'react-redux';
-import { deleteProductItem, fetchSingleProduct, updateProductById } from '../slices/productSlice';
+import { deleteProductItem, fetchSingleProduct, updateProductById, uploadAssets } from '../slices/productSlice';
 import Loader from '../components/Loader';
 import { RiH1 } from 'react-icons/ri';
 import toast from 'react-hot-toast';
@@ -23,12 +23,30 @@ const ProductDetails = () => {
     slug: '',
     description: '',
     assets: [],
+    enable: false
   });
   const [isDisabled, setIsDisabled] = useState(false);
   const { id } = useParams()
   const [isLoader, setIsLoader] = useState(false)
   const navigate = useNavigate()
   const [isOpen, setIsOpen] = useState(false)
+  const [enable, setEnable] = useState(true)
+  const [assets, setAssets] = useState([])
+  const [filesToUpload, setFilesToUpload] = useState([]);
+
+  // console.log(assetIds) array form
+  // useEffect(()=>{
+
+  //   const assetIds = product.assets.map(asset => asset.id);
+  //   setProduct((prevState) => ({
+  //     ...prevState,
+  //     assetIds: [...(prevState.assetIds || []), ...assetIds],
+  //   }));
+  // },[filesToUpload])
+
+
+
+console.log(product)
 
 
   const handleInputChange = (field, value) => {
@@ -63,13 +81,14 @@ const ProductDetails = () => {
     const isModified =
       updatedProduct.name !== originalProduct.name ||
       updatedProduct.slug !== originalProduct.slug ||
-      normalizedUpdatedDescription !== normalizedOriginalDescription;
+      normalizedUpdatedDescription !== normalizedOriginalDescription ||
+    
 
     // Update the isDisabled state based on whether there are modifications
     setIsDisabled(isModified);
   };
 
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       setIsLoader(true);
@@ -78,13 +97,13 @@ const ProductDetails = () => {
 
       // Extract only the required fields
       const productData = {
-        name: fetchedProduct.name,
-        slug: fetchedProduct.slug,
-        description: fetchedProduct.description,
-        enabled: fetchedProduct.enabled,
-        assets: fetchedProduct.assets,
+        name: fetchedProduct?.name,
+        slug: fetchedProduct?.slug,
+        description: fetchedProduct?.description,
+        enabled: fetchedProduct?.enabled,
+        assets: fetchedProduct?.assets,
       };
-
+      setEnable(productData.enabled)
       // Set the extracted data into the state
       setOriginalProduct(fetchedProduct); // Set the full product as the original product
       setProduct(productData); // Set only the specific fields
@@ -116,7 +135,7 @@ const ProductDetails = () => {
   const confirmDeletion = async () => {
 
     // Dispatch delete action
-    dispatch(deleteProductItem(product.id));
+    dispatch(deleteProductItem(originalProduct.id));
 
 
     toast.success('Product Deleted Successfully!');
@@ -130,21 +149,81 @@ const ProductDetails = () => {
 
   };
 
-  const handleUpdateData = () => {
- 
-    const data = {
-      id: originalProduct.id,
-      product: product
-    }
-    dispatch(updateProductById(data))
-    toast.success("Updated Product")
 
-  }
+
+  const handleUpdateData = async() => {
+    const newData = {};
+
+    // Check for differences and include only modified fields in newData
+    if (product.name !== originalProduct.name) newData.name = product.name;
+    if (product.slug !== originalProduct.slug) newData.slug = product.slug;
+    if (product.description !== originalProduct.description) newData.description = product.description;
+    if (enable !== originalProduct.enable) newData.enabled = enable;
+    
+    if(filesToUpload.length) {
+      const assetIds = product.assets.map(asset => asset.id);
+     
+      const formData = new FormData();
+    
+      
+        // Append each file to FormData
+        filesToUpload.forEach((file, index) => {
+          formData.append(`files[${index}]`, file);
+        })
+
+      const response = await dispatch(uploadAssets(formData));
+     console.log(response)
+      const assetuploadIds =  response.payload.data.createAssets.map(asset => asset.id);
+      const productAssets =  product.assets.map(asset => asset.id);
+      newData.assetIds = [...productAssets , ...assetuploadIds];
+
+      if (Object.keys(newData).length > 0) {
+        const data = {
+          id: originalProduct.id,
+          product: newData // Only include the modified fields
+        };
+  
+        dispatch(updateProductById(data));
+        toast.success("Updated Product");
+      }
+    }
+
+
+
+    // If newData contains any modified fields, dispatch the update
+    else {
+      toast.info("No changes detected, product not updated");
+    }
+  };
+
+ 
+
+
+  const handleFileUpload = (e) => {
+    const newFiles = Array.from(e.target.files);
+
+    // Generate object URLs for local preview
+    const updatedAssets = newFiles.map((file) => {
+      const url = URL.createObjectURL(file);
+      console.log('Object URL:', url); // Log the generated URLs
+      return { file, url };
+    });
+
+    // Update state to include the new files and URLs
+    setAssets((prevAssets) => [...prevAssets, ...updatedAssets]);
+    setFilesToUpload((prevFiles) => [...prevFiles, ...newFiles]);
+   
+  };
+ 
+  useEffect(()=>{
+   if(filesToUpload.length>0) setIsDisabled(true)
+  },[])
+  
 
   if (isLoader) {
     return <Loader />
   }
-
+  
   return (
     <>
       <Toaster />
@@ -170,13 +249,13 @@ const ProductDetails = () => {
             <button onClick={handleDelete} className="bg-red-500 flex items-center hover:bg-red-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2 mr-5">
               Delete
             </button>
-            {isDisabled&&  <button
+            {isDisabled && <button
               onClick={handleUpdateData}
               className={`flex items-center bg-btnBlue hover:bg-blue-700 rounded-lg text-white pl-3 pr-3 pt-2 pb-2`}
             >
               Update
             </button>}
-           
+
 
           </div>
         </div>
@@ -233,35 +312,81 @@ const ProductDetails = () => {
                 />
               </div>
             </div>
+
             <div className="p-4 border mt-5 rounded-lg dark:bg-slate-700 bg-white shadow-md max-w-4xl mx-auto">
+              {/* Original Assets Section */}
               <h2 className="text-xl font-semibold mb-4">Assets</h2>
-              <div className="flex ">
-                <div className="flex-shrink-0 w-1/3 h-48 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
-                  <div className="text-center p-8">
-                    {/* <GrImage size={'100%'} /> */}
-                    <img src={originalProduct?.featuredAsset?.preview} alt="Product image" className="w-full mx-auto" />
-                    {/* <p className="text-gray-500 mt-2">No featured asset</p> */}
-                  </div>
+              <div className="grid grid-cols-8 gap-4">
+                {originalProduct?.assets?.map((el, index) => (
+                  <img
+                    key={index}
+                    src={el?.preview}
+                    alt={`Asset ${index}`}
+                    className="w-full h-full object-cover border border-gray-300 rounded-lg"
+                  />
+                ))}
+              </div>
+
+              {/* Add New Assets Section */}
+              <hr className='mt-4' />
+              <h2 className="text-xl font-semibold mt-4">Add New Assets</h2>
+
+              {/* Integrated UI for adding new assets */}
+              <div className="p-4 border mt-5 rounded-lg dark:bg-slate-700 bg-white shadow-md max-w-4xl mx-auto flex relative">
+                {/* Left Section: Main Image */}
+                <div className="w-1/4 flex-shrink-0 h-40 dark:bg-customBlue border border-gray-300 rounded-lg bg-gray-100 flex items-center justify-center">
+                  {assets.length === 0 ? (
+                    <div className="text-center p-8">
+                      <GrImage size={"100%"} />
+                    </div>
+                  ) : (
+                    <img
+                      src={assets[0].url} // Display the first uploaded image as the featured asset
+                      alt="Featured asset"
+                      className="w-full h-full object-cover rounded-lg"
+                    />
+                  )}
                 </div>
 
-                <div className='h-full' >
-                  <div className='flex flex-wrap'>
-                    {originalProduct?.assets?.map((el) =>
-                      <img src={el?.preview} alt="" className='ml-4 w-18 h-18' />
-                    )}
+                {/* Right Section: Other Images and Add Asset */}
+                <div className="w-3/4 ml-4 flex flex-col">
+                  {/* Other Images */}
+                  <div className="flex-1 grid grid-cols-4 gap-2 mb-4">
+                    {assets.slice(1).map((asset, index) => (
+                      <div key={index} className="w-full h-24 border border-gray-300 rounded-lg overflow-hidden">
+                        <img
+                          src={asset.url}
+                          alt={`Asset ${index + 1}`}
+                          className="w-full h-full object-cover"
+                        />
+                      </div>
+                    ))}
                   </div>
-                  <div className="  ml-4 flex mt-20">
-                    <label className="px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer dark:bg-btnBlue">
-                      <svg className="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
-                      </svg>
-                      Add asset
-                      <input type="file" className="hidden" />
-                    </label>
-                  </div>
+
+                  {/* Add Asset Button */}
+                  <label className="mt-auto w-40 dark:bg-btnBlue px-4 py-2 border border-gray-300 rounded-lg bg-white text-gray-600 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-gray-300 cursor-pointer">
+                    <svg
+                      className="w-5 h-5 inline-block mr-2"
+                      fill="none"
+                      stroke="currentColor"
+                      viewBox="0 0 24 24"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                    </svg>
+                    Add asset
+                    <input
+                      type="file"
+                      multiple
+                      className="hidden"
+                      onChange={handleFileUpload}
+                    />
+                  </label>
                 </div>
               </div>
             </div>
+
+
             <div className="p-4 mt-5 border rounded-lg bg-white dark:bg-slate-700 shadow-md max-w-4xl mx-auto">
               <h2 className="text-xl font-semibold mb-4">Product Variants</h2>
               {(!originalProduct?.variants?.length) ? <h1>No Variants</h1> :
@@ -325,7 +450,10 @@ const ProductDetails = () => {
                     type="checkbox"
                     id="visibility"
                     className="h-4 w-4 text-indigo-600 border-gray-300 rounded focus:ring-indigo-500"
-                    defaultChecked
+                    // defaultChecked
+                    checked={enable}
+                    onChange={(e) => setEnable((pre) => !pre)}
+
                   />
                   <span className="ml-2 text-sm text-gray-700">Enabled</span>
                 </div>
