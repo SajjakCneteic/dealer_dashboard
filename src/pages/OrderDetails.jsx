@@ -1,24 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router-dom';
-import { fetchSingleOrder, updateOrderStatus } from '../slices/orderSlice'; 
-import OrderProductTable from '../components/OrderProductTable';
-import TaxSummary from '../components/TaxSummary';
-import QRCodeComponent from '../components/QrCode';
-import Breadcrumb from '../components/Breadcrumb';
-import Loader from '../components/Loader';
-import ConfirmationModal from '../components/ConformationModal';  // Import the modal
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useParams } from "react-router-dom";
+import { fetchSingleOrder, updateOrderStatus } from "../slices/orderSlice";
+import OrderProductTable from "../components/OrderProductTable";
+import TaxSummary from "../components/TaxSummary";
+import QRCodeComponent from "../components/QrCode";
+import Breadcrumb from "../components/Breadcrumb";
+import Loader from "../components/Loader";
+import ConfirmationModal from "../components/ConformationModal"; // Import the modal
 
-const mutedFgClass = 'text-muted-foreground dark:text-muted-foreground';
-const inputClasses = 'bg-input border text-sm border-border rounded-md py-2 px-3 pr-8 text-primary   focus:outline-none focus:ring focus:ring-primary focus:border-primary/80';
-const textInputClasses = 'pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-input';
+const mutedFgClass = "text-muted-foreground dark:text-muted-foreground";
+const inputClasses =
+  "bg-input border text-sm border-border rounded-md py-2 px-3 pr-8 text-primary   focus:outline-none focus:ring focus:ring-primary focus:border-primary/80";
+const textInputClasses =
+  "pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-input";
 const formatCurrency = (amount) => {
-  const currency = process.env.REACT_APP_CURRENCY || 'INR';
-  const symbol = 
-    currency === 'USD' ? '$' : 
-    currency === 'EUR' ? '€' : 
-    currency === 'GBP' ? '£' : 
-    currency === 'INR' ? '₹' : '';
+  const currency = process.env.REACT_APP_CURRENCY || "INR";
+  const symbol =
+    currency === "USD"
+      ? "$"
+      : currency === "EUR"
+      ? "€"
+      : currency === "GBP"
+      ? "£"
+      : currency === "INR"
+      ? "₹"
+      : "";
 
   return `${symbol}${amount.toLocaleString()}`;
 };
@@ -27,14 +34,14 @@ const OrderDetails = () => {
   const { id } = useParams();
   const dispatch = useDispatch();
   const { order, loading, error } = useSelector((state) => state.orders);
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [pendingStatus, setPendingStatus] = useState('');
-const [update,setUpdate]=useState(0);
+  const [pendingStatus, setPendingStatus] = useState("");
+  const [update, setUpdate] = useState(0);
 
   useEffect(() => {
     dispatch(fetchSingleOrder(id));
-  }, [dispatch, id,update]);
+  }, [dispatch, id, update]);
 
   useEffect(() => {
     if (order && order.order && order.order.state) {
@@ -50,7 +57,9 @@ const [update,setUpdate]=useState(0);
 
   const confirmStatusChange = () => {
     setStatus(pendingStatus);
-    dispatch(updateOrderStatus({ id, status: pendingStatus.toLowerCase() })).then(() => {
+    dispatch(
+      updateOrderStatus({ id, status: pendingStatus.toLowerCase() })
+    ).then(() => {
       dispatch(fetchSingleOrder(id)); // Refetch order to get updated state
     });
     setIsModalOpen(false); // Close modal
@@ -64,7 +73,7 @@ const [update,setUpdate]=useState(0);
     dispatch(updateOrderStatus({ id, status: "fulfill" })).then(() => {
       // Refetch the order details to get the updated status
       dispatch(fetchSingleOrder(id));
-      setUpdate((pre)=>pre+1)
+      setUpdate((pre) => pre + 1);
     });
   };
   if (loading) {
@@ -92,37 +101,43 @@ const [update,setUpdate]=useState(0);
     createdAt,
     updatedAt,
     nextStates,
-    fulfillments,deliveryType
+    fulfillments,
+    deliveryType,
   } = order.order;
-console.log(order.order)
+  console.log(order.order);
   const isApproved = fulfillments?.[0]?.id !== undefined;
   const getBadgeColor = () => {
     switch (deliveryType) {
-      case 'Standard Shipment':
-        return 'bg-blue-400 text-white'; // blue background for standard shipment
-      case 'ship':
-        return 'bg-green-400 text-white'; // green background for ship
-      case 'pickup':
-        return 'bg-orange-400 text-white'; // yellow background for pickup
+      case "Standard Shipment":
+        return "bg-blue-400 text-white"; // blue background for standard shipment
+      case "ship":
+        return "bg-green-400 text-white"; // green background for ship
+      case "pickup":
+        return "bg-orange-400 text-white"; // yellow background for pickup
       default:
-        return 'bg-gray-400 text-white'; // default gray for other types
+        return "bg-gray-400 text-white"; // default gray for other types
     }
   };
-  const discount = lines?.reduce((acc, el) => {
-    return acc + el.linePrice;
-}, 0) - subTotal;
+  const discount =
+    lines?.reduce((acc, el) => {
+      return acc + el.linePrice;
+    }, 0) - subTotal;
   return (
     <div className="p-2 bg-white dark:bg-black rounded-lg">
       <div className="mb-6">
         <Breadcrumb />
       </div>
       <div className="flex justify-between mb-4">
-        <h2 className="text-lg font-semibold dark:text-card-foreground">Order: #{id}</h2>
-        <button 
+        <h2 className="text-lg font-semibold dark:text-card-foreground">
+          Order: #{id}
+        </h2>
+        <button
           onClick={handleApprovalClick}
           disabled={isApproved}
           className={`${
-            isApproved ? "bg-blue-300 text-white" : "bg-primary text-white dark:bg-primary-foreground dark:text-primary-foreground"
+            isApproved
+              ? "bg-blue-300 text-white"
+              : "bg-primary text-white dark:bg-primary-foreground dark:text-primary-foreground"
           } px-4 py-2 rounded-md`}
         >
           {isApproved ? "Approved" : "Approve"}
@@ -141,7 +156,7 @@ console.log(order.order)
                 image: line.featuredAsset.preview,
               }))}
               summary={{
-                totalDiscount:`- ${formatCurrency(discount)}`,
+                totalDiscount: `- ${formatCurrency(discount)}`,
                 subTotal: formatCurrency(subTotal),
                 shipping: formatCurrency(shipping),
                 total: formatCurrency(total),
@@ -163,12 +178,16 @@ console.log(order.order)
           <div className="p-4 mb-4 bg-card border border-border rounded-lg md:mt-6">
             <div className="text-muted font-semibold">Status</div>
             <hr />
-            <div className={`flex items-center justify-between mt-2 `} >
+            <div className={`flex items-center justify-between mt-2 `}>
               <select
                 className={`w-full  ${inputClasses} ${
-                  state === "Delivered" ? "bg-green-100" :
-                  state === "Shipped" ? "bg-orange-100" :
-                  state === "Cancelled" ? "bg-red-200" : "bg-blue-200"
+                  state === "Delivered"
+                    ? "bg-green-100"
+                    : state === "Shipped"
+                    ? "bg-orange-100"
+                    : state === "Cancelled"
+                    ? "bg-red-200"
+                    : "bg-blue-200"
                 } px-4 py-2 font-semibold border  rounded ${
                   !isApproved ? "bg-gray-200 text-black " : "" // Apply disabled styles
                 }`}
@@ -177,11 +196,13 @@ console.log(order.order)
                 value={status}
                 onChange={handleStatusChange}
               >
-                <option value={state}>{state === "PaymentSettled" ? "Payment Settled" : state}</option>
+                <option value={state}>
+                  {state === "PaymentSettled" ? "Payment Settled" : state}
+                </option>
                 {nextStates?.map((nextState, i) => (
-                  <option 
-                    key={i} 
-                    value={nextState} 
+                  <option
+                    key={i}
+                    value={nextState}
                     disabled={!isApproved} // Disable only if not approved
                   >
                     {nextState}
@@ -194,40 +215,51 @@ console.log(order.order)
             <h2 className="text-lg font-semibold mb-2">Customer</h2>
             <hr />
             <div className="flex items-center my-4">
-              <img alt="user-icon" src="https://openui.fly.dev/openui/24x24.svg?text=👤" className="w-6 h-6 mr-2" />
-              <span className="text-primary font-medium">{customer?.firstName} {customer?.lastName}</span>
+              <img
+                alt="user-icon"
+                src="https://openui.fly.dev/openui/24x24.svg?text=👤"
+                className="w-6 h-6 mr-2"
+              />
+              <span className="text-primary font-medium">
+                {customer?.firstName} {customer?.lastName}
+              </span>
             </div>
-            {shippingAddress?.company?<>
+            {shippingAddress?.company ? (
+              <>
+                <div className="flex items-center space-x-2">
+                  <div>Delivery Type:</div>
+                  <span
+                    className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
+                  >
+                    {deliveryType.charAt(0).toUpperCase() +
+                      deliveryType.slice(1)}
+                  </span>
+                </div>{" "}
+                <h3 className="text-md font-semibold mb-1">Shipping address</h3>
+                <hr />
+                <p className="text-muted-foreground">
+                  {shippingAddress?.company}
+                  <br />
+                  {shippingAddress?.streetLine1} {shippingAddress?.streetLine2}
+                  <br />
+                  {shippingAddress?.city}, {shippingAddress?.province}{" "}
+                  {shippingAddress?.postalCode}
+                  <br />
+                  📍 {shippingAddress?.country}
+                  <br />
+                  📞 {shippingAddress?.phoneNumber}
+                </p>
+              </>
+            ) : (
               <div className="flex items-center space-x-2">
-      <div>Delivery Type:</div>
-      <span
-        className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
-      >
-        {deliveryType.charAt(0).toUpperCase() + deliveryType.slice(1)}
-
-      </span>
-    </div>            <h3 className="text-md font-semibold mb-1">Shipping address</h3>
-            <hr />
-            <p className="text-muted-foreground">
-              {shippingAddress?.company}
-              <br />
-              {shippingAddress?.streetLine1} {shippingAddress?.streetLine2}
-              <br />
-              {shippingAddress?.city}, {shippingAddress?.province} {shippingAddress?.postalCode}
-              <br />
-              📍 {shippingAddress?.country}
-              <br />
-              📞 {shippingAddress?.phoneNumber}
-            </p>
-            </>:  <div className="flex items-center space-x-2">
-      <div>Delivery Type:</div>
-      <span
-        className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
-      >
-        {deliveryType.charAt(0).toUpperCase() + deliveryType.slice(1)}
-
-      </span>
-    </div>}
+                <div>Delivery Type:</div>
+                <span
+                  className={`inline-block px-3 py-1 rounded-full text-sm font-semibold ${getBadgeColor()}`}
+                >
+                  {deliveryType.charAt(0).toUpperCase() + deliveryType.slice(1)}
+                </span>
+              </div>
+            )}
           </div>
           <div className="my-4 p-4 rounded-lg border border-border">
             <h2 className="text-lg pb-2 font-semibold">Payments</h2>
@@ -235,7 +267,10 @@ console.log(order.order)
             <div className="bg-card mt-2 text-muted-foreground dark:bg-card dark:text-muted-foreground">
               <div className="flex justify-between">
                 <p>
-                  Payment <span className="font-semibold text-primary dark:text-primary">{formatCurrency(payments?.[0]?.amount)}</span>
+                  Payment{" "}
+                  <span className="font-semibold text-primary dark:text-primary">
+                    {formatCurrency(payments?.[0]?.amount)}
+                  </span>
                 </p>
                 <p>
                   <span className="inline-flex items-center justify-center px-3 py-1 text-sm font-medium text-white bg-green-500 rounded-full dark:bg-green-500 dark:text-white">
@@ -244,16 +279,40 @@ console.log(order.order)
                 </p>
               </div>
               <p>Payment method: {payments?.[0]?.method}</p>
-              <p>Amount: <span className="font-semibold dark:text-primary">{formatCurrency(payments?.[0]?.amount)}</span></p>
-              <p>Transaction ID: <span className="font-semibold">{payments?.[0]?.transactionId}</span></p>
+              <p>
+                Amount:{" "}
+                <span className="font-semibold dark:text-primary">
+                  {formatCurrency(payments?.[0]?.amount)}
+                </span>
+              </p>
+              <p>
+                Transaction ID:{" "}
+                <span className="font-semibold">
+                  {payments?.[0]?.transactionId}
+                </span>
+              </p>
             </div>
           </div>
-          <div className={`rounded-lg border border-border p-4 ${mutedFgClass}`}>
-            <p className="py-2">ID: <span className="font-semibold">{id}</span></p>
+          <div
+            className={`rounded-lg border border-border p-4 ${mutedFgClass}`}
+          >
+            <p className="py-2">
+              ID: <span className="font-semibold">{id}</span>
+            </p>
             <hr />
-            <p className="pt-2">Created at: <span className="font-semibold">{new Date(createdAt).toLocaleString()}</span></p>
-            <p>Updated at: <span className="font-semibold">{new Date(updatedAt).toLocaleString()}</span></p>
-             <QRCodeComponent orderId={id} />
+            <p className="pt-2">
+              Created at:{" "}
+              <span className="font-semibold">
+                {new Date(createdAt).toLocaleString()}
+              </span>
+            </p>
+            <p>
+              Updated at:{" "}
+              <span className="font-semibold">
+                {new Date(updatedAt).toLocaleString()}
+              </span>
+            </p>
+            <QRCodeComponent orderId={id} />
           </div>
         </div>
       </div>
